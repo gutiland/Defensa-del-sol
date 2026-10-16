@@ -329,6 +329,7 @@ export class Game {
           life: 0.4,
           duration: 0.4,
           type: weapon.type,
+          level: b.level,
           color: b.type === "speaker" ? "#87c9c0" : "#f5ce68",
         });
       }
@@ -504,6 +505,19 @@ export class Game {
         this.money =
           (this.mode === "local" ? this.defenseMoney : this.money) + income;
         this.phase = "build";
+        const source =
+          this.buildings.find((b) => b.type === "kitchen") || this.base;
+        this.effects.push({
+          type: "round-income",
+          amount: income,
+          kitchenAmount: income - ROUND_PROVISIONS,
+          round: this.round - 1,
+          buildingId: source.id,
+          x: source.x,
+          y: source.y,
+          life: 4,
+          duration: 4,
+        });
       }
       for (const b of this.buildings) b.hp = Math.min(b.maxHp, b.hp + 25);
       reinforceCamp(this, building);

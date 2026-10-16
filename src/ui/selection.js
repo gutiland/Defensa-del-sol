@@ -4,6 +4,7 @@ import {
   maxLevel,
   TENT_WEAPONS,
   rangeFor,
+  equipmentFor,
 } from "../data/weapons.js";
 import { odorStats } from "../stereotypes.js";
 import { BUILDINGS } from "../data/catalog.js";
@@ -12,13 +13,39 @@ import { canRemove, refundableCost } from "../construction.js";
 import { projectY } from "../data/map.js";
 const $ = (id) => document.getElementById(id);
 const WEAPON_ICONS = ["🪨", "🪨", "🍾", "🔥"];
-const BRANCH_ICONS = {
-  tent: ["⚡", "💥"],
-  area: ["⚡", "🎨"],
-  speaker: ["🎶", "📣"],
-  odor: ["☁", "🧪"],
-  kitchen: ["🍲", "⏱"],
-  barrier: ["🛡", "🔧"],
+const BRANCH_LABELS = {
+  tent: [
+    ["⏱", "−35%"],
+    ["⚔", "+55%"],
+  ],
+  area: [
+    ["⏱", "−30%"],
+    ["◎", "95"],
+  ],
+  speaker: [
+    ["🐌", "3s"],
+    ["⚔", "+90%"],
+  ],
+  odor: [
+    ["◎", "+45"],
+    ["☁", "+2/s"],
+  ],
+  kitchen: [
+    ["🍲", "+15/↻"],
+    ["🍲", "+2/5s"],
+  ],
+  barrier: [
+    ["🛡", "+240"],
+    ["❤️", "+12/s"],
+  ],
+};
+const SHORT_NAMES = {
+  tent: "Caseta",
+  area: "Área",
+  speaker: "Radio",
+  odor: "Olor",
+  kitchen: "Cocina",
+  barrier: "Barrera",
 };
 let selectionView = null;
 export function refreshSelectionStats(game) {
@@ -33,10 +60,14 @@ export function refreshSelectionStats(game) {
     selectionView = null;
     return;
   }
-  selectionView.title.textContent = `${BUILDINGS[b.type].icon} ${BUILDINGS[b.type].name} · N${b.level}`;
+  selectionView.title.textContent = `${BUILDINGS[b.type].icon} ${b.id === "base" ? "Base" : SHORT_NAMES[b.type]} · N${b.level}`;
   selectionView.title.title = `Resistencia: ${Math.ceil(b.hp)}/${b.maxHp}`;
 }
-export function renderSelection({ game, selected }, command) {
+export function renderSelection(
+  { game, selected },
+  command,
+  onClose = () => {},
+) {
   selectionView = null;
   $("selection").replaceChildren();
   const b = [game.base, ...game.buildings].find((b) => b.id === selected);
@@ -55,6 +86,8 @@ export function renderSelection({ game, selected }, command) {
     close.setAttribute("aria-label", "Cerrar mejoras");
     close.onclick = () => {
       $("selection").hidden = true;
+      selectionView = null;
+      onClose();
     };
     $("selection").append(close);
     const title = document.createElement("p");
@@ -80,6 +113,12 @@ export function renderSelection({ game, selected }, command) {
     summary.setAttribute("aria-label", "Ver estadísticas y especialidades");
     summary.title = "Estadísticas y especialidades";
     info.append(summary, details);
+    const equipment = equipmentFor(b.type, b.level);
+    if (equipment) {
+      const current = document.createElement("p");
+      current.textContent = `${equipment.icon} ${equipment.name}`;
+      info.append(current);
+    }
     if (canRemove(game, b)) {
       const remove = document.createElement("button");
       remove.textContent = game.sandbox ? "🗑" : `↶ +${refundableCost(b)}`;
@@ -113,8 +152,8 @@ export function renderSelection({ game, selected }, command) {
       const upgradeLabel =
         b.type === "tent"
           ? `↑ ${TENT_WEAPONS[b.level].name} · ${b.level * 30}`
-          : `↑ Nivel ${b.level + 1} · ${b.level * 30}`;
-      btn.textContent = `↑ ${b.type === "tent" ? WEAPON_ICONS[b.level] : definition.icon} N${b.level + 1} · ${b.level * 30}`;
+          : `↑ ${equipmentFor(b.type, b.level + 1).name} · ${b.level * 30}`;
+      btn.textContent = `↑ ${b.type === "tent" ? WEAPON_ICONS[b.level] : equipmentFor(b.type, b.level + 1).icon} N${b.level + 1} · ${b.level * 30}`;
       btn.title = upgradeLabel;
       btn.setAttribute("aria-label", `${upgradeLabel} provisiones`);
       btn.className = "upgrade-primary";
@@ -125,8 +164,18 @@ export function renderSelection({ game, selected }, command) {
     }
     if (b.branch) {
       const note = document.createElement("p");
-      note.textContent = BRANCHES[b.type][b.branch][0];
+      const label = BRANCH_LABELS[b.type][b.branch === "rapid" ? 0 : 1];
+      note.textContent = `✓ ${label.join(" ")}`;
       note.title = BRANCHES[b.type][b.branch][1];
+      note.setAttribute(
+        "aria-label",
+        BRANCHES[b.type][b.branch].slice(0, 2).join(": "),
+      );
+      const explanation = document.createElement("p");
+      explanation.textContent = BRANCHES[b.type][b.branch]
+        .slice(0, 2)
+        .join(": ");
+      info.append(explanation);
       $("selection").append(note);
     } else if (canDefend(game)) {
       const choices = document.createElement("div");
@@ -135,8 +184,17 @@ export function renderSelection({ game, selected }, command) {
         BRANCHES[b.type],
       )) {
         const button = document.createElement("button");
-        const icon = BRANCH_ICONS[b.type][branch === "rapid" ? 0 : 1];
-        button.textContent = `${icon} ${name} · ${cost}`;
+        const [icon, short] = BRANCH_LABELS[b.type][branch === "rapid" ? 0 : 1];
+        const symbol = document.createElement("span"),
+          caption = document.createElement("span"),
+          price = document.createElement("span");
+        symbol.textContent = icon;
+        symbol.setAttribute("aria-hidden", "true");
+        caption.textContent = short;
+        caption.className = "specialty-name";
+        price.textContent = `◈ ${cost}`;
+        price.className = "specialty-price";
+        button.append(symbol, caption, price);
         button.title = `${description}. Elección permanente: excluye la otra rama.`;
         button.setAttribute(
           "aria-label",

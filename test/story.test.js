@@ -2,8 +2,10 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { renderStory } from "../src/ui/story.js";
 import { Game } from "../src/engine.js";
-function element() {
-  return {
+
+function fixture() {
+  const element = (tagName) => ({
+    tagName,
     children: [],
     setAttribute() {},
     append(...items) {
@@ -12,46 +14,42 @@ function element() {
     replaceChildren() {
       this.children = [];
     },
-  };
+  });
+  const root = element("section");
+  return { root, doc: { getElementById: () => root, createElement: element } };
 }
-test("story archive unlocks chapters through progress, preserves controls and resets with a new match", () => {
-  const root = element(),
-    doc = { getElementById: () => root, createElement: element },
+
+test("diary shows the current round without a chapter picker and preserves manual minimizing", () => {
+  const { root, doc } = fixture(),
     game = new Game();
   renderStory(game, doc);
-  const archive = root.children[0],
-    select = archive.children[1];
-  assert.equal(select.children.length, 1);
-  assert.equal(archive.open, true);
-  archive.open = true;
+  const diary = root.children[0];
+  assert.equal(diary.open, true);
+  assert.deepEqual(
+    diary.children.map((node) => node.tagName),
+    ["summary", "div"],
+  );
+  assert.ok(diary.children[1].children[0].textContent.startsWith("1."));
+  diary.open = false;
   renderStory(game, doc);
-  assert.equal(root.children[0], archive);
-  assert.equal(archive.open, true);
-  game.round = 6;
-  game.defendedWaves = 5;
-  renderStory(game, doc);
-  const unlocked = root.children[0].children[1];
-  assert.equal(unlocked.children.length, 6);
-  assert.equal(root.children[0].open, true);
-  root.children[0].open = false;
-  renderStory(game, doc);
-  assert.equal(root.children[0].open, false);
-  game.phase = "combat";
-  root.children[0].open = true;
+  assert.equal(root.children[0], diary);
+  assert.equal(diary.open, false);
+  game.command({ type: "ready" });
   renderStory(game, doc);
   assert.equal(root.children[0].open, true);
-  assert.equal(root.children[0].children[1].children.length, 6);
-  assert.equal(root.children[0].children[1].value, "5");
-  const activeTitle = root.children[0].children[2].children[0].textContent;
-  const activeSelect = root.children[0].children[1];
-  activeSelect.value = "0";
-  activeSelect.onchange();
-  assert.notEqual(
-    root.children[0].children[2].children[0].textContent,
-    activeTitle,
+  assert.ok(root.children[0].children[0].textContent.endsWith("Ronda 1"));
+  game.units = [];
+  game.pending = [];
+  game.tick(0.01);
+  renderStory(game, doc);
+  assert.ok(root.children[0].children[0].textContent.endsWith("Ronda 2"));
+  assert.ok(
+    root.children[0].children[1].children[0].textContent.startsWith("2."),
   );
   renderStory(new Game(), doc);
-  assert.equal(root.children[0].children[1].children.length, 1);
+  assert.ok(
+    root.children[0].children[1].children[0].textContent.startsWith("1."),
+  );
   renderStory(new Game("attack"), doc);
   assert.equal(root.hidden, true);
   game.sandbox = true;
@@ -59,23 +57,23 @@ test("story archive unlocks chapters through progress, preserves controls and re
   assert.equal(root.hidden, true);
 });
 
-test("event chapter is selected in preparation and combat, while finished reports remain available in the archive", () => {
-  const root = element(),
-    doc = { getElementById: () => root, createElement: element };
+test("event chapters stay aligned in preparation, combat and after advancing", () => {
+  const { root, doc } = fixture();
   for (const round of [9, 17]) {
     const game = new Game();
     game.round = round;
     game.defendedWaves = round - 1;
     renderStory(game, doc);
-    assert.equal(root.children[0].children[1].children.length, round);
-    assert.equal(root.children[0].open, true);
+    assert.ok(
+      root.children[0].children[1].children[0].textContent.startsWith(
+        `${round}.`,
+      ),
+    );
     assert.ok(game.command({ type: "ready" }));
     renderStory(game, doc);
-    const archive = root.children[0],
-      card = archive.children[2];
-    assert.equal(archive.children[1].value, String(round - 1));
-    assert.equal(archive.children[1].children.length, round);
-    assert.ok(archive.children[0].textContent.endsWith(`Ronda ${round}`));
+    const diary = root.children[0],
+      card = diary.children[1];
+    assert.ok(diary.children[0].textContent.endsWith(`Ronda ${round}`));
     assert.ok(
       card.children.some((node) => node.textContent?.startsWith("Evento:")),
     );
@@ -83,43 +81,29 @@ test("event chapter is selected in preparation and combat, while finished report
     game.pending = [];
     game.tick(0.01);
     renderStory(game, doc);
-    const finished = root.children[0];
-    assert.equal(finished.children[1].children.length, round + 1);
-    assert.equal(finished.children[1].value, String(round));
-    finished.children[1].value = String(round - 1);
-    finished.children[1].onchange();
     assert.ok(
-      finished.children[2].children.some(
-        (node) => node.className === "round-recap",
-      ),
+      root.children[0].children[0].textContent.endsWith(`Ronda ${round + 1}`),
     );
-    assert.equal(finished.open, true);
+    assert.equal(root.children[0].open, true);
   }
 });
 
-test("a fresh match immediately opens diary one, and entering combat keeps the correct day", () => {
-  const root = element(),
-    doc = { getElementById: () => root, createElement: element },
+test("diary refreshes a report for its displayed round without adding archive controls", () => {
+  const { root, doc } = fixture(),
     game = new Game();
   renderStory(game, doc);
-  const first = root.children[0];
-  assert.equal(first.open, true);
-  assert.equal(first.children[1].value, "0");
-  assert.ok(first.children[0].textContent.endsWith("Ronda 1"));
-  first.open = false;
+  game.reports.push({
+    round: 1,
+    kills: 5,
+    earned: 15,
+    lostHealth: 0,
+    star: "Caseta",
+  });
   renderStory(game, doc);
-  assert.equal(root.children[0].open, false);
-  game.command({ type: "ready" });
-  renderStory(game, doc);
-  assert.equal(root.children[0].open, true);
   assert.ok(
-    root.children[0].children[2].children[0].textContent.startsWith("1."),
+    root.children[0].children[1].children.some(
+      (node) => node.className === "round-recap",
+    ),
   );
-  game.pending = [];
-  game.units = [];
-  game.tick(0.01);
-  renderStory(game, doc);
-  assert.equal(root.children[0].open, true);
-  assert.equal(root.children[0].children[1].value, "1");
-  assert.ok(root.children[0].children[0].textContent.endsWith("Ronda 2"));
+  assert.equal(root.children[0].children.length, 2);
 });

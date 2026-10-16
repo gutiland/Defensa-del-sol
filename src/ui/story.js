@@ -38,15 +38,7 @@ export function renderStory(game, document) {
   };
   const archive = make("details"),
     summary = make("summary", "Diario de la plaza"),
-    select = make("select"),
     card = make("div");
-  select.setAttribute("aria-label", "Releer un capítulo descubierto");
-  for (let i = 0; i < available; i++) {
-    const option = make("option", `${i + 1}. ${STORY_CHAPTERS[i].title}`);
-    option.value = String(i);
-    select.append(option);
-  }
-  select.value = String(available - 1);
   function show(index) {
     const chapter = STORY_CHAPTERS[index];
     if (!chapter) return;
@@ -135,10 +127,6 @@ export function renderStory(game, document) {
       card.append(sources);
     }
   }
-  select.onchange = () => {
-    show(Number(select.value));
-    archive.ontoggle();
-  };
   archive.open =
     previous?.game !== game ||
     previous.round !== game.round ||
@@ -146,10 +134,10 @@ export function renderStory(game, document) {
     completed > previous.completed ||
     previous.archive.open;
   archive.ontoggle = () => {
-    summary.textContent = `Diario de la plaza · ${archive.open ? "Minimizar" : "Abrir"} · Ronda ${Number(select.value) + 1}`;
+    summary.textContent = `Diario de la plaza · ${archive.open ? "Minimizar" : "Abrir"} · Ronda ${available}`;
   };
   archive.ontoggle();
-  archive.append(summary, select, card);
+  archive.append(summary, card);
   root.append(archive);
   views.set(root, {
     game,
@@ -161,5 +149,5 @@ export function renderStory(game, document) {
     phase: game.phase,
     archive,
   });
-  show(Number(select.value));
+  show(available - 1);
 }

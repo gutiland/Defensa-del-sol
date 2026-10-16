@@ -56,6 +56,16 @@ export async function createStaticServer({
         ]);
         if (!host || !validHosts.has(host.toLowerCase()))
           return fail(421, "Host no permitido");
+        const devtoolsPath =
+          "/.well-known/appspecific/com.chrome.devtools.json";
+        if (development && !origin)
+          res.setHeader(
+            "Content-Security-Policy",
+            SECURITY_HEADERS["Content-Security-Policy"].replace(
+              "connect-src 'none'",
+              `connect-src http://${host}${devtoolsPath}`,
+            ),
+          );
         const ip = req.socket.remoteAddress,
           now = Date.now();
         for (const [key, window] of requests)
@@ -90,6 +100,12 @@ export async function createStaticServer({
         )
           return fail(400, "Ruta inválida");
         const pathname = decodeURIComponent(req.url.split("?")[0]);
+        // Chrome's local workspace probe needs no project path or configuration.
+        if (development && !origin && pathname === devtoolsPath) {
+          res.writeHead(204);
+          res.end();
+          return;
+        }
         if (
           /[\\\x00-\x1f\x7f]/.test(pathname) ||
           pathname
@@ -100,7 +116,10 @@ export async function createStaticServer({
         )
           return fail(400, "Ruta inválida");
         const name = pathname === "/" ? "index.html" : pathname.slice(1);
-        if (development && ["index.html", "src/main.js"].includes(name))
+        if (
+          development &&
+          ["index.html", "src/main.js", "style.css"].includes(name)
+        )
           allowed = await siteFiles(realRoot, true);
         if (!allowed.has(name)) return fail(404, "No encontrado");
         const actual = await realpath(path.join(realRoot, name));

@@ -5,10 +5,9 @@ import { createStoryScenes } from "./ui/story-scenes.js";
 import { Playback } from "./playback.js";
 import { createPlaybackControls } from "./ui/playback.js";
 import { createAudio } from "./ui/audio.js";
-import { preferences, mountExperienceSettings } from "./preferences.js";
+import { preferences } from "./preferences.js";
 
 const $ = (id) => document.getElementById(id);
-mountExperienceSettings(document);
 const playback = new Playback(),
   renderer = createBoardRenderer($("board"));
 let game = null,

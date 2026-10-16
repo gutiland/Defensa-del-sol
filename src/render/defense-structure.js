@@ -1,6 +1,7 @@
 ﻿import { drawCampingTent } from "./tent.js";
 import { drawCampStructure } from "./camp.js";
 import { drawWeaponStock, drawWeapon } from "./weapon-art.js";
+import { AREA_WEAPONS } from "../data/weapons.js";
 
 function canvasShelter(ctx, color, roof, level) {
   ctx.fillStyle = color;
@@ -93,7 +94,7 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
     ctx.fillRect(-30, 16, 59, 7);
     ctx.strokeRect(-30, 16, 59, 7);
     for (let i = 0; i < (level > 1 ? 3 : 2); i++)
-      drawWeapon(ctx, "paintbomb", -20 + i * 18, 14, 0.85);
+      drawWeapon(ctx, AREA_WEAPONS[level - 1].type, -20 + i * 18, 14, 0.85);
     ctx.fillStyle = "#f0c9ea";
     for (const [x, y] of [
       [-16, -15],
@@ -126,6 +127,24 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
     ctx.strokeRect(20, 10, 12, 14);
     ctx.fillStyle = "#5e713a";
     ctx.fillRect(24, 5, 5, 6);
+    if (level >= 2) {
+      ctx.fillStyle = "#6c8545";
+      ctx.fillRect(-33, 7, 14, 20);
+      ctx.strokeRect(-33, 7, 14, 20);
+      ctx.strokeStyle = "#cbd9a2";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(-26, 7);
+      ctx.quadraticCurveTo(-20, -5, -7, -2);
+      ctx.stroke();
+    }
+    if (level >= 3) {
+      ctx.fillStyle = "#e0d79d";
+      ctx.beginPath();
+      ctx.arc(25, -13, 12, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+    }
     ctx.strokeStyle = "#bcd579";
     ctx.lineWidth = 2;
     for (let i = 0; i < 2; i++) {
@@ -136,7 +155,7 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
     }
   } else if (type === "speaker") {
     canvasShelter(ctx, "#6393ad", "peak", level);
-    for (const x of [-24, 24]) {
+    for (const x of level === 1 ? [24] : [-24, 24]) {
       ctx.fillStyle = "#254551";
       ctx.fillRect(x - 6, 5, 12, 19);
       ctx.strokeRect(x - 6, 5, 12, 19);
@@ -144,6 +163,15 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
       ctx.beginPath();
       ctx.arc(x, 15, 4, 0, Math.PI * 2);
       ctx.fill();
+      if (level >= 3) {
+        ctx.fillStyle = "#254551";
+        ctx.fillRect(x - 7, -15, 14, 18);
+        ctx.strokeRect(x - 7, -15, 14, 18);
+        ctx.fillStyle = "#9ebcc8";
+        ctx.beginPath();
+        ctx.arc(x, -6, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
     }
     ctx.strokeStyle = "#495f64";
     ctx.lineWidth = 2;
@@ -170,6 +198,22 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
       ctx.ellipse(0, 0, 14, 4, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.stroke();
+      if (level >= 2) {
+        ctx.fillStyle = "#acb8a2";
+        ctx.fillRect(-30, 3, 13, 17);
+        ctx.strokeRect(-30, 3, 13, 17);
+      }
+      if (level >= 3) {
+        ctx.fillStyle = "#677e58";
+        ctx.fillRect(-32, 22, 64, 8);
+        ctx.strokeRect(-32, 22, 64, 8);
+        ctx.fillStyle = "#edb357";
+        for (const x of [-23, 0, 24]) {
+          ctx.beginPath();
+          ctx.arc(x, 25, 2, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
       ctx.strokeStyle = "#e7d2a5";
       ctx.lineWidth = 3;
       ctx.beginPath();
@@ -177,6 +221,23 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
       ctx.lineTo(25, -12);
       ctx.stroke();
     } else if (type === "barrier") {
+      if (level >= 2) {
+        ctx.strokeStyle = "#8c9da0";
+        ctx.lineWidth = 5;
+        ctx.beginPath();
+        ctx.moveTo(-25, -2);
+        ctx.lineTo(27, 23);
+        ctx.moveTo(25, -2);
+        ctx.lineTo(-27, 23);
+        ctx.stroke();
+      }
+      if (level >= 3) {
+        ctx.fillStyle = "#a3956d";
+        for (let i = 0; i < 5; i++) {
+          ctx.fillRect(-36 + i * 15, 23, 14, 9);
+          ctx.strokeRect(-36 + i * 15, 23, 14, 9);
+        }
+      }
       ctx.fillStyle = "#cf5747";
       ctx.fillRect(-30, 13, 61, 6);
       ctx.fillStyle = "#f9deb1";

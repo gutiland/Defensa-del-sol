@@ -31,7 +31,9 @@ export function mountResultSharing(document, game) {
     } catch (error) {
       if (error.name !== "AbortError")
         status.textContent =
-          "No se ha podido compartir. Puedes guardar la tarjeta.";
+          game.result === "loss"
+            ? "No se ha podido compartir. Puedes copiar el resumen del resultado."
+            : "No se ha podido compartir. Puedes guardar la tarjeta.";
     }
   };
   download.onclick = () => {
@@ -65,5 +67,7 @@ export function mountResultSharing(document, game) {
     link.href = image.toDataURL("image/png");
     link.click();
   };
-  actions.append(info, share, download, status);
+  actions.append(info, share);
+  if (game.result !== "loss") actions.append(download);
+  actions.append(status);
 }

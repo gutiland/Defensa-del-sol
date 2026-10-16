@@ -1,4 +1,9 @@
 export function soundForEffect(effect) {
+  if (
+    effect.type === "splash" &&
+    ["firecracker", "grenade"].includes(effect.weaponType)
+  )
+    return effect.weaponType === "grenade" ? "grenade" : "firecracker";
   if (effect.type === "impact") {
     return (
       {
@@ -10,9 +15,16 @@ export function soundForEffect(effect) {
     );
   }
   if (
-    ["stone", "big-stone", "bottle", "molotov", "paintbomb"].includes(
-      effect.type,
-    )
+    [
+      "stone",
+      "big-stone",
+      "bottle",
+      "molotov",
+      "paintbomb",
+      "paintcan",
+      "firecracker",
+      "grenade",
+    ].includes(effect.type)
   )
     return "throw";
   return (

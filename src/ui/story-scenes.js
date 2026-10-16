@@ -9,6 +9,15 @@ export function createStoryScenes(document, playback, getGame, onChange) {
   const dialog = document.getElementById("story-scene");
   dialog.innerHTML = `<span class="eyebrow">HISTORIA DE LA PLAZA · PARODIA</span><h2 id="scene-title"></h2><canvas id="scene-portrait" width="560" height="300" aria-hidden="true"></canvas><p id="scene-speaker"></p><p id="scene-line" aria-live="polite"></p><p id="scene-event-info" hidden></p><div id="scene-choices" hidden></div><p id="scene-reference"></p><div class="scene-actions"><button id="scene-next" class="primary">Continuar</button><button id="scene-skip" class="subtle">Saltar escena</button></div>`;
   const $ = (id) => document.getElementById(id);
+  $("scene-title").setAttribute("tabindex", "-1");
+  $("scene-title").setAttribute("autofocus", "");
+  function showFromTop() {
+    $("scene-title").focus?.({ preventScroll: true });
+    for (const node of [dialog, $("scene-choices"), $("scene-reference")]) {
+      node.scrollTop = 0;
+      node.scrollLeft = 0;
+    }
+  }
   const reducedMotion = globalThis.matchMedia?.(
     "(prefers-reduced-motion: reduce)",
   );
@@ -75,6 +84,7 @@ export function createStoryScenes(document, playback, getGame, onChange) {
     }
     appendStoryReference(document, $("scene-reference"), state.game.round);
     state.time = 0;
+    if (dialog.open) showFromTop();
   }
   $("scene-next").onclick = () => {
     if (!state) return;
@@ -119,6 +129,7 @@ export function createStoryScenes(document, playback, getGame, onChange) {
       playback.paused = true;
       text();
       dialog.showModal();
+      showFromTop();
       onChange();
       return true;
     },

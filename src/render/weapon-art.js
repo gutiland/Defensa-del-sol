@@ -3,6 +3,46 @@ export function drawWeapon(ctx, type, x = 0, y = 0, scale = 1) {
   ctx.translate(x, y);
   ctx.scale(scale, scale);
   ctx.lineWidth = 0.7;
+  if (["paintcan", "firecracker", "grenade"].includes(type)) {
+    ctx.strokeStyle = "#26362d";
+    ctx.lineWidth = 1.4;
+    ctx.fillStyle =
+      type === "paintcan"
+        ? "#39b8cc"
+        : type === "firecracker"
+          ? "#ee6253"
+          : "#658445";
+    if (type === "grenade") {
+      ctx.beginPath();
+      ctx.ellipse(0, 1, 5, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.stroke();
+      ctx.strokeRect(-2, -9, 5, 4);
+      ctx.beginPath();
+      ctx.moveTo(-4, 0);
+      ctx.lineTo(4, 0);
+      ctx.moveTo(-4, 4);
+      ctx.lineTo(4, 4);
+      ctx.stroke();
+    } else {
+      ctx.fillRect(-5, -6, 10, 13);
+      ctx.strokeRect(-5, -6, 10, 13);
+      ctx.fillStyle = "#fff1ce";
+      ctx.fillRect(-4, -1, 8, 3);
+      if (type === "paintcan") {
+        ctx.beginPath();
+        ctx.arc(0, -7, 4, Math.PI, 0);
+        ctx.stroke();
+      } else {
+        ctx.fillStyle = "#ffe576";
+        ctx.beginPath();
+        ctx.arc(2, -10, 2.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+    ctx.restore();
+    return;
+  }
   if (type === "paintbomb") {
     ctx.fillStyle = "#a16aba";
     ctx.strokeStyle = "#483155";

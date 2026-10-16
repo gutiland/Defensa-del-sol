@@ -3,11 +3,10 @@ import { EventPreviewGame } from "./event-preview.js";
 import { createBoardRenderer } from "./render/board.js";
 import { Playback } from "./playback.js";
 import { PerformanceSamples } from "./performance-samples.js";
-import { preferences, mountExperienceSettings } from "./preferences.js";
+import { preferences } from "./preferences.js";
 const $ = (id) => document.getElementById(id),
   renderer = createBoardRenderer($("board")),
   playback = new Playback();
-mountExperienceSettings(document);
 let game,
   samples,
   last = performance.now(),

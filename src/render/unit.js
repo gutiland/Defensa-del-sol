@@ -4,6 +4,7 @@ import { drawCharacter } from "./characters.js";
 import { drawGroundMotion } from "./effects.js";
 import { drawAttackerAbilities } from "./attacker-abilities.js";
 import { drawImpactFeedback } from "./impact-feedback.js";
+import { damageMarkLevel, drawDamageMarks } from "./damage-look.js";
 
 export function drawUnit(ctx, u, game, time, sources, sprites, view = {}) {
   const state = bossState(game, u, sources);
@@ -38,6 +39,20 @@ export function drawUnit(ctx, u, game, time, sources, sprites, view = {}) {
   )
     drawGroundMotion(ctx, u, time, game.time >= game.freezeUntil && !slipping);
   ctx.save();
+  const injury = damageMarkLevel(u);
+  const hitAge = game.time - (u.lastHit ?? -100);
+  if (
+    injury &&
+    !u.hitContinuous &&
+    !view.reducedMotion &&
+    hitAge >= 0 &&
+    hitAge < 0.24
+  ) {
+    const recoil = Math.sin((hitAge / 0.24) * Math.PI);
+    ctx.translate(u.x, projectY(u.y) + 18);
+    ctx.rotate(recoil * 0.09 * (u.id % 4 ? 1 : -1));
+    ctx.translate(-u.x, -projectY(u.y) - 18);
+  }
   if (slipping) {
     const elapsed = 1.6 - u.slipRemaining;
     const fall =
@@ -77,10 +92,18 @@ export function drawUnit(ctx, u, game, time, sources, sprites, view = {}) {
         !slipping,
       release: Math.max(0, 1 - (game.time - (u.lastStrike ?? -100)) / 0.25),
       hit:
+        !!injury &&
         !view.reducedMotion &&
         !u.hitContinuous &&
         game.time - (u.lastHit ?? -100) < 0.14,
     },
+  );
+  drawDamageMarks(
+    ctx,
+    injury,
+    u.scale || (u.kind === "heavy" ? 1.15 : 1),
+    u.x,
+    projectY(u.y),
   );
   ctx.save();
   ctx.translate(u.x, projectY(u.y));

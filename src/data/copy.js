@@ -11,6 +11,38 @@ export const COPY = {
     build: "Okupa espacio. Convoca otra comisión.",
   },
   shop: { build: "URBANISMO ASAMBLEARIO", attack: "BOLSA DE PATRIOTAS" },
+  mealLines: [
+    "¡A comer! Reparto horizontal; yo pruebo primero.",
+    "¡Táper para todos! La austeridad se sirve sin pan.",
+    "¡Se abre el comedor! La dieta del diputado va aparte.",
+    "¡A la mesa! El recorte hoy se lo lleva la tortilla.",
+  ],
+  buildingSummary: {
+    tent: "🎯 Daño individual",
+    area: "💥 Daño en área",
+    speaker: "🐌 Ralentiza en área",
+    odor: "☁ Daño continuo",
+    kitchen: "🍲 +15/nivel/ronda",
+    barrier: "🛡 Bloquea el camino",
+  },
+  buildingHelp: {
+    tent: "Ataca a un enemigo. Mejora de piedras a botellas y molotov con fuego en el suelo.",
+    area: "Daño en área: bolas de pintura → botes → petardos → granadas. Ideal contra grupos.",
+    speaker:
+      "Ralentiza en área y hace algo de daño. Da más tiempo para disparar a las otras casetas.",
+    odor: "Daña continuamente en su nube. No ralentiza; no se acumula y los perfumados son inmunes.",
+    kitchen:
+      "Genera 15 provisiones por nivel al terminar cada ronda. No ataca.",
+    barrier: "Va sobre el camino y bloquea hasta que la destruyen. No ataca.",
+  },
+  buildingDetails: {
+    tent: "Piedras → botellas → molotov. Prioriza al más avanzado.",
+    area: "Bolas → botes → petardos → granadas. Golpea grupos.",
+    speaker: "−55 % velocidad durante 1,5 s. Apoya a las otras casetas.",
+    odor: "No frena ni se acumula. Perfumados inmunes.",
+    kitchen: "No ataca. Cobra al acabar la ronda; mejora para ganar más.",
+    barrier: "Sobre el camino. No ataca; retiene hasta que la rompen.",
+  },
   help: {
     combat:
       "Combate automático: hoy los piojosos curran y los fachas avanzan sin chófer. Espera al final de la oleada.",
@@ -146,7 +178,7 @@ export function applyStaticCopy(document) {
     const element = document.querySelector(selector);
     if (element) element.textContent = text;
   }
-  const labels = ["LEGISLATURA", "CAJA B", "CHIRINGUITO"];
+  const labels = ["LEGISLATURA", "DINERO NEGRO", "EL ATICO"];
   document.querySelectorAll(".stats > span").forEach((element, i) => {
     element.firstChild.textContent = labels[i] + " ";
   });

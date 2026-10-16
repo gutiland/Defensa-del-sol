@@ -16,12 +16,11 @@ import { createEnemyIntroductions } from "./ui/enemy-intro.js";
 import { createStoryScenes } from "./ui/story-scenes.js";
 import { nearestConstruction } from "./ui/construction-hit.js";
 import { loadCampaign, saveCampaign } from "./campaign-save.js";
-import { preferences, mountExperienceSettings } from "./preferences.js";
+import { preferences } from "./preferences.js";
 import { mountSupport } from "./ui/support.js";
 import { createTutorial } from "./ui/tutorial.js";
 applyStaticCopy(document);
 mountGallery(document);
-mountExperienceSettings(document);
 mountSupport(document);
 const $ = (id) => document.getElementById(id),
   canvas = $("board"),
@@ -38,7 +37,11 @@ let resultWait = 0;
 const audio = createAudio(document);
 const playback = new Playback();
 const controls = createPlaybackControls(document, playback, () => game);
-const tutorial = createTutorial(document);
+const tutorial = createTutorial(
+  document,
+  playback,
+  () => introductions.isOpen || scenes.isOpen,
+);
 const introductions = createEnemyIntroductions(
   document,
   playback,
@@ -60,10 +63,15 @@ const scenes = createStoryScenes(
   () => controls.render(),
 );
 function start(mode, restored = null) {
+  tutorial.cancel();
   scenes.cancel();
   playback.reset();
   pointer = null;
   game = isAdmin ? new AdminGame() : restored || new Game(mode);
+  if (document.body) {
+    document.body.classList?.toggle("playing", !isAdmin);
+    document.body.dataset.playMode = mode;
+  }
   if (!isAdmin) void audio.unlock();
   audio.update(game);
   kind = "tent";
@@ -93,18 +101,20 @@ document
   .querySelectorAll("[data-mode]")
   .forEach((b) => (b.onclick = () => start(b.dataset.mode)));
 function reset() {
+  tutorial.cancel();
   scenes.cancel();
   if (isAdmin) return start("defense");
   $("result").close();
   $("intro").hidden = false;
   $("game").hidden = true;
   game = null;
+  document.body?.classList?.remove("playing");
   refreshContinue();
 }
 $("restart").onclick = reset;
 $("again").onclick = reset;
 function command(c, afterScene = false) {
-  if (scenes.isOpen) return false;
+  if (scenes.isOpen || tutorial.isOpen) return false;
   if (
     c.type === "ready" &&
     !afterScene &&
@@ -115,7 +125,6 @@ function command(c, afterScene = false) {
   if (c.type === "ready" || c.type === "test-boss") saveCampaign(game);
   const ok = game.command(c);
   if (ok) {
-    tutorial.record(c);
     clearFeedback(game);
     update();
     audio.action(c.type);
@@ -132,6 +141,7 @@ function update() {
     { game, kind: placing ? kind : null, selected, selectedEntries },
     {
       command,
+      clearSelection: cancelPlacement,
       selectKind(value) {
         kind = value;
         placing = true;
@@ -147,7 +157,7 @@ function update() {
     },
   );
   $("cancel-build").disabled = !placing && selected === null;
-  tutorial.render(game, { placing, selected });
+  tutorial.render(game, { placing, kind, selected });
 }
 function cancelPlacement() {
   if (game) clearFeedback(game);
@@ -159,7 +169,7 @@ function cancelPlacement() {
 $("cancel-build").onclick = cancelPlacement;
 const playbackKey = document.onkeydown;
 document.onkeydown = (event) => {
-  if (introductions.isOpen || scenes.isOpen) return;
+  if (introductions.isOpen || scenes.isOpen || tutorial.isOpen) return;
   if (
     handleShortcut(event, {
       game,
@@ -185,7 +195,7 @@ $("undo-build").onclick = () => {
   if (b) command({ type: "remove", id: b.id });
 };
 canvas.onclick = (e) => {
-  if (!game || game.result) return;
+  if (!game || game.result || tutorial.isOpen) return;
   const r = canvas.getBoundingClientRect(),
     x = ((e.clientX - r.left) * 1000) / r.width,
     y = unprojectY(((e.clientY - r.top) * 680) / r.height);
@@ -251,7 +261,8 @@ function frame(now) {
       update();
     }
     scenes.draw(dt);
-    if (!scenes.isOpen && introductions.update(game)) controls.render();
+    if (!scenes.isOpen && !tutorial.isOpen && introductions.update(game))
+      controls.render();
     audio.update(game, { paused: playback.paused });
     renderer.draw(
       game,
@@ -284,7 +295,7 @@ function frame(now) {
       refresh = 0;
     } else if (refresh > 0.2) {
       renderLiveStats(game);
-      tutorial.render(game, { placing, selected });
+      tutorial.render(game, { placing, kind, selected });
       refresh = 0;
     }
     if (game.result && !shown && !game.sandbox) {

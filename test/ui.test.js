@@ -25,6 +25,7 @@ test("controller connects modes, construction, recruitment and the frame rendere
     textContent: "",
     children: [],
     dataset: {},
+    style: {},
     classList: { toggle() {} },
     replaceChildren() {
       this.children = [];
@@ -64,6 +65,11 @@ test("controller connects modes, construction, recruitment and the frame rendere
   try {
     await import("../src/main.js");
     modes[0].onclick();
+    // Dismiss the real modal tutorial before exercising the ordinary controls.
+    ids
+      .get("game")
+      .children.find((node) => node.className === "tutorial-modal")
+      .children[2].children[3].onclick();
     ids
       .get("board")
       .onclick({ clientX: SLOTS[0].x, clientY: projectY(SLOTS[0].y) });
@@ -85,10 +91,28 @@ test("controller connects modes, construction, recruitment and the frame rendere
       .get("shop")
       .children.find((button) => Number(button.dataset.cost) === 45)
       .onclick();
+    assert.equal(
+      ids.get("shop").children[0],
+      idleButton,
+      "selection keeps card nodes alive for the flip transition",
+    );
     ids
       .get("board")
       .onclick({ clientX: SLOTS[0].x, clientY: projectY(SLOTS[0].y) });
     assert.equal(ids.get("money").textContent, 95);
+    ids.get("selection").children[0].onclick();
+    assert.equal(ids.get("selection").hidden, true);
+    assert.equal(
+      ids.get("cancel-build").disabled,
+      true,
+      "closing upgrades clears the construction selection",
+    );
+    for (let i = 0; i < 6; i++) frame((now += 50));
+    assert.equal(
+      ids.get("selection").hidden,
+      true,
+      "live refresh does not reopen closed upgrades",
+    );
     ids.get("board").onclick({ clientX: 680, clientY: projectY(320) });
     assert.equal(
       ids.get("money").textContent,

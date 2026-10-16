@@ -2,7 +2,39 @@
 
 ## Estado actual
 
-El nivel 1 (rondas 1–5) incluye guía contextual que responde a selección, colocación, mejoras y combate: objetivo y caja, primera caseta, deshacer, Asamblea y pausa, especialidades, radio y área, barricadas y eventos, preparación del jefe y persistencia. Resalta el control relevante sin bloquear acciones ni modificar economía o simulación. Se puede omitir para la partida actual; no aparece en laboratorios, duelo ni niveles posteriores.
+La X del panel de mejoras limpia también la selección y la previsualización, igual que cancelar; el panel permanece cerrado al actualizar contadores.
+
+Al superar una ronda con ingreso, el Ministerio del Táper anuncia el reparto con una frase satírica y muestra provisiones de ronda y cocina, más monedas hacia el marcador. El efecto usa el importe abonado por el motor, dura cuatro segundos de reloj visual en preparación y se cancela al iniciar combate; no repite cobros ni se reproduce al cargar. Sin monedas en movimiento reducido. La última ronda mantiene su economía existente (sin ingreso entre rondas).
+
+La pantalla de derrota ya no muestra «Guardar tarjeta»; conserva compartir resultado y apoyo al desarrollo. La descarga de tarjeta sigue disponible tras una victoria.
+
+Las escenas de evento y jefe abren desde arriba: foco inicial en el título sin desplazar la página y reinicio del scroll del modal, decisiones y referencias después de abrir y al pasar de diálogo. Evita heredar la posición de la escena anterior o saltar directamente al botón inferior.
+
+Reverso de cartas con función resumida y una segunda explicación breve: progresión de proyectiles, ralentización, inmunidad al olor, ingresos o bloqueo. El coste sigue visible y el detalle se desplaza dentro de la tarjeta si falta altura.
+
+Tablero y selector ocupan sus áreas completas: eliminados los topes de anchura del mapa basados en altura. Canvas ajustado al ancho y alto disponibles, tanto con lateral como con catálogo inferior; las coordenadas de interacción siguen escalándose por eje. Se mantiene la partida dentro de una ventana y el desplazamiento interno del catálogo.
+
+Selector de defensas con un recordatorio mínimo de función (daño individual, área, ralentización, daño continuo, ingresos o bloqueo). La explicación completa sigue en el tutorial de colocación y en las etiquetas accesibles. Las tarjetas se voltean al seleccionarlas en todos los tamaños de pantalla.
+
+Eau de Asamblea muestra ondas y neblina en todo su radio efectivo, incluidas mejoras y especialidad; no dibuja aura si está destruida o bloqueada por el evento. Efectos acotados y versión ligera. La mitad de atacantes, elegida por identificador par, muestra ojo morado, tirita y ropa marcada según vida restante, con un pequeño gesto al recibir impactos. Las marcas van sobre los sprites compartidos sin multiplicar variantes de caché ni modificar estadísticas; desaparecen si recuperan toda la vida. Animaciones respetan pausa y movimiento reducido.
+
+Las tarjetas del catálogo se voltean al seleccionar una defensa: cara inicial con caseta, nombre y coste; reverso con función y coste. Solo la tarjeta seleccionada muestra su función. Se reutilizan los botones al cambiar de selección para conservar foco y transición; sin animación con movimiento reducido.
+
+Panel de mejoras con etiquetas breves: icono y cifra (intervalo −35 %, daño +55 %, vida +240, curación +12/s, etc.), coste en una línea separada y nombre corto de caseta. El detalle completo se conserva en ⓘ, tooltip y etiquetas accesibles; las cifras de las mejoras también se muestran en móvil.
+
+Servidor local: al recargar CSS también se renueva el manifiesto de recursos, incluidas fuentes locales. La petición automática de Chrome DevTools se admite solo en desarrollo local y responde 204 sin exponer rutas del equipo; la CSP permite únicamente esa URL. La distribución pública conserva `connect-src 'none'`.
+
+Progresión visible de equipamiento: área pasa por bolas de pintura, botes, petardos y granadas (cuatro niveles, daño 6/10/14/16, mismo radio 65 y cadencia 1,8 s). Proyectil, reservas, pose, impacto y sonido acompañan el arma real. Radio escala de megáfono a torre de sonido; olor de ropa a difusor y ventilador; cocina de hornillo a cocina de campaña; barricadas de palés a doble parapeto. Los tres niveles de estas últimas conservan sus estadísticas; animaciones de ondas, humo, vapor y refuerzos se diferencian por nivel. Se mantienen casetas y caché de estructuras por nivel; partículas acotadas y movimiento reducido respetado.
+
+Tutorial sustituido por ventanas modales breves con flecha y recuadro sobre el elemento explicado. Hay que cerrar cada explicación para continuar; pausa y restaura el combate, se muestra una sola vez por lección y puede omitirse. No se superpone con fichas de enemigos o escenas. Marcador compacto de ronda, provisiones y base dentro del tablero. Partida ajustada al viewport con catálogo de desplazamiento interno (horizontal en móvil); portada y laboratorios conservan su distribución.
+
+Retirado el menú de destellos, movimiento reducido, efectos ligeros y mezcla de efectos/ambiente de partida y laboratorios. Se conservan sonido y volumen general, así como el respeto de las preferencias de movimiento del sistema.
+
+Catálogo de casetas con explicación visible y breve de su función (daño individual, área, ralentización, nube, provisiones o bloqueo), sin depender del hover. El diario muestra únicamente el episodio de la ronda actual; retirado el selector de capítulos y conservado el minimizado.
+
+En móvil, mejoras en panel fijo inferior sobre el diario, con altura limitada al viewport, desplazamiento interno, zonas táctiles de 44 px y especialidades resumidas en icono y coste (efectos disponibles en ⓘ).
+
+El nivel 1 (rondas 1–5) enseña objetivo y caja, primera caseta, deshacer, Asamblea y pausa, especialidades, radio y área, barricadas y eventos, preparación del jefe y persistencia. Se puede omitir para la partida actual; no aparece en laboratorios, duelo ni niveles posteriores.
 
 Ajuste de legibilidad: fuente cartoon reservada a marca y títulos grandes; botones, controles, descripciones y títulos pequeños usan Arial/Helvetica. Desactivada la síntesis de negrita y retirado el escalado de controles al interactuar; se conserva la respuesta de color y el foco visible. Las sombras de texto siguen desactivadas. Pendiente revisión visual en el equipo del usuario.
 

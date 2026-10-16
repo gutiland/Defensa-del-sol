@@ -1,5 +1,29 @@
 // Material layers: tones [Hz, seconds, delay, wave, gain, endHz] and filtered noise textures.
 export const SOUNDS = {
+  firecracker: {
+    notes: [[170, 0.12, 0, "triangle", 0.05, 45]],
+    textures: [
+      {
+        duration: 0.12,
+        frequency: 2200,
+        end: 220,
+        filter: "lowpass",
+        gain: 0.06,
+      },
+    ],
+  },
+  grenade: {
+    notes: [[95, 0.22, 0, "sine", 0.07, 28]],
+    textures: [
+      {
+        duration: 0.28,
+        frequency: 1200,
+        end: 100,
+        filter: "lowpass",
+        gain: 0.07,
+      },
+    ],
+  },
   deathBoing: { notes: [[480, 0.16, 0, "triangle", 0.04, 85]] },
   deathQuack: { notes: [[230, 0.11, 0, "sawtooth", 0.016, 65]] },
   deathSqueak: { notes: [[1050, 0.13, 0, "sine", 0.035, 180]] },

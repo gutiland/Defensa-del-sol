@@ -1,4 +1,4 @@
-import { TENT_WEAPONS } from "../data/weapons.js";
+import { TENT_WEAPONS, AREA_WEAPONS } from "../data/weapons.js";
 import { drawWeapon } from "./weapon-art.js";
 
 export function defenderPose(building, time) {
@@ -14,7 +14,7 @@ export function defenderPose(building, time) {
       building.type === "tent"
         ? TENT_WEAPONS[building.level - 1].type
         : building.type === "area"
-          ? "paintbomb"
+          ? AREA_WEAPONS[building.level - 1].type
           : null,
     hit:
       time >= (building.lastHit ?? -100) &&

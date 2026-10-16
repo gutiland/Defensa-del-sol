@@ -23,6 +23,7 @@ import { drawCharacter, drawSpeech } from "./characters.js";
 import { CHARACTERS, buildingDefender } from "../data/characters.js";
 import { createSprites } from "./sprites.js";
 import { projectY } from "../data/map.js";
+import { createIncomeState, drawRoundIncome } from "./round-income.js";
 import { drawPlaza } from "../plaza.js";
 import { drawTactical } from "./tactical.js";
 import { drawCombatEffects, gradeEnvironment } from "./effects.js";
@@ -44,6 +45,7 @@ export function createBoardRenderer(canvas) {
   const attackerSprites = createAttackerSprites();
   const camera = createBattleCamera();
   const visibleSpeeches = createSpeechLifetime();
+  const incomeState = createIncomeState();
   let visualGame = null,
     visualTime = 0;
   function draw(game, preview, view = {}) {
@@ -53,6 +55,7 @@ export function createBoardRenderer(canvas) {
     }
     visualTime += Math.max(0, view.animationDelta || 0);
     const speeches = visibleSpeeches(game, visualTime);
+    const income = incomeState(game, view.paused ? 0 : view.animationDelta || 0);
     const cheering = celebration(game, view.animationDelta || 0);
     const animationDt = view.reducedMotion ? 0 : view.animationDelta || 0;
     atmosphere.advance(game, view.quality === "low" ? 0 : animationDt);
@@ -69,7 +72,7 @@ export function createBoardRenderer(canvas) {
     if (!view.reducedMotion && view.quality !== "low") atmosphere.draw(ctx);
     drawTactical(ctx, game, preview, view);
     drawFirePools(ctx, game.fires, visualTime);
-    drawStereotypes(ctx, game, visualTime);
+    drawStereotypes(ctx, game, view.reducedMotion ? 0 : visualTime, view);
     drawDeaths(ctx, game, view.animationDelta || 0, view);
     if (preview) drawPlacementPreview(ctx, preview, view.kind);
     function paintBuilding(b) {
@@ -118,8 +121,8 @@ export function createBoardRenderer(canvas) {
           ctx.fillText("EN DEBATE", b.x, projectY(b.y) - 29);
           ctx.restore();
         }
-        drawOdorLines(ctx, b, visualTime);
-        drawBuildingAmbient(ctx, b, visualTime);
+        drawOdorLines(ctx, b, view.reducedMotion ? 0 : visualTime);
+        drawBuildingAmbient(ctx, b, view.reducedMotion ? 0 : visualTime);
         if (hasDefender(b))
           drawCharacter(
             ctx,
@@ -134,6 +137,7 @@ export function createBoardRenderer(canvas) {
               seed: base ? 0 : b.id,
               celebrate: view.reducedMotion ? 0 : cheering,
               talking:
+                (income?.event.buildingId === b.id && b.type === "kitchen") ||
                 (game.phase === "combat" && !game.result) ||
                 speeches.some(
                   (speech) => speech.construction && speech.buildingId === b.id,
@@ -171,6 +175,7 @@ export function createBoardRenderer(canvas) {
     for (const speech of speeches)
       if (CHARACTERS[speech.character]?.side !== "attack")
         drawSpeech(ctx, speech);
+    drawRoundIncome(ctx, game, income, view.reducedMotion);
     if (view.paused && game.phase === "combat") {
       ctx.save();
       ctx.fillStyle = "#182522d9";

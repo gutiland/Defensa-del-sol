@@ -1,9 +1,11 @@
 import { drawWeapon } from "./weapon-art.js";
 import { projectY } from "../data/map.js";
+import { impactColor } from "./impact-feedback.js";
 
 export function drawCombatEffects(ctx, effects, intensity = 0) {
   ctx.save();
   for (const e of effects) {
+    if (e.type === "round-income") continue;
     const t = Math.max(0, Math.min(1, 1 - e.life / (e.duration || 0.4)));
     const x = e.x,
       y = projectY(e.y),
@@ -43,8 +45,9 @@ export function drawCombatEffects(ctx, effects, intensity = 0) {
       if (e.radius) {
         ctx.strokeStyle = "#e2f3b8";
         ctx.lineWidth = 2.5;
-        for (let i = 0; i < 3; i++) {
-          const progress = (t + i / 3) % 1;
+        const rings = Math.min(5, 1 + (e.level || 1));
+        for (let i = 0; i < rings; i++) {
+          const progress = (t + i / rings) % 1;
           ctx.globalAlpha = (1 - t) * (1 - progress) * 0.65;
           ctx.beginPath();
           ctx.ellipse(
@@ -69,9 +72,15 @@ export function drawCombatEffects(ctx, effects, intensity = 0) {
         ctx.stroke();
       }
     } else if (e.type === "splash") {
+      const explosive =
+        e.weaponType === "firecracker" || e.weaponType === "grenade";
       const radius = (e.radius || 65) * (0.3 + t * 0.7);
-      ctx.fillStyle = "#a16aba55";
-      ctx.strokeStyle = "#d9ade4";
+      ctx.fillStyle = explosive
+        ? "#f0a23b44"
+        : e.weaponType === "paintcan"
+          ? "#39b8cc55"
+          : "#a16aba55";
+      ctx.strokeStyle = impactColor(e.weaponType);
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.ellipse(tx, ty, radius, radius * 0.66, 0, 0, Math.PI * 2);
@@ -79,7 +88,11 @@ export function drawCombatEffects(ctx, effects, intensity = 0) {
       ctx.stroke();
       for (let i = 0; i < 10 + Math.round(intensity * 8); i++) {
         const a = i * 2.4;
-        ctx.fillStyle = i % 2 ? "#ba84c7" : "#dfbaeb";
+        ctx.fillStyle = explosive
+          ? i % 2
+            ? "#e79842"
+            : "#fff1aa"
+          : impactColor(e.weaponType);
         ctx.beginPath();
         ctx.arc(
           tx + Math.cos(a) * radius,
@@ -89,6 +102,23 @@ export function drawCombatEffects(ctx, effects, intensity = 0) {
           Math.PI * 2,
         );
         ctx.fill();
+      }
+      if (explosive) {
+        ctx.strokeStyle = e.weaponType === "grenade" ? "#fff0ad" : "#ffb352";
+        ctx.lineWidth = e.weaponType === "grenade" ? 3 : 2;
+        for (let i = 0; i < 8; i++) {
+          const angle = (i * Math.PI) / 4;
+          ctx.beginPath();
+          ctx.moveTo(
+            tx + Math.cos(angle) * radius * 0.3,
+            ty + Math.sin(angle) * radius * 0.2,
+          );
+          ctx.lineTo(
+            tx + Math.cos(angle) * radius * 0.8,
+            ty + Math.sin(angle) * radius * 0.5,
+          );
+          ctx.stroke();
+        }
       }
     } else if (e.type === "impact" || e.type === "rubble") {
       const rubble = e.type === "rubble";

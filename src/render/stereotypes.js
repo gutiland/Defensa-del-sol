@@ -7,9 +7,11 @@ export function drawOdorLines(ctx, building, time) {
   ctx.lineJoin = "round";
   const x = building.x,
     y = projectY(building.y) - 17;
-  for (let i = 0; i < 5; i++) {
-    const age = (time * 0.38 + i / 5) % 1;
-    const rise = age * 24,
+  const level = building.level || 1;
+  const count = 3 + level;
+  for (let i = 0; i < count; i++) {
+    const age = (time * (0.3 + level * 0.08) + i / count) % 1;
+    const rise = age * (16 + level * 8),
       side = (i - 2) * 8;
     const sway = Math.sin(time * 2.5 + i) * 4;
     ctx.globalAlpha = Math.sin(age * Math.PI) * 0.85;
@@ -24,7 +26,7 @@ export function drawOdorLines(ctx, building, time) {
       y - rise - 28,
     );
     ctx.strokeStyle = "#536c2c";
-    ctx.lineWidth = 3;
+    ctx.lineWidth = 2 + level * 0.6;
     ctx.stroke();
     ctx.strokeStyle = "#bed168";
     ctx.lineWidth = 1.5;
@@ -32,27 +34,51 @@ export function drawOdorLines(ctx, building, time) {
   }
   ctx.restore();
 }
-export function drawStereotypes(ctx, game, time = game.time) {
+export function drawStereotypes(ctx, game, time = game.time, view = {}) {
   ctx.save();
   for (const b of game.buildings) {
-    if (b.type !== "odor") continue;
+    if (
+      b.type !== "odor" ||
+      b.hp <= 0 ||
+      (game.storyEvent?.buildingId === b.id &&
+        (game.storyEvent.wholeRound || game.time < game.storyEvent.until))
+    )
+      continue;
     const x = b.x,
       y = projectY(b.y),
-      radius = odorStats(b).radius;
-    ctx.fillStyle = "#b2c75517";
+      radius = odorStats(b, game).radius;
+    ctx.fillStyle = "#b2c75520";
     ctx.beginPath();
     ctx.ellipse(x, y, radius, radius * 0.66, 0, 0, Math.PI * 2);
     ctx.fill();
-    for (let i = 0; i < 6; i++) {
-      const age = (time * 0.3 + i / 6) % 1;
-      ctx.globalAlpha = (1 - age) * 0.18;
+    // Bounded rings and wisps span the actual damage radius, including upgrades.
+    ctx.strokeStyle = "#a3bf5d";
+    ctx.lineWidth = 1.5;
+    ctx.globalAlpha = 0.42;
+    ctx.beginPath();
+    ctx.ellipse(x, y, radius, radius * 0.66, 0, 0, Math.PI * 2);
+    ctx.stroke();
+    const rings = view.quality === "low" ? 1 : 2;
+    for (let i = 0; i < rings; i++) {
+      const wave = (time * 0.22 + i / rings) % 1;
+      ctx.globalAlpha = (1 - wave) * 0.35;
+      ctx.beginPath();
+      ctx.ellipse(x, y, radius * wave, radius * wave * 0.66, 0, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+    const count = view.quality === "low" ? 4 : 8;
+    for (let i = 0; i < count; i++) {
+      const age = (time * 0.3 + i / count) % 1;
+      const angle = i * 2.39996 + time * 0.12;
+      const distance = radius * (0.25 + 0.58 * age);
+      ctx.globalAlpha = Math.sin(age * Math.PI) * 0.28;
       ctx.fillStyle = "#b1c74e";
       ctx.beginPath();
       ctx.ellipse(
-        x + Math.sin(i * 4) * age * 70,
-        y - age * 32 + Math.cos(i * 3) * 24,
-        9 + age * 14,
-        6 + age * 10,
+        x + Math.cos(angle) * distance,
+        y + Math.sin(angle) * distance * 0.66 - age * 5,
+        4 + age * 9,
+        3 + age * 6,
         0,
         0,
         Math.PI * 2,

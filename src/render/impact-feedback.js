@@ -3,6 +3,9 @@ export const impactColor = (weapon) =>
     bottle: "#a8f4ff",
     molotov: "#ffad43",
     paintbomb: "#d0a0ff",
+    paintcan: "#74e3ef",
+    firecracker: "#ffb352",
+    grenade: "#ffe694",
     odor: "#b4e369",
     sound: "#86dfff",
   })[weapon] || "#ffe6a0";

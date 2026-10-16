@@ -191,6 +191,32 @@ test("development reload includes newly imported modules without exposing unrela
     servers.push(dev.server);
     const publicSite = await listen({ root });
     servers.push(publicSite.server);
+    await mkdir(path.join(root, "assets/fonts"), { recursive: true });
+    await writeFile(
+      path.join(root, "assets/fonts/lilita-one.ttf"),
+      await readFile(path.join(PROJECT_ROOT, "assets/fonts/lilita-one.ttf")),
+    );
+    await writeFile(
+      path.join(root, "assets/fonts/lilita-one-license.txt"),
+      "Font license fixture",
+    );
+    await writeFile(
+      path.join(root, "style.css"),
+      '@font-face {font-family: Cartoon; src: url("./assets/fonts/lilita-one.ttf");}',
+    );
+    assert.equal((await request(dev.port, "/style.css")).status, 200);
+    const font = await request(
+      dev.port,
+      "/assets/fonts/lilita-one.ttf",
+      "HEAD",
+    );
+    assert.equal(font.status, 200);
+    assert.equal(font.headers["content-type"], "font/ttf");
+    assert.equal(
+      (await request(publicSite.port, "/assets/fonts/lilita-one.ttf", "HEAD"))
+        .status,
+      404,
+    );
     await writeFile(
       path.join(root, "src/new-module.js"),
       "export const ready = true;",
@@ -212,6 +238,41 @@ test("development reload includes newly imported modules without exposing unrela
   } finally {
     for (const server of servers) await stop(server);
     await cleanup(root);
+  }
+});
+
+test("Chrome workspace probe is empty and narrowly permitted only in local development", async () => {
+  const servers = [];
+  const probe = "/.well-known/appspecific/com.chrome.devtools.json";
+  try {
+    const dev = await listen({ development: true });
+    servers.push(dev.server);
+    const page = await request(dev.port, "/");
+    const policy = page.headers["content-security-policy"];
+    assert.ok(
+      policy.includes(`connect-src http://127.0.0.1:${dev.port}${probe};`),
+    );
+    const response = await request(dev.port, probe);
+    assert.equal(response.status, 204);
+    assert.equal(response.text, "");
+    assert.equal(
+      (await request(dev.port, "/.well-known/other.json")).status,
+      400,
+    );
+    assert.equal((await request(dev.port, probe, "POST")).status, 405);
+    const publicSite = await listen({
+      development: true,
+      publicOrigin: "https://game.example",
+    });
+    servers.push(publicSite.server);
+    const publicPage = await request(publicSite.port, "/");
+    assert.equal(
+      publicPage.headers["content-security-policy"],
+      SECURITY_HEADERS["Content-Security-Policy"],
+    );
+    assert.equal((await request(publicSite.port, probe)).status, 400);
+  } finally {
+    for (const server of servers) await stop(server);
   }
 });
 

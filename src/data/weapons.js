@@ -10,19 +10,73 @@ export const TENT_WEAPONS = [
     fire: { radius: 45, dps: 4, duration: 4 },
   },
 ];
-export const maxLevel = (type) => (type === "tent" ? 4 : 3);
+export const AREA_WEAPONS = [
+  {
+    name: "Bolas de pintura",
+    type: "paintbomb",
+    icon: "🟣",
+    damage: 6,
+    rate: 1.8,
+    splash: 65,
+  },
+  {
+    name: "Botes de pintura",
+    type: "paintcan",
+    icon: "🎨",
+    damage: 10,
+    rate: 1.8,
+    splash: 65,
+  },
+  {
+    name: "Petardos",
+    type: "firecracker",
+    icon: "🧨",
+    damage: 14,
+    rate: 1.8,
+    splash: 65,
+  },
+  {
+    name: "Granadas",
+    type: "grenade",
+    icon: "💥",
+    damage: 16,
+    rate: 1.8,
+    splash: 65,
+  },
+];
+export const EQUIPMENT = {
+  speaker: [
+    ["Megáfono", "📣"],
+    ["Altavoces", "🔊"],
+    ["Torre de sonido", "📡"],
+  ],
+  odor: [
+    ["Ropa fermentada", "🧦"],
+    ["Difusor", "🧪"],
+    ["Ventilador de esencias", "🌀"],
+  ],
+  kitchen: [
+    ["Hornillo", "🔥"],
+    ["Olla comunitaria", "🍲"],
+    ["Cocina de campaña", "🍳"],
+  ],
+  barrier: [
+    ["Palés", "🪵"],
+    ["Valla reforzada", "🛡"],
+    ["Doble parapeto", "🚧"],
+  ],
+};
+export const equipmentFor = (type, level) => {
+  if (type === "area") return AREA_WEAPONS[level - 1];
+  const item = EQUIPMENT[type]?.[level - 1];
+  return item ? { name: item[0], icon: item[1] } : null;
+};
+export const maxLevel = (type) => (type === "tent" || type === "area" ? 4 : 3);
 export const rangeFor = (building, definition) =>
   definition.range +
   (building.type === "speaker" && building.branch === "power" ? 30 : 0);
 function baseWeapon(building, definition) {
-  if (building.type === "area")
-    return {
-      name: "Bomba de pintura",
-      type: "paintbomb",
-      damage: definition.damage + 4 * (building.level - 1),
-      rate: definition.rate,
-      splash: 65,
-    };
+  if (building.type === "area") return AREA_WEAPONS[building.level - 1];
   return building.type === "tent"
     ? TENT_WEAPONS[building.level - 1]
     : {

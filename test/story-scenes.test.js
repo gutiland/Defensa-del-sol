@@ -73,6 +73,40 @@ test("every preview exposes its news link throughout the scene without adding de
     s.scenes.cancel();
   }
 });
+test("event scenes reset old scroll after automatic modal focus and on each dialogue", () => {
+  const s = setup();
+  const dialog = s.nodes.get("story-scene");
+  const title = s.nodes.get("scene-title");
+  let focusOptions;
+  title.focus = (options) => {
+    focusOptions = options;
+  };
+  dialog.showModal = () => {
+    dialog.open = true;
+    dialog.scrollTop = 350;
+  };
+  dialog.close = () => {
+    dialog.open = false;
+  };
+  s.game.round = 9;
+  s.scenes.beforeReady(s.game, () => {});
+  assert.equal(dialog.scrollTop, 0);
+  assert.deepEqual(focusOptions, { preventScroll: true });
+  dialog.scrollTop = 280;
+  s.nodes.get("scene-choices").scrollTop = 80;
+  s.nodes.get("scene-reference").scrollTop = 40;
+  s.nodes.get("scene-next").onclick();
+  assert.equal(dialog.scrollTop, 0);
+  assert.equal(s.nodes.get("scene-choices").scrollTop, 0);
+  assert.equal(s.nodes.get("scene-reference").scrollTop, 0);
+  s.scenes.cancel();
+  const next = new Game();
+  next.round = 17;
+  s.setGame(next);
+  s.scenes.beforeReady(next, () => {});
+  assert.equal(dialog.scrollTop, 0);
+});
+
 test("boss scene pauses before combat, exchanges dialogue and starts the wave exactly once", () => {
   const s = setup();
   s.game.round = 5;

@@ -87,7 +87,7 @@ export function renderLiveStats(game) {
 }
 export function renderPanel(
   { game, kind, selected, selectedEntries },
-  { command, selectKind, selectEntry },
+  { command, selectKind, selectEntry, clearSelection },
 ) {
   if (!game) return;
   const attacking = game.phase === "attack",
@@ -184,7 +184,7 @@ export function renderPanel(
       $("queue").append(document.createElement("br"), b);
     }
   }
-  renderSelection({ game, selected }, command);
+  renderSelection({ game, selected }, command, clearSelection);
   $("status").textContent = combat
     ? COPY.live(game.units.length, game.pending.length)
     : attacking

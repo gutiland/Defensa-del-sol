@@ -5,7 +5,7 @@ import { STREETS, unprojectY } from "./map.js";
 export const BUILDINGS = {
   area: {
     name: "Comité de Lanzamiento",
-    desc: "Bomba de pintura: 6/10/14 de daño según nivel en radio 65. Reparte estopa de forma horizontal.",
+    desc: "Bolas de pintura, botes, petardos y granadas: 6/10/14/16 de daño en radio 65. Reparte estopa de forma horizontal.",
     cost: 75,
     hp: 126,
     range: 200,

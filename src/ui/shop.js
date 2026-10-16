@@ -11,13 +11,25 @@ import {
 import { COPY } from "../data/copy.js";
 import { BUILDINGS, UNITS, ENTRIES } from "../data/catalog.js";
 const $ = (id) => document.getElementById(id);
+const shopViews = new WeakMap();
 export function renderShop(
   { game, kind, selectedEntries },
   { command, selectKind },
 ) {
   const attacking = game.phase === "attack";
   $("shopLabel").textContent = COPY.shop[attacking ? "attack" : "build"];
+  const cached = shopViews.get($("shop"));
+  if (!attacking && cached?.game === game) {
+    for (const [key, button] of cached.buttons) {
+      button.classList.toggle("active", kind === key);
+      button.setAttribute("aria-pressed", String(kind === key));
+      button.disabled = !canDefend(game) || game.money < BUILDINGS[key].cost;
+    }
+    return;
+  }
+  shopViews.delete($("shop"));
   $("shop").replaceChildren();
+  const buttons = new Map();
   const entry = selectedEntries[game.queue.length % selectedEntries.length];
   for (const [key, d] of Object.entries(attacking ? UNITS : BUILDINGS)) {
     const b = document.createElement("button");
@@ -26,16 +38,18 @@ export function renderShop(
       description = document.createElement("small");
     price.textContent = `${d.cost} ◈`;
     description.className = "shop-description";
-    description.textContent =
-      d.desc || `Resistencia ${d.hp} · Velocidad ${d.speed}`;
+    const help = attacking
+      ? d.desc || `Resistencia ${d.hp} · Velocidad ${d.speed}`
+      : COPY.buildingHelp[key];
+    description.textContent = attacking ? help : COPY.buildingSummary[key];
     b.append(price, description);
     b.setAttribute(
       "aria-label",
-      `${d.name}, ${d.cost} provisiones. ${d.desc || `Resistencia ${d.hp}, velocidad ${d.speed}`}`,
+      `${d.name}, ${d.cost} provisiones. ${attacking ? help : `${COPY.buildingSummary[key]}. ${COPY.buildingDetails[key]}`}`,
     );
     const roleLabel = document.createElement("small");
     roleLabel.textContent = d.scale ? "JEFE FINAL" : ROLE_LABELS[key];
-    b.append(roleLabel);
+    if (attacking) b.append(roleLabel);
     if (attacking) {
       const route = document.createElement("small");
       route.textContent =
@@ -70,6 +84,33 @@ export function renderShop(
       d.role || key,
     );
     b.append(portrait);
+    if (!attacking) {
+      const inner = document.createElement("div"),
+        front = document.createElement("div"),
+        back = document.createElement("div"),
+        name = document.createElement("span"),
+        backName = document.createElement("strong"),
+        detail = document.createElement("small"),
+        backPrice = document.createElement("span");
+      inner.className = "shop-card-inner";
+      front.className = "shop-card-front";
+      back.className = "shop-card-back";
+      name.className = "shop-card-name";
+      name.textContent = `${d.icon} ${d.name}`;
+      backName.className = "shop-back-name";
+      backName.textContent = d.name;
+      backPrice.className = "shop-back-price";
+      backPrice.textContent = `${d.cost} ◈`;
+      detail.className = "shop-card-detail";
+      detail.textContent = COPY.buildingDetails[key];
+      b.replaceChildren();
+      front.append(name, price, portrait);
+      back.append(backName, description, detail, backPrice);
+      inner.append(front, back);
+      b.append(inner);
+      b.dataset.flipCard = "true";
+      buttons.set(key, b);
+    }
     b.classList.toggle("has-portrait", true);
     b.title = CHARACTERS[character].name;
     b.title += ` · ${d.desc || `Resistencia ${d.hp}, velocidad ${d.speed}`}`;
@@ -92,4 +133,5 @@ export function renderShop(
     };
     $("shop").append(b);
   }
+  if (!attacking) shopViews.set($("shop"), { game, buttons });
 }

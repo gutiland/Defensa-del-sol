@@ -56,8 +56,15 @@ export function createBattleAtmosphere() {
         const x = e.tx ?? e.x,
           y = projectY(e.ty ?? e.y);
         if (e.type === "splash") {
-          emit(x, y, "paint", Math.max(2, count - 1), intensity);
-          emit(x, y, "purple", count + 2, intensity);
+          const explosive = ["firecracker", "grenade"].includes(e.weaponType);
+          emit(
+            x,
+            y,
+            explosive ? "smoke" : "paint",
+            Math.max(2, count - 1),
+            intensity,
+          );
+          emit(x, y, explosive ? "spark" : "purple", count + 2, intensity);
         } else if (e.type === "impact" || e.type === "rubble" || e.character) {
           const weapon = e.weaponType || e.weapon;
           const kind =

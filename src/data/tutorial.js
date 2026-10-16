@@ -1,8 +1,7 @@
-// Guidance follows the real game state; it never changes combat or prices.
-export function tutorialStep(
-  game,
-  { placing = false, selected = null, usedAbility = false } = {},
-) {
+import { COPY } from "./copy.js";
+import { BUILDINGS } from "./catalog.js";
+
+export function tutorialStep(game, state = {}, seen = new Set()) {
   if (
     !game ||
     game.mode !== "defense" ||
@@ -11,91 +10,79 @@ export function tutorialStep(
     game.round > 5
   )
     return null;
-  const lesson = (icon, title, text, target) => ({
-    icon,
-    title,
-    text,
-    target,
-    round: game.round,
-  });
+  const { placing, kind, selected } = state;
+  const step = (id, title, text, target) =>
+    seen.has(id) ? null : { id, title, text, target };
+  if (game.round === 1 && !seen.has("defenses"))
+    return step(
+      "defenses",
+      "Estas son tus defensas",
+      "Elige una caseta aquí y colócala fuera del camino, cerca de donde pasan los enemigos. Solo la barricada va sobre el camino.",
+      "#shop",
+    );
+  if (placing && BUILDINGS[kind])
+    return step(
+      `place-${kind}`,
+      BUILDINGS[kind].name,
+      `${COPY.buildingHelp[kind]} ${kind === "barrier" ? "Toca un punto del camino para colocarla." : "Toca un hueco libre FUERA del camino. Verde permite colocar; rojo indica un obstáculo."}`,
+      "#board",
+    );
+  if (selected !== null && selected !== undefined && game.phase === "build")
+    return step(
+      "upgrade",
+      "Aquí mejoras tu caseta",
+      "↑ compra el siguiente nivel. El número indica el coste en provisiones. Las otras dos mejoras son especialidades: elige solo una. ⓘ explica sus efectos.",
+      "#selection",
+    );
   if (game.phase === "combat") {
-    if (game.round === 5)
-      return lesson(
-        "★",
-        "Examen: el primer jefe",
-        "Combina casetas y mejoras. Usa la Asamblea cuando se acerque a la base; puedes construir durante el combate.",
+    if (game.units.length >= 3 && !seen.has("ability"))
+      return step(
+        "ability",
+        "Detén a los atacantes",
+        "Pulsa la mano o Q para detenerlos durante 3 segundos. La Asamblea tarda 25 segundos en recargarse: úsala cerca de tus defensas.",
         "#ability",
       );
-    if (!usedAbility && game.units.length >= 3)
-      return lesson(
-        "✋",
-        "Frena la oleada",
-        "Pulsa la mano o Q: la Asamblea detiene a todos durante 3 segundos. Después necesita 25 segundos de recarga.",
-        "#ability",
-      );
-    return lesson(
-      "▶",
-      "Tus casetas disparan solas",
-      "Protege la caseta central. Cada baja da provisiones; puedes seguir construyendo y mejorando. Espacio pausa y 1× cambia la velocidad.",
+    return step(
+      "combat",
+      "Disparan automáticamente",
+      "No tienes que apuntar. Tus casetas atacan al enemigo más avanzado dentro de su alcance. Ⅱ pausa para pensar y 1× cambia la velocidad.",
       "#pause",
     );
   }
-  if (game.round === 1) {
-    if (!game.buildings.length)
-      return placing
-        ? lesson(
-            "⛺",
-            "Coloca tu primera caseta",
-            "Pulsa una zona libre junto al camino: verde permite construir y rojo indica un obstáculo. Los enemigos siguen las rutas hasta la base.",
-            "#board",
-          )
-        : lesson(
-            "⛺",
-            "Elige una defensa",
-            "Selecciona una caseta de proyectiles en el catálogo. Cuesta provisiones: consulta tu caja arriba. El objetivo es que la base sobreviva.",
-            "#shop",
-          );
-    return lesson(
-      "▶",
-      "Prepara la primera ronda",
-      "Puedes añadir otra caseta. Si te equivocas, ↶ deshace la última colocación antes de empezar. Cuando estés listo, pulsa «Que empiece la crispación».",
+  if (game.round === 1 && game.buildings.length)
+    return step(
+      "start",
+      "Empieza cuando estés listo",
+      "Este botón inicia la oleada. Antes puedes poner más casetas o deshacer la última con ↶. Cada baja y ronda superada da provisiones para ampliar el campamento.",
       "#action",
     );
-  }
-  if (game.round === 2 && !game.buildings.some((b) => b.level > 1))
-    return lesson(
-      "↑",
-      "Mejora una caseta",
-      selected !== null
-        ? "Pulsa ↑ en el panel de la caseta. El número indica el coste; una mejora aumenta su potencia. Las dos especialidades son alternativas permanentes."
-        : "Pulsa una caseta construida para abrir sus mejoras. También puedes mejorar la base. Reserva provisiones para ampliar el campamento.",
-      selected !== null ? "#selection" : "#board",
+  if (game.round === 2)
+    return step(
+      "resources",
+      "Vigila estos contadores",
+      "Aquí ves el nivel y la ronda, las provisiones para construir y la vida de la base. Si la base llega a cero, pierdes. Toca tus casetas para mejorarlas.",
+      ".stats",
     );
-  if (game.round === 3 && !game.buildings.some((b) => b.type === "speaker"))
-    return lesson(
-      "📣",
-      "Combina funciones",
-      "La radio ralentiza en área: colócala donde cubra un tramo largo. Las casetas de proyectiles dañan y el Comité de Lanzamiento golpea grupos. Mira sus alcances al seleccionarlas.",
+  if (game.round === 3)
+    return step(
+      "roles",
+      "Combina defensas",
+      "Radio ralentiza; Lanzamiento golpea grupos; Eau daña sin ralentizar. La cocina no dispara: genera provisiones al final de cada ronda. Su función aparece en cada tarjeta.",
       "#shop",
     );
   if (game.round === 4)
-    return lesson(
-      "🪧",
-      "Caminos y decisiones",
-      "Las barricadas van SOBRE el camino: bloquean, pero no atacan. Las demás casetas van fuera. Lee el evento del diario y elige teniendo en cuenta tus provisiones.",
+    return step(
+      "diary",
+      "El diario explica los eventos",
+      "Ábrelo para ver lo que pasa en esta ronda. Los eventos pueden cambiar el combate y ofrecer decisiones que cuestan provisiones.",
       "#story-chapter",
     );
   if (game.round === 5)
-    return lesson(
-      "★",
-      "Prepara al campamento",
-      "Llega el primer jefe. Mejora tus defensas y cubre el tramo final. Casetas y mejoras se conservan al pasar al nivel 2, donde sube la dificultad.",
-      "#shop",
+    return step(
+      "boss",
+      "Llega el primer jefe",
+      "Prepara casetas y mejoras antes de iniciar. Usa la Asamblea para retenerlo bajo el fuego. Si ganas, conservas el campamento en el siguiente nivel.",
+      "#action",
     );
-  return lesson(
-    "✓",
-    "Listo para continuar",
-    "Amplía el campamento cerca del recorrido y consulta el diario. Las defensas apuntan al enemigo más avanzado que tengan a alcance. Inicia la ronda cuando estés listo.",
-    "#action",
-  );
+  return null;
 }

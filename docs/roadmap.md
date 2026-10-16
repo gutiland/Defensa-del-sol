@@ -2,6 +2,10 @@
 
 ## Estado actual
 
+Ajuste de legibilidad: fuente cartoon reservada a marca y títulos grandes; botones, controles, descripciones y títulos pequeños usan Arial/Helvetica. Desactivada la síntesis de negrita y retirado el escalado de controles al interactuar; se conserva la respuesta de color y el foco visible. Las sombras de texto siguen desactivadas. Pendiente revisión visual en el equipo del usuario.
+
+Icono de pestaña propio: caseta dorada y sol sobre fondo verde, en SVG local incluido en la distribución y en los laboratorios de desarrollo.
+
 Tipografía Lilita One local para títulos y botones, con licencia SIL OFL incluida; cuerpo de texto con fuentes del sistema para facilitar la lectura. Eliminada la importación externa de Google Fonts. El servidor y la distribución conservan los bytes de la fuente y la sirven con su tipo MIME, sin ampliar la política de seguridad.
 
 El panel de mejoras de casetas se superpone al diario y al botón de ronda. Cabecera compacta con icono y nivel, mejora con arma y coste, acciones secundarias con símbolos y estadísticas desplegables; las etiquetas accesibles conservan la explicación completa.

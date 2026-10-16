@@ -124,6 +124,7 @@ export async function createStaticServer({
             ".css": "text/css; charset=utf-8",
             ".js": "text/javascript; charset=utf-8",
             ".ttf": "font/ttf",
+            ".svg": "image/svg+xml",
             ".txt": "text/plain; charset=utf-8",
           }[path.extname(name)],
         );

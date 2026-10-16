@@ -17,7 +17,7 @@ export async function siteFiles(root, development = false) {
     name = name.replaceAll("\\", "/");
     if (files.has(name)) return;
     if (
-      !/^(?:src\/[a-zA-Z0-9_/-]+\.js|[a-z-]+\.(?:html|css)|assets\/fonts\/lilita-one(?:\.ttf|-license\.txt))$/.test(
+      !/^(?:favicon\.svg|src\/[a-zA-Z0-9_/-]+\.js|[a-z-]+\.(?:html|css)|assets\/fonts\/lilita-one(?:\.ttf|-license\.txt))$/.test(
         name,
       )
     )
@@ -26,6 +26,11 @@ export async function siteFiles(root, development = false) {
     if (!actual.startsWith(resolvedRoot + path.sep))
       throw Error("Recurso fuera de la raíz pública");
     files.add(name);
+    if (
+      name.endsWith(".html") &&
+      (await readFile(actual, "utf8")).includes('href="./favicon.svg"')
+    )
+      await visit("favicon.svg");
     if (name.endsWith(".css")) {
       const css = await readFile(actual, "utf8");
       for (const match of css.matchAll(

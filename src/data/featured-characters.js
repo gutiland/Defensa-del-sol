@@ -1,0 +1,23 @@
+// Every combat silhouette plus the most distinct camp personalities.
+export const FEATURED_CHARACTERS = [
+  "polo",
+  "micro",
+  "gilet",
+  "terrace",
+  "flag",
+  "viral",
+  "medic",
+  "berserker",
+  "bossDani",
+  "bossSanti",
+  "bossPedro",
+  "spokesperson",
+  "dread",
+  "student",
+  "assembly",
+  "union",
+  "wordkeeper",
+  "hummus",
+  "reply",
+  "tote",
+];

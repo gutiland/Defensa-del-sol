@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Acampada Sol · Sala de eventos</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="index.html">☀ ACAMPADA SOL</a
+      ><a href="admin.html">Laboratorio completo</a>
+    </header>
+    <main class="events-preview">
+      <h1>Sala de eventos</h1>
+      <p>
+        Prueba escenas, decisiones y efectos sin avanzar la historia. Campamento
+        preparado, dinero ilimitado y base invulnerable.
+      </p>
+      <section class="panel preview-controls" aria-label="Elegir prueba">
+        <label
+          >Evento o jefe
+          <select id="preview-event"></select
+        ></label>
+        <label
+          >Decisión
+          <select id="preview-option"></select
+        ></label>
+        <button id="preview-scene" class="primary">Ver escena y elegir</button>
+        <button id="preview-start">Probar directamente</button>
+        <button id="preview-repeat">Repetir prueba</button>
+        <button id="preview-step">Avanzar 5 segundos</button>
+        <p id="preview-description"></p>
+        <p id="preview-reference"></p>
+        <p id="preview-feedback" role="status"></p>
+      </section>
+      <div class="board-wrap">
+        <div class="board-toolbar">
+          <button id="pause">Pausa</button><button id="speed">1×</button
+          ><button id="paths">Ver rutas</button
+          ><button id="sound">Sonido</button
+          ><label
+            >Volumen
+            <input
+              id="sound-volume"
+              type="range"
+              min="0"
+              max="100"
+              value="35"
+              aria-label="Volumen de efectos" /></label
+          ><small id="preview-status" aria-live="off"></small>
+        </div>
+        <div class="board-stage">
+          <canvas
+            id="board"
+            width="1000"
+            height="680"
+            aria-label="Vista de prueba del evento seleccionado"
+          ></canvas>
+        </div>
+      </div>
+      <p class="note">
+        La prueba permanece en la ronda elegida. Repetir reconstruye el
+        campamento y permite cambiar de decisión.
+      </p>
+      <a href="index.html">Volver al juego</a>
+    </main>
+    <dialog
+      id="story-scene"
+      aria-labelledby="scene-title"
+      aria-describedby="scene-line"
+    ></dialog>
+    <script type="module" src="src/events-main.js"></script>
+  </body>
+</html>

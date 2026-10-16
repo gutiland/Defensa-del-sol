@@ -1,0 +1,116 @@
+export function drawCampStructure(ctx, type) {
+  ctx.save();
+  ctx.lineJoin = "round";
+  ctx.lineCap = "round";
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "#34412b";
+  ctx.fillStyle = "#27392130";
+  ctx.beginPath();
+  ctx.ellipse(4, 25, 35, 9, 0, 0, Math.PI * 2);
+  ctx.fill();
+  if (type === "barrier") {
+    for (let i = 0; i < 5; i++) {
+      ctx.save();
+      ctx.translate(-25 + i * 12, 0);
+      ctx.rotate((i % 2 ? 1 : -1) * 0.08);
+      ctx.fillStyle = i % 2 ? "#b38a4d" : "#cfaa65";
+      ctx.fillRect(-5, -8, 11, 32);
+      ctx.strokeRect(-5, -8, 11, 32);
+      ctx.restore();
+    }
+    ctx.fillStyle = "#f7e2a1";
+    ctx.beginPath();
+    ctx.moveTo(-30, -13);
+    ctx.lineTo(29, -16);
+    ctx.lineTo(32, 9);
+    ctx.lineTo(-28, 12);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#69472d";
+    ctx.font = "bold 8px sans-serif";
+    ctx.textAlign = "center";
+    ctx.fillText("NO PASAR", 0, 0);
+  } else if (type === "speaker") {
+    ctx.strokeStyle = "#34412b";
+    ctx.lineWidth = 4;
+    ctx.beginPath();
+    ctx.moveTo(0, -10);
+    ctx.lineTo(0, 22);
+    ctx.lineTo(-16, 28);
+    ctx.moveTo(0, 22);
+    ctx.lineTo(17, 27);
+    ctx.stroke();
+    ctx.fillStyle = "#678a77";
+    ctx.beginPath();
+    ctx.moveTo(-17, -32);
+    ctx.lineTo(16, -35);
+    ctx.lineTo(19, 4);
+    ctx.lineTo(-18, 6);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#273f37";
+    ctx.beginPath();
+    ctx.ellipse(0, -13, 12, 14, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#90b09a";
+    ctx.beginPath();
+    ctx.arc(0, -13, 5, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = "#f3cf64";
+    ctx.fillRect(-11, -29, 7, 3);
+  } else {
+    ctx.strokeStyle = "#535337";
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(-27, -4);
+    ctx.lineTo(-27, 25);
+    ctx.moveTo(27, -4);
+    ctx.lineTo(27, 25);
+    ctx.stroke();
+    ctx.fillStyle = "#e6a45a";
+    ctx.beginPath();
+    ctx.moveTo(-35, -7);
+    ctx.lineTo(-23, -30);
+    ctx.quadraticCurveTo(0, -36, 24, -29);
+    ctx.lineTo(35, -7);
+    ctx.closePath();
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#f8d681";
+    for (let i = -28; i < 28; i += 14) {
+      ctx.beginPath();
+      ctx.moveTo(i, -8);
+      ctx.lineTo(i + 6, -30);
+      ctx.lineTo(i + 12, -30);
+      ctx.lineTo(i + 12, -8);
+      ctx.closePath();
+      ctx.fill();
+    }
+    ctx.strokeStyle = "#34412b";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(-35, -7);
+    ctx.quadraticCurveTo(0, -2, 35, -7);
+    ctx.stroke();
+    ctx.fillStyle = "#b0844a";
+    ctx.fillRect(-25, 15, 50, 7);
+    ctx.strokeRect(-25, 15, 50, 7);
+    ctx.fillStyle = "#687d70";
+    ctx.beginPath();
+    ctx.moveTo(-12, 0);
+    ctx.lineTo(12, 0);
+    ctx.quadraticCurveTo(15, 17, 0, 17);
+    ctx.quadraticCurveTo(-15, 17, -12, 0);
+    ctx.fill();
+    ctx.stroke();
+    ctx.fillStyle = "#c5d3ac";
+    ctx.beginPath();
+    ctx.ellipse(0, 0, 13, 4, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.stroke();
+  }
+  ctx.restore();
+}

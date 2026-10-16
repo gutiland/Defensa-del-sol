@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Admin - Acampada Sol · Tower Defense</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body data-page="admin">
+    <header>
+      <a class="brand" href="./"
+        >☀ ACAMPADA SOL <small>Una plaza. Muchas pancartas.</small></a
+      ><button id="restart" class="subtle">Nueva partida</button>
+      <a href="events.html">Sala de eventos</a>
+    </header>
+    <main>
+      <section id="admin-panel" class="panel admin-panel" hidden></section>
+      <section id="intro">
+        <span class="eyebrow">ESTRATEGIA EN LA PLAZA</span>
+        <h1>La plaza se construye.<br />La resistencia, también.</h1>
+        <p>
+          Levanta el campamento o prepara la próxima oleada. Cada provisión
+          cuenta.
+        </p>
+        <div class="modes">
+          <button data-mode="defense">
+            <b>⛺ Defender Sol</b
+            ><span
+              >Construye, mejora y vive una historia de 20 rondas.</span
+            ></button
+          ><button data-mode="attack">
+            <b>🚩 Tomar la plaza</b
+            ><span
+              >Recluta y elige accesos contra un campamento predefinido.</span
+            ></button
+          ><button data-mode="local">
+            <b>🤝 Duelo local</b
+            ><span>Dos personas, un equipo. Preparación por turnos.</span>
+          </button>
+        </div>
+        <h2>El censo de la crispación</h2>
+        <p>
+          <a href="admin.html">Abrir laboratorio de pruebas (admin)</a> ?
+          <a href="events.html">Sala de eventos</a>
+        </p>
+        <p>
+          Trece egos, dos bandos y ninguna intención de escuchar. Los diseños se
+          alternan automáticamente durante la partida.
+        </p>
+        <div id="characters-gallery" class="characters-gallery"></div>
+        <p class="note">
+          Prototipo individual y duelo local · Las salas online aún no están
+          disponibles.
+        </p>
+      </section>
+      <section id="game" hidden>
+        <div class="game-heading">
+          <div>
+            <span class="eyebrow" id="modeLabel"></span>
+            <h1 id="phaseTitle">Prepara el campamento</h1>
+          </div>
+          <div class="stats">
+            <span>RONDA <b id="round"></b></span
+            ><span>PROVISIONES <b id="money"></b></span
+            ><span>BASE <b id="health"></b></span>
+          </div>
+        </div>
+        <div class="layout">
+          <div class="board-wrap">
+            <div class="board-toolbar" aria-label="Controles de partida">
+              <button id="undo-build" type="button" disabled>
+                Deshacer última colocación
+              </button>
+              <button id="cancel-build" type="button">
+                Cancelar selección · Esc
+              </button>
+              <button id="pause" type="button" disabled>
+                Ⅱ Pausa parlamentaria
+              </button>
+              <button id="speed" type="button" disabled>
+                1× · Ritmo de tertulia
+              </button>
+              <button id="sound" type="button" aria-pressed="true">
+                Sonido: activado
+              </button>
+              <label class="volume-control"
+                >Volumen
+                <input
+                  id="sound-volume"
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="35"
+                  aria-label="Volumen de efectos"
+              /></label>
+              <button id="ability" type="button" disabled>
+                Asamblea extraordinaria
+              </button>
+              <button id="paths" type="button">Ver rutas de entrada</button>
+              <small
+                >Espacio: pausa · 1–6: casetas · Q: asamblea · Enter: ronda ·
+                Mayús: colocar varias</small
+              >
+            </div>
+            <div class="board-stage">
+              <canvas
+                id="board"
+                width="1000"
+                height="680"
+                aria-label="Mapa de la plaza. Selecciona una construcción y pulsa un espacio libre para construir."
+              ></canvas>
+
+              <div class="board-actions">
+                <section
+                  id="story-chapter"
+                  class="story-chapter"
+                  aria-label="Historia de la plaza"
+                  hidden
+                ></section>
+                <button id="action" class="primary">Iniciar oleada →</button>
+              </div>
+              <div id="selection" class="building-popover" hidden></div>
+            </div>
+            <div class="map-caption">
+              <span>PUERTA DEL SOL · MADRID IMAGINARIA</span
+              ><span id="status">Elige una parcela</span>
+            </div>
+          </div>
+          <aside>
+            <div class="panel">
+              <span class="eyebrow" id="shopLabel">CONSTRUCCIONES</span>
+              <div id="shop"></div>
+            </div>
+            <div class="panel">
+              <h3 id="ordersTitle">Tu siguiente movimiento</h3>
+              <p id="wave-preview" class="note"></p>
+
+              <details class="side-help">
+                <summary>Consejos y actualidad</summary>
+                <p id="help"></p>
+                <p id="satire-news" class="satire-news"></p>
+                <p id="quote-source" class="note"></p>
+              </details>
+              <div id="routes" hidden></div>
+              <div id="queue"></div>
+
+              <button id="test-boss" class="subtle" type="button">
+                ★ Probar ronda de jefes
+              </button>
+            </div>
+            <p class="note">
+              Movimiento y combate automáticos. Las decisiones de construcción y
+              despliegue son tuyas.
+            </p>
+          </aside>
+        </div>
+      </section>
+    </main>
+    <dialog id="enemy-intro" aria-labelledby="enemy-intro-name"></dialog>
+    <dialog
+      id="story-scene"
+      aria-labelledby="scene-title"
+      aria-describedby="scene-line"
+    ></dialog>
+    <dialog id="result">
+      <span class="eyebrow">FIN DE LA PARTIDA</span>
+      <h2 id="resultTitle"></h2>
+      <p id="resultText"></p>
+      <button id="again" class="primary">Volver a la plaza</button>
+    </dialog>
+    <script type="module" src="src/main.js"></script>
+  </body>
+</html>

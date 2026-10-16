@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Acampada Sol · Rendimiento</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a href="index.html" class="brand">ACAMPADA SOL</a
+      ><a href="admin.html">Laboratorio</a>
+    </header>
+    <main class="events-preview">
+      <h1>Prueba de multitudes</h1>
+      <div class="board-toolbar">
+        <label
+          >Atacantes
+          <select id="stress-count">
+            <option>100</option>
+            <option>300</option>
+            <option selected>600</option>
+          </select></label
+        >
+        <label
+          >Escenario
+          <select id="stress-scenario">
+            <option value="march">Marcha</option>
+            <option value="deaths">Bajas simultáneas</option>
+            <option value="rain">Lluvia</option>
+            <option value="fire">Fuego</option>
+          </select></label
+        ><button id="stress-restart">Repetir escenario</button
+        ><button id="stress-pause">Pausa</button>
+      </div>
+      <p id="stress-stats" role="status"></p>
+      <p>
+        Medición local de los últimos 300 fotogramas. Mantén esta pestaña
+        visible; compara el mismo escenario y equipo. P95 muestra el tiempo bajo
+        el que queda el 95 % de las muestras.
+      </p>
+      <canvas
+        id="board"
+        width="1000"
+        height="680"
+        aria-label="Tablero de prueba de multitudes"
+      ></canvas>
+    </main>
+    <script type="module" src="src/performance-main.js"></script>
+  </body>
+</html>

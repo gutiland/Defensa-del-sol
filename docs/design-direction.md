@@ -1,6 +1,6 @@
 # Dirección de diseño: claridad de Plants vs. Zombies en Acampada Sol
 
-Referencia investigada el 15 de octubre de 2026 por petición del usuario. Documento de dirección; no describe funciones nuevas ya implementadas.
+Guía visual y de legibilidad del juego.
 
 ## Referencias
 
@@ -31,12 +31,12 @@ Estos papeles ya existen en el prototipo. La prioridad es hacerlos visibles, sin
 
 ## Dirección artística
 
-Actualización: el usuario ha pedido adoptar una estética cartoon inspirada en Plants vs. Zombies, sustituyendo la anterior preferencia por el realismo. Las notas de entorno realista de esta primera propuesta quedan reemplazadas por personajes cabezones, ojos grandes y asimétricos, contornos fuertes, colores vivos, tiendas redondeadas y movimientos elásticos. Se mantienen diseños propios y la geografía jugable de Sol.
+Caricatura 2D con personajes cabezones, ojos grandes y asimétricos, contornos fuertes, colores vivos, tiendas redondeadas y movimientos elásticos. Los diseños son propios y conservan la geografía jugable de Sol.
 
 - Entorno de granito y edificios madrileños con luz coherente y colores contenidos.
 - Personajes estilizados, con volumen y accesorios claros. Mejorar reconocimiento y expresividad sin perseguir fotorrealismo a escala diminuta.
 - Una silueta dominante por rol: olla, altavoz, pancarta, móvil o proyectiles. Reducir accesorios que compiten entre sí.
-- Banderas cartoon solo en algunos personajes, según las preferencias ya confirmadas.
+- Banderas cartoon solo en algunos personajes.
 - Proyectiles distintos por tamaño, color y trayectoria. Las cuatro mejoras deben reconocerse también en la propia tienda, no solo en el panel.
 - Ataques con anticipación breve, lanzamiento, impacto y recuperación. El momento visual del golpe debe coincidir con el daño del motor.
 - Respuesta de daño breve y localizada; evitar parpadeo continuo o efectos que oculten rutas y caras.
@@ -46,9 +46,7 @@ Actualización: el usuario ha pedido adoptar una estética cartoon inspirada en 
 
 1. **Ahora: acabado visual de los roles actuales.** Redibujar siluetas, poses de ataque y estado de las cuatro armas; revisar un tablero lleno, no solo retratos aislados.
 2. **Después: ritmo y equilibrio.** Probar economía frente a defensa, composición de oleadas y variedad de estrategias. Requiere partidas y resultados registrados antes de ajustar valores.
-3. **Posibles pasos posteriores, todavía no implementados:** presentar amenazas antes de cada ronda, progresión que enseñe un concepto por vez y especialización de enemigos. Retomar cuando se autorice trabajo funcional.
-
-No añadir modos, unidades ni reglas durante la fase visual actual. La petición de inspiración no elimina la construcción libre ni autoriza por sí sola a sustituir todo el sistema de combate.
+3. **Claridad de las oleadas:** revisar las fichas de nuevos enemigos y la anticipación de amenazas para enseñar un concepto por vez.
 
 ## Cómo evaluar el resultado
 
@@ -59,7 +57,7 @@ No añadir modos, unidades ni reglas durante la fase visual actual. La petición
 - Mantener visibles accesos, barras de resistencia y selección en partidas con muchas unidades.
 - Validar capturas reales de escritorio y móvil; las pruebas automáticas de lógica no demuestran calidad visual ni diversión.
 
-## Primera aplicación de la dirección
+## Animación y dibujo compartido
 
 - Las cuatro armas comparten dibujo entre proyectil, mano del defensor y reserva junto a la tienda (`weapon-art.js`).
 - La pose se calcula a partir del disparo y la cadencia reales: carga, lanzamiento y recuperación (`poses.js`). El primer tiro al adquirir un objetivo es inmediato, sin introducir un nuevo retraso de daño.
@@ -67,5 +65,3 @@ No añadir modos, unidades ni reglas durante la fase visual actual. La petición
 - Cocinas con vapor, construcciones con marcas de desgaste y personajes con una señal breve al recibir impactos.
 - El fuego muestra humo suave y un arco de duración. Los efectos se congelan con el tiempo de la simulación al pausar.
 - Se conservan Sol, las once calles, la colocación libre, estadísticas y costes existentes.
-
-Validación: comprobaciones de sintaxis y pruebas de lógica. Pendiente revisión visual real en navegador y partidas de equilibrio; esta implementación no equivale a haber validado aún la calidad visual o la diversión.

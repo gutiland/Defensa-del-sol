@@ -89,7 +89,6 @@ export function drawDefenseStructure(ctx, type, level = 1, base = false) {
     }
   } else if (type === "area") {
     canvasShelter(ctx, "#ab78ab", "ridge", level);
-    // Paint supplies belong to a tent workshop, not a siege machine.
     ctx.fillStyle = "#73523f";
     ctx.fillRect(-30, 16, 59, 7);
     ctx.strokeRect(-30, 16, 59, 7);

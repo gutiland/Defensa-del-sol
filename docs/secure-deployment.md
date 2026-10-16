@@ -52,7 +52,7 @@ Solo si una plataforma de contenedores lo requiere, configurar `HOST=0.0.0.0` ju
 
 ## Pago y guardado
 
-El apoyo solo admite enlaces HTTPS del host exacto `buy.stripe.com`, sin credenciales, puerto adicional, query ni fragmento. Sigue siendo el enlace autorizado por el usuario. Nuevos proveedores o dominios personalizados requieren una revisión explícita de esa lista. No se procesan tarjetas ni se almacenan claves de Stripe; no hay ventajas de pago ni confirmaciones simuladas. Cualquier futura recompensa de pago requerirá verificación de servidor.
+El apoyo solo admite enlaces HTTPS del host exacto `buy.stripe.com`, sin credenciales, puerto adicional, query ni fragmento. Se configura en `src/data/support.js`. Nuevos proveedores o dominios personalizados requieren revisar esa lista. No se procesan tarjetas ni se almacenan claves de Stripe; no hay ventajas de pago ni confirmaciones simuladas. Cualquier futura recompensa de pago requerirá verificación de servidor.
 
 Se limita el tamaño del JSON local antes de parsearlo y se valida estructura, medallas conocidas, opciones de historia, base y geometría del campamento. Son medidas de robustez del cliente: el dueño del navegador todavía puede hacer trampas; no deben usarse como prueba de identidad, pago o resultados de una clasificación online.
 
@@ -60,7 +60,7 @@ Se limita el tamaño del JSON local antes de parsearlo y se valida estructura, m
 
 1. Desplegar únicamente la salida nueva de `dist`. Verificar portada, mejora de casetas, audio, guardado y resultado en escritorio y móvil con la política real aplicada.
 2. Desde el dominio público, comprobar que `/server.js`, `/.env`, `/AGENTS.md`, `/admin.html` y `/src/admin-game.js` no devuelven su contenido, y que las respuestas incluyen CSP/nosniff y HTTPS correcto. Repetir en cada cambio de proveedor.
-3. Verificar manualmente el destinatario e importe del enlace de Stripe en modo apropiado. No compartir claves secretas; usar autenticación multifactor y acceso mínimo en Stripe, hosting y repositorio. Estas cuentas no se han auditado ni modificado desde esta sesión.
+3. Verificar manualmente el destinatario e importe del enlace de Stripe en modo apropiado. No compartir claves secretas; usar autenticación multifactor y acceso mínimo en Stripe, hosting y repositorio.
 4. Mantener Node y las herramientas en versiones soportadas con actualizaciones de seguridad. Los scripts de copia, build y pruebas son propios y no añaden dependencias de producción.
 5. Conservar copia del código en un repositorio privado o con una política de acceso revisada. `.gitignore` ayuda a evitar archivos sensibles futuros, pero no elimina secretos previamente publicados ni sustituye una revisión del historial.
 

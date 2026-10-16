@@ -1,10 +1,46 @@
+# Dependencies and generated output
 node_modules/
 dist/
+coverage/
+.nyc_output/
+test-results/
+playwright-report/
+.cache/
+.npm/
+.netlify/
+
+# Local environment and credentials
 .env
 .env.*
 !.env.example
+!.env.*.example
 *.pem
 *.key
 *.p12
+*.pfx
+
+# Local assistant instructions and state
+AGENTS.md
+AGENTS.local.md
+.agents/
+.codex/
+.claude/
+CLAUDE.md
+.cursor/
+.aider*
 %USERPROFILE%/
+
+# Editor and operating-system files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Logs and temporary files
 *.log
+*.tmp
+*.temp

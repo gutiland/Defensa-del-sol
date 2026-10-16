@@ -1,5 +1,4 @@
-// Adapted from the user's supplied story material. Source labels are supplied
-// provenance, not independently verified quotations or claims about participants.
+// Story scenes are fictional adaptations; news references provide context.
 const reported = (text, source, context) => ({
   text,
   source,
@@ -296,7 +295,7 @@ export const STORY_CHAPTERS = [
         reported(
           text,
           "Carteles 15M",
-          "Referencia de 2011 aportada por el usuario; no atribuida a la acampada actual.",
+          "Referencia histórica de 2011; no atribuida a la acampada actual.",
         ),
       ),
       ...[

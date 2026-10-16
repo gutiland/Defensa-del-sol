@@ -8,7 +8,7 @@ La campaña tiene tres niveles y veinte rondas: Dani cierra el primero en la ron
 
 Para publicar usa `npm.cmd run build` y sube **solo `dist`**. `npm.cmd run preview` comprueba esa salida localmente. Se incluye configuración para Netlify y cabeceras de protección; consulta [secure-deployment.md](docs/secure-deployment.md). El servidor local ya no publica documentos ni archivos arbitrarios del proyecto. Reinicia cualquier servidor anterior para activar los cambios.
 
-Botón de apoyo voluntario en portada y resultados: `src/data/support.js` contiene el enlace público de Stripe autorizado. Solo se admiten enlaces HTTPS del host exacto `buy.stripe.com`; otros proveedores requieren revisar expresamente esa restricción. Si está vacío o es inválido, el botón permanece desactivado. El pago se abre en otra pestaña; el juego no recoge tarjetas, no confirma pagos ni concede ventajas. No introduzcas claves secretas en ese archivo.
+Botón de apoyo voluntario en portada y resultados: `src/data/support.js` contiene el enlace público de Stripe. Solo se admiten enlaces HTTPS del host exacto `buy.stripe.com`; otros proveedores requieren revisar esa restricción. Si está vacío o es inválido, el botón permanece desactivado. El pago se abre en otra pestaña; el juego no recoge tarjetas, no confirma pagos ni concede ventajas. No introduzcas claves secretas en ese archivo.
 
 Abre `index.html` mediante un servidor local. Con Node instalado:
 
@@ -48,7 +48,7 @@ Durante el combate puedes pausar con el botón o la barra espaciadora, y alterna
 
 Al colocar una caseta se selecciona para inspeccionarla, evitando compras accidentales con el siguiente clic. Las mejoras, especializaciones y retirada aparecen en un panel flotante sobre el tablero, junto a la caseta seleccionada. Mantén Mayús al colocar para construir varias seguidas. Esc, clic derecho o «Cancelar selección» salen de colocación. Atajos fuera de formularios: 1 caseta, 2 área, 3 megafonía, 4 olor, 5 cocina, 6 barricada; Q activa Asamblea y Enter inicia la ronda. Los mensajes de colocación permanecen 3,5 segundos aunque se actualicen los contadores.
 
-`npm.cmd run check` comprueba la sintaxis de los módulos y ejecuta las pruebas. Las prioridades de próximas iteraciones están en `docs/roadmap.md`.
+Las tareas pendientes están en [la hoja de ruta](docs/roadmap.md).
 
 Las tiendas defensoras y la tienda central tienen cuatro niveles de arma: piedras (7 de daño), piedras grandes (12), botellas (18) y molotov (23). Las mejoras cuestan 30, 60 y 90 provisiones. Selecciona la tienda para mejorarla durante preparación o combate en defensa. El molotov deja al impactar un charco de radio 45 que inflige 4 de daño por segundo durante 4 segundos; los charcos superpuestos no multiplican el daño. El fuego se limpia al terminar la ronda. Las demás construcciones conservan sus tres niveles. Estos valores son los iniciales, antes de especializaciones y protección enemiga.
 
@@ -95,14 +95,14 @@ Dani acelera escoltas cercanos, Pedro alterna protección y carrera cada 4 segun
 
 En ataque y duelo, reclutar a Dani cuesta 210 provisiones y a Pedro o Santi, 200. El presupuesto inicial exige ahorrar para ellos. Admin conserva su dinero ilimitado y permite enviar jefes directamente.
 
-«Eau de Asamblea» cuesta 50 y ralentiza por olor en su radio (35/40/45 % según nivel, antes de especializar). «Cayetano Premium» cuesta 30 y es inmune solo al olor. Los agitadores digitales aceleran un 15 % a aliados de otros tipos dentro de radio 65. Las copias de una misma aura no se acumulan. Al combinar olor y megafonía se aplica la ralentización más fuerte.
+«Eau de Asamblea» cuesta 50 y causa daño continuo por olor. «Cayetano Premium» cuesta 30 y es inmune al olor. Los agitadores digitales aceleran un 15 % a aliados de otros tipos dentro de radio 65. Las copias de una misma aura no se acumulan.
 
-Modo historia: Dani en ronda 5, Pedro en 10, Santi en 15 y los tres en 20. Cada ronda avanza el relato de la plaza. Nuevos atacantes: Socorrista (ronda 8, regenera 5 de vida/s) e Indignado (ronda 12, bajo media vida gana 60 % de velocidad y 50 % de golpe). El laboratorio permite probar las veinte rondas.
+Cada ronda avanza el relato de la plaza. Nuevos atacantes: Socorrista (ronda 8, regenera 5 de vida/s) e Indignado (ronda 12, bajo media vida gana 60 % de velocidad y 50 % de golpe). El laboratorio permite probar las veinte rondas.
 
-En ataque llegan refuerzos al campamento antes de cada ronda 2 a 8, con animaci?n de montaje. El presupuesto entre asaltos es 100 + 35 por n?mero de ronda. Al terminar cualquier ronda se limpian las selecciones de caseta, colocaci?n y calles.
+En ataque llegan refuerzos al campamento antes de cada ronda 2 a 8, con animación de montaje. El presupuesto entre asaltos es 100 + 35 por número de ronda. Al terminar cualquier ronda se limpian las selecciones de caseta, colocación y calles.
 
-Historia actual: tres niveles con casetas y mejoras persistentes. Nivel 1: rondas 1-5, Dani. Nivel 2: rondas 6-12, Santi. Nivel 3: rondas 13-20, Pedro. Sustituye el calendario previo de cuatro rondas de jefe y final con los tres juntos.
+Tres niveles con casetas y mejoras persistentes. Nivel 1: rondas 1-5, Dani. Nivel 2: rondas 6-12, Santi. Nivel 3: rondas 13-20, Pedro.
 
 ## Sala de eventos
 
-Abre `http://localhost:3000/events.html` para probar directamente lluvia, tienda ocupada, 12-O y entradas de los tres jefes. Incluye campamento preparado, dinero infinito, base invulnerable, escenas con decisiones, repetici?n, pausa, velocidad y avance de cinco segundos. La prueba no cambia de ronda autom?ticamente ni afecta partidas normales. Tambi?n hay enlaces desde la portada y admin.
+Abre `http://localhost:3000/events.html` para probar directamente lluvia, tienda ocupada, 12-O y entradas de los tres jefes. Incluye campamento preparado, dinero infinito, base invulnerable, escenas con decisiones, repetición, pausa, velocidad y avance de cinco segundos. La prueba no cambia de ronda automáticamente ni afecta partidas normales. También hay enlaces desde la portada y admin.

@@ -349,7 +349,6 @@ export function buildingDefender(building) {
   return tentResidents.get(building);
 }
 
-// Visual faction markers for this fictional game, not real political endorsements.
 export function characterFlag(id) {
   return (
     { flag: "spain", polo: "spain", student: "palestine", union: "republic" }[

@@ -2,6 +2,8 @@
 
 ## Estado actual
 
+El nivel 1 (rondas 1–5) incluye guía contextual que responde a selección, colocación, mejoras y combate: objetivo y caja, primera caseta, deshacer, Asamblea y pausa, especialidades, radio y área, barricadas y eventos, preparación del jefe y persistencia. Resalta el control relevante sin bloquear acciones ni modificar economía o simulación. Se puede omitir para la partida actual; no aparece en laboratorios, duelo ni niveles posteriores.
+
 Ajuste de legibilidad: fuente cartoon reservada a marca y títulos grandes; botones, controles, descripciones y títulos pequeños usan Arial/Helvetica. Desactivada la síntesis de negrita y retirado el escalado de controles al interactuar; se conserva la respuesta de color y el foco visible. Las sombras de texto siguen desactivadas. Pendiente revisión visual en el equipo del usuario.
 
 Icono de pestaña propio: caseta dorada y sol sobre fondo verde, en SVG local incluido en la distribución y en los laboratorios de desarrollo.

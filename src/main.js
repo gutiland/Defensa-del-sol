@@ -18,6 +18,7 @@ import { nearestConstruction } from "./ui/construction-hit.js";
 import { loadCampaign, saveCampaign } from "./campaign-save.js";
 import { preferences, mountExperienceSettings } from "./preferences.js";
 import { mountSupport } from "./ui/support.js";
+import { createTutorial } from "./ui/tutorial.js";
 applyStaticCopy(document);
 mountGallery(document);
 mountExperienceSettings(document);
@@ -37,6 +38,7 @@ let resultWait = 0;
 const audio = createAudio(document);
 const playback = new Playback();
 const controls = createPlaybackControls(document, playback, () => game);
+const tutorial = createTutorial(document);
 const introductions = createEnemyIntroductions(
   document,
   playback,
@@ -113,6 +115,7 @@ function command(c, afterScene = false) {
   if (c.type === "ready" || c.type === "test-boss") saveCampaign(game);
   const ok = game.command(c);
   if (ok) {
+    tutorial.record(c);
     clearFeedback(game);
     update();
     audio.action(c.type);
@@ -144,6 +147,7 @@ function update() {
     },
   );
   $("cancel-build").disabled = !placing && selected === null;
+  tutorial.render(game, { placing, selected });
 }
 function cancelPlacement() {
   if (game) clearFeedback(game);
@@ -280,6 +284,7 @@ function frame(now) {
       refresh = 0;
     } else if (refresh > 0.2) {
       renderLiveStats(game);
+      tutorial.render(game, { placing, selected });
       refresh = 0;
     }
     if (game.result && !shown && !game.sandbox) {

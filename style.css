@@ -287,6 +287,38 @@ p {
   grid-template-columns: minmax(0, 1fr) 260px;
   gap: 22px;
 }
+.tutorial-guide {
+  grid-column: 1 / -1;
+  order: -1;
+  background: #fff1ce;
+  color: #20362a;
+  border: 2px solid #f4ce66;
+  border-radius: 10px;
+  padding: 12px 16px;
+  margin: 12px 0;
+}
+#game {
+  display: flex;
+  flex-direction: column;
+}
+#game > .game-heading {
+  order: -2;
+}
+.tutorial-guide p {
+  color: #20362a;
+  margin: 6px 0;
+  font-size: 14px;
+}
+.tutorial-guide button {
+  font-size: 12px;
+  padding: 6px 10px;
+  background: #20362a;
+  color: #fff1ce;
+}
+[data-tutorial-target="true"] {
+  outline: 3px solid #f4ce66;
+  outline-offset: 3px;
+}
 .play-layout > aside {
   padding-top: 10px;
 }

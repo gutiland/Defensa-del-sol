@@ -1,4 +1,9 @@
 // One deterministic slip per selected attacker, so weather never causes a stunlock.
+export function rainDamageMultiplier(game, type) {
+  if (game?.storyEvent?.id !== "rain") return 1;
+  return type === "odor" ? 0.5 : type === "molotov" ? 0.6 : 1;
+}
+
 export function advanceRainSlip(game, unit, dt) {
   if (game.storyEvent?.id !== "rain") return false;
   if (unit.slipRemaining > 0) {

@@ -3,15 +3,13 @@ import assert from "node:assert/strict";
 import { Game } from "../src/engine.js";
 import { tryDialogue } from "../src/dialogue.js";
 import { CHARACTERS } from "../src/data/characters.js";
-test("boss speech preserves the documented quotation and its attribution", () => {
+test("boss speech uses fictional dialogue without attributing it to a real speaker", () => {
   for (const id of ["bossDani", "bossPedro", "bossSanti"]) {
     const game = new Game();
     assert.ok(tryDialogue(game, id, { x: 500, y: 340 }));
     const speech = game.speeches[0];
-    assert.ok(speech.quote);
-    assert.equal(speech.text, speech.quote.text);
-    assert.ok(speech.quote.source.startsWith("https://"));
-    assert.ok(speech.quote.context.length > 0);
+    assert.equal(speech.quote, undefined);
+    assert.ok(CHARACTERS[id].lines.includes(speech.text));
   }
 });
 

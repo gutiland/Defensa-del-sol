@@ -1,4 +1,5 @@
 import { dealDamage } from "./boss-mechanics.js";
+import { rainDamageMultiplier } from "./rain.js";
 export function resolveProjectiles(game, dt) {
   for (const projectile of game.projectiles) {
     projectile.life -= dt;
@@ -13,11 +14,23 @@ export function resolveProjectiles(game, dt) {
           Math.hypot(unit.x - projectile.tx, unit.y - projectile.ty) <=
             projectile.weapon.splash
         ) {
-          dealDamage(game, unit, projectile.weapon.damage, projectile.weapon);
+          dealDamage(
+            game,
+            unit,
+            projectile.weapon.damage *
+              rainDamageMultiplier(game, projectile.weapon.type),
+            projectile.weapon,
+          );
         }
       }
     } else if (target) {
-      dealDamage(game, target, projectile.weapon.damage, projectile.weapon);
+      dealDamage(
+        game,
+        target,
+        projectile.weapon.damage *
+          rainDamageMultiplier(game, projectile.weapon.type),
+        projectile.weapon,
+      );
     }
     game.effects.push({
       type: projectile.weapon.splash ? "splash" : "impact",
@@ -54,7 +67,10 @@ export function burnGround(game, dt) {
       damage = 0;
     for (const fire of game.fires) {
       if (Math.hypot(unit.x - fire.x, unit.y - fire.y) > fire.radius) continue;
-      const amount = fire.dps * Math.min(dt, fire.life);
+      const amount =
+        fire.dps *
+        Math.min(dt, fire.life) *
+        rainDamageMultiplier(game, "molotov");
       if (amount > damage) {
         damage = amount;
         strongest = fire;

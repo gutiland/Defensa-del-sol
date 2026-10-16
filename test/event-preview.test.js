@@ -6,7 +6,7 @@ import { placementError } from "../src/placement.js";
 test("preview exposes every event and boss with a prepared legal camp and no campaign requirements", () => {
   assert.deepEqual(
     EVENT_PREVIEWS.map((item) => item.round),
-    [4, 5, 9, 12, 15, 20],
+    [4, 5, 9, 12, 15, 17, 20],
   );
   for (const item of EVENT_PREVIEWS) {
     const game = new EventPreviewGame(item.round);

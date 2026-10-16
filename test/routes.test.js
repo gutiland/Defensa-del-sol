@@ -21,7 +21,7 @@ test("barricades require a path while ordinary buildings must stay off it", () =
   );
   assert.ok(game.command({ type: "build", kind: "barrier", x, y }));
   assert.equal(game.command({ type: "build", kind: "barrier", x, y }), false);
-  assert.equal(game.money, 85);
+  assert.equal(game.money, 115);
 });
 
 test("all entrances share one winding final corridor and have substantial travel distance", () => {

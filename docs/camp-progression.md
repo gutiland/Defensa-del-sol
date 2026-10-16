@@ -14,15 +14,16 @@ Cada clase usa siempre la misma cara, ropa y accesorios; las fases de paso puede
 
 | Primera ronda | Tipo | Diferencia principal |
 |---|---|---|
-| 1 | Raso | 58 vida, velocidad 44 |
-| 2 | Agitador | 38 vida, velocidad 92, aura +25 % |
-| 3 | Pancartista | 175 vida, armadura 3 |
-| 4 | Perfumado | 78 vida, inmune al olor |
+| 1 | Raso | 70 vida, velocidad 44 |
+| 2 | Agitador | 46 vida, velocidad 92, aura +25 % |
+| 3 | Pancartista | 210 vida, armadura 3 |
+| 4 | Perfumado | 94 vida, inmune al olor |
 | 5 | Dani | Primer jefe, acelera escoltas |
-| 6 | Blindado | 135 vida, armadura 6 |
-| 7 | Ultrasprint | 28 vida, velocidad 125 |
-| 8 | Socorrista | 105 vida, regenera 5/s |
-| 12 | Indignado | 165 vida, bajo media vida +60 % velocidad y +50 % golpe |
+| 6 | Blindado | 162 vida, armadura 6 |
+| 7 | Ultrasprint | 34 vida, velocidad 125 |
+| 7 | Inspector de Cremalleras | 100 de vida base, se detiene en el camino para atacar casetas cercanas; las barricadas tienen prioridad |
+| 8 | Socorrista | 126 vida, regenera 5/s |
+| 12 | Indignado | 198 vida, bajo media vida +60 % velocidad y +50 % golpe |
 | 12 | Santi | Segundo jefe, armadura 8 |
 | 20 | Pedro | Jefe final, escudo y carrera |
 

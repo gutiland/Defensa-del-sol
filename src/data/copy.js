@@ -71,7 +71,7 @@ export const COPY = {
     },
     kitchen: {
       name: "Ministerio del táper",
-      desc: "+20 provisiones por nivel y ronda. Reparto horizontal; el portavoz repite por responsabilidad institucional.",
+      desc: "+15 provisiones por nivel y ronda. Reparto horizontal; el portavoz repite por responsabilidad institucional.",
     },
     barrier: {
       name: "Línea roja de quita y pon",
@@ -81,11 +81,11 @@ export const COPY = {
   units: {
     basic: {
       name: "Cuñado de orden",
-      desc: "58 de aguante · velocidad 44. Pide mano dura desde una silla plegable. Primero España; aparcar en doble fila, también.",
+      desc: "70 de aguante · velocidad 44. Pide mano dura desde una silla plegable. Primero España; aparcar en doble fila, también.",
     },
     fast: {
       name: "Patriota de fibra óptica",
-      desc: "38 de aguante · velocidad 92. Su directo acelera un 25 % a aliados cercanos, salvo otros agitadores. Reenvía antes de leer.",
+      desc: "46 de aguante · velocidad 92. Su directo acelera un 25 % a aliados cercanos, salvo otros agitadores. Reenvía antes de leer.",
     },
     heavy: {
       name: "Liberal de ventanilla",

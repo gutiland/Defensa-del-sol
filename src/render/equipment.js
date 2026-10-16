@@ -3,7 +3,24 @@ import { drawWeapon } from "./weapon-art.js";
 export function drawEquipment(ctx, role, side, time = 0, pose = {}) {
   ctx.save();
   ctx.lineJoin = "round";
-  if (role === "medic") {
+  if (role === "saboteur") {
+    ctx.fillStyle = "#f4c555";
+    ctx.strokeStyle = "#263c46";
+    ctx.lineWidth = 3;
+    ctx.fillRect(-14, -20, 28, 8);
+    ctx.strokeRect(-14, -20, 28, 8);
+    ctx.fillStyle = "#34536b";
+    ctx.fillRect(12, -3, 17, 23);
+    ctx.strokeRect(12, -3, 17, 23);
+    ctx.strokeStyle = "#fff3c6";
+    ctx.lineWidth = 2;
+    for (let y = 2; y < 16; y += 5) {
+      ctx.beginPath();
+      ctx.moveTo(16, y);
+      ctx.lineTo(25, y);
+      ctx.stroke();
+    }
+  } else if (role === "medic") {
     ctx.fillStyle = "#21694f";
     ctx.strokeStyle = "#152e25";
     ctx.lineWidth = 2;

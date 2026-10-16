@@ -13,14 +13,21 @@ export function renderStory(game, document) {
   if (root.hidden) return;
   const previous = views.get(root);
   const completed = Math.min(game.defendedWaves || 0, STORY_CHAPTERS.length);
+  const available = Math.min(
+    STORY_CHAPTERS.length,
+    Math.max(1, completed, game.round),
+  );
+  const reportCount = game.reports?.length || 0;
+  const choice = game.storyChoices?.[game.round];
   if (
     previous?.game === game &&
     previous.round === game.round &&
-    previous.completed === completed
+    previous.completed === completed &&
+    previous.available === available &&
+    previous.reportCount === reportCount &&
+    previous.choice === choice &&
+    previous.phase === game.phase
   ) {
-    if (game.phase === "combat" && previous.phase !== "combat")
-      previous.archive.open = false;
-    previous.phase = game.phase;
     return;
   }
   root.replaceChildren();
@@ -34,7 +41,6 @@ export function renderStory(game, document) {
     select = make("select"),
     card = make("div");
   select.setAttribute("aria-label", "Releer un capítulo descubierto");
-  const available = Math.max(1, completed);
   for (let i = 0; i < available; i++) {
     const option = make("option", `${i + 1}. ${STORY_CHAPTERS[i].title}`);
     option.value = String(i);
@@ -129,12 +135,18 @@ export function renderStory(game, document) {
       card.append(sources);
     }
   }
-  select.onchange = () => show(Number(select.value));
+  select.onchange = () => {
+    show(Number(select.value));
+    archive.ontoggle();
+  };
   archive.open =
-    completed > 0 &&
-    (previous?.game !== game || completed > previous.completed);
+    previous?.game !== game ||
+    previous.round !== game.round ||
+    (game.phase === "combat" && previous.phase !== "combat") ||
+    completed > previous.completed ||
+    previous.archive.open;
   archive.ontoggle = () => {
-    summary.textContent = `Diario de la plaza · ${archive.open ? "Minimizar" : "Abrir"}${completed ? ` · Ronda ${completed}` : ""}`;
+    summary.textContent = `Diario de la plaza · ${archive.open ? "Minimizar" : "Abrir"} · Ronda ${Number(select.value) + 1}`;
   };
   archive.ontoggle();
   archive.append(summary, select, card);
@@ -143,6 +155,9 @@ export function renderStory(game, document) {
     game,
     round: game.round,
     completed,
+    available,
+    reportCount,
+    choice,
     phase: game.phase,
     archive,
   });

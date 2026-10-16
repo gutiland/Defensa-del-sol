@@ -159,9 +159,12 @@ p {
 }
 .modes {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(2, 1fr);
   gap: 18px;
   margin: 40px 0;
+}
+#continue-campaign {
+  grid-column: 1 / -1;
 }
 .modes button {
   text-align: left;
@@ -587,8 +590,8 @@ h3 {
 }
 .story-chapter small {
   display: block;
-  font-size: 0.7rem;
-  opacity: 0.75;
+  font-size: 0.8rem;
+  opacity: 1;
 }
 .story-chapter summary {
   cursor: pointer;
@@ -760,6 +763,9 @@ aside .panel {
 }
 #story-scene {
   width: min(760px, calc(100vw - 24px));
+  --muted: #33434b;
+  --ink: #192b36;
+  color-scheme: light;
   border: 3px solid #172b39;
   border-radius: 8px;
   padding: 20px;
@@ -803,6 +809,37 @@ aside .panel {
 .story-chapter summary,
 .story-chapter blockquote {
   color: #203126;
+}
+.story-chapter {
+  --muted: #33432d;
+  --ink: #203126;
+  color-scheme: light;
+}
+.story-reference {
+  background: #fffaf0;
+  color: #233c46;
+  border: 1px solid #9b927b;
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: left;
+}
+.story-reference a {
+  color: #21535c;
+  text-decoration: underline;
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+.story-reference small {
+  display: block;
+  margin-top: 6px;
+  color: #233c46;
+  font-size: 0.85rem;
+  line-height: 1.55;
+  opacity: 1;
+}
+.story-reference a:focus-visible {
+  outline: 2px solid #21535c;
+  outline-offset: 3px;
 }
 .story-chapter select {
   color: #203126;
@@ -1012,7 +1049,7 @@ button:disabled {
   flex-basis: 100%;
 }
 #save-status {
-  color: #254c3b;
+  color: var(--muted);
 }
 .support-actions {
   display: flex;
@@ -1020,9 +1057,16 @@ button:disabled {
   align-items: center;
   gap: 10px;
   margin: 16px 0;
+  padding: 14px;
+  background: #20362a;
+  border: 1px solid #859774;
+  border-radius: 12px;
 }
 .support-actions small {
-  color: #254c3b;
+  flex: 1 1 280px;
+  color: #edf1df;
+  font-size: 0.85rem;
+  line-height: 1.55;
 }
 .support-button {
   display: inline-flex;

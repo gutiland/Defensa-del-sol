@@ -2,7 +2,13 @@
 
 Tower defense 2D para navegador ambientado en una Puerta del Sol imaginaria y satírica. Usa módulos nativos y no necesita instalar dependencias.
 
+Los personajes son caricaturas con diálogos originales y acciones ficticias, sin afiliación ni patrocinio de las personas u organizaciones aludidas. Las noticias enlazadas aportan contexto y no describen los combates del juego. Criterios editoriales en [satire.md](docs/satire.md).
+
 La campaña tiene tres niveles y veinte rondas: Dani cierra el primero en la ronda 5, Santi el segundo en la 12 y Pedro el tercero en la 20. Mantienes el campamento y sus mejoras. Los tipos de atacante se introducen progresivamente; una ficha pausa la partida al ver cada tipo por primera vez. Admin permite probarlos sin interrupciones.
+
+Desde el segundo nivel aumentan progresivamente vida, velocidad y daño de los enemigos normales, y los grupos llegan más seguidos. Los jefes posteriores tienen más resistencia. La anticipación de oleada muestra los multiplicadores de la ronda; las recompensas por baja no crecen con ellos. Esta escala solo afecta a la campaña de defensa.
+
+El equilibrio busca que la victoria requiera un campamento de al menos unas veinte casetas mejoradas. La cantidad por sí sola no garantiza ganar: importan cobertura, especializaciones y combinación de control y daño. `node scripts/camp-balance.js` compara campamentos mixtos al máximo contra la ronda final, sin simular su compra.
 
 ## Jugar
 
@@ -20,8 +26,8 @@ Visita http://localhost:3000. Para detener el servidor, pulsa Ctrl+C en la termi
 
 ## Modos
 
-- **Defensa:** tienda central, 110 provisiones y modo historia de veinte rondas. Construye y mejora también durante el combate. Cada baja paga provisiones: básicos 5, rápidos 6, pesados 12, perfumados 8, blindados 10, Ultrasprint 6 y jefes 55. Tiendas y base tienen cuatro niveles; otras construcciones, tres. Las cocinas producen ingresos y las construcciones recuperan 25 de resistencia entre rondas.
-- **Ataque:** recluta unidades por accesos contra un campamento que recibe una nueva defensa entre rondas. Dispones de ocho rondas para destruir la tienda central. Los daños persisten entre rondas; los supervivientes del campamento reparan 25 puntos.
+- **Defensa:** tienda central con 660 de resistencia, 140 provisiones iniciales y modo historia de veinte rondas. Construye y mejora también durante el combate. Cada baja paga provisiones: básicos 3, rápidos 4, pesados 8, perfumados 5, blindados 7, Ultrasprint 4, socorristas 6, indignados 8 y jefes 35. Entre rondas recibes 45 más los ingresos de cocina (15 por nivel y 15 extra con Comedor). Tiendas y base tienen cuatro niveles; otras construcciones, tres. Las construcciones recuperan 25 de resistencia entre rondas.
+- **Ataque (oculto en el MVP):** conservado para una fase posterior. Empieza con 150 provisiones y recluta unidades por accesos contra un campamento que recibe una nueva defensa entre rondas. Dispones de ocho rondas para destruir la tienda central. Los daños persisten entre rondas; los supervivientes del campamento reparan 25 puntos.
 - **Duelo local:** dos personas comparten navegador. El defensor construye y pasa el turno al atacante, que recluta y despliega. El defensor gana si resiste ocho rondas; el atacante gana al destruir la base.
 
 Los atacantes siguen caminos completos hasta la tienda central. Las barricadas se colocan sobre el camino: detienen a los atacantes, que deben destruirlas antes de continuar. Las barricadas no causan daño. Las demás construcciones se colocan libremente fuera de los caminos. No hay decisiones estratégicas de IA. Las casetas empiezan pequeñas y remendadas y crecen visualmente con los niveles, sin cambiar las reglas de colocación. Solo algunas tienen defensor visible.
@@ -79,11 +85,15 @@ La geometría está dibujada a mano y adaptada al tablero: no es una reproducci�
 
 Los once accesos están disponibles. Victoria enlaza con Carrera de San Jerónimo mediante una ruta con giro. Los caminos visibles y la simulación comparten geometría, rodean la plaza y confluyen en un corredor final hasta la base. Los atacantes pueden superponerse; solo las barricadas bloquean el paso.
 
+Desde la ronda 7 aparece el Inspector de Cremalleras: se detiene en el camino para atacar casetas a menos de 85 unidades, con un aviso antes del golpe. No abandona su ruta ni atraviesa barricadas; si pierde su objetivo, vuelve a avanzar hacia la base. Empieza uno por oleada y se añade otro cada cuatro rondas.
+
 ## Combate y especializaciones
 
 ### Laboratorio y corrección de colocaciones
 
 Abre [admin.html](http://localhost:3000/admin.html) con el servidor arrancado, o entra desde el enlace de la portada. El laboratorio tiene dinero ilimitado y permite construir defensas, enviar cualquier atacante o jefe por cualquier calle, cargar oleadas, limpiar el combate, reparar, alternar la invulnerabilidad de la base, recargar la habilidad y restablecer especializaciones. Pausa y velocidad funcionan igual que en el juego. El laboratorio permanece en la prueba actual hasta que vuelves a preparación o cargas otra oleada.
+
+Para comprobar una defensa con recursos limitados, elige ronda y pulsa **Preparar ronda con presupuesto**. Se vacía el tablero y recibes las provisiones iniciales, las recompensas de todas las bajas anteriores y los ingresos fijos entre rondas. No descuenta gastos anteriores ni suma cocinas. Coloca tus casetas y pulsa Iniciar oleada; se aplican resistencia y eventos de campaña y la base puede perder vida. Reiniciar el laboratorio recupera el dinero ilimitado.
 
 En defensa normal, usa **Deshacer última colocación** o selecciona la nueva tienda y pulsa **Retirar y recuperar…**. Se devuelve todo lo invertido en ella, incluidas mejoras, hasta que comienza la ronda. Las construcciones que ya participaron en rondas anteriores y la base no se pueden retirar.
 
@@ -99,7 +109,7 @@ En ataque y duelo, reclutar a Dani cuesta 210 provisiones y a Pedro o Santi, 200
 
 Cada ronda avanza el relato de la plaza. Nuevos atacantes: Socorrista (ronda 8, regenera 5 de vida/s) e Indignado (ronda 12, bajo media vida gana 60 % de velocidad y 50 % de golpe). El laboratorio permite probar las veinte rondas.
 
-En ataque llegan refuerzos al campamento antes de cada ronda 2 a 8, con animación de montaje. El presupuesto entre asaltos es 100 + 35 por número de ronda. Al terminar cualquier ronda se limpian las selecciones de caseta, colocación y calles.
+En ataque llegan refuerzos al campamento antes de cada ronda 2 a 8, con animación de montaje. El presupuesto entre asaltos es 80 + 25 por número de ronda. Al terminar cualquier ronda se limpian las selecciones de caseta, colocación y calles.
 
 Tres niveles con casetas y mejoras persistentes. Nivel 1: rondas 1-5, Dani. Nivel 2: rondas 6-12, Santi. Nivel 3: rondas 13-20, Pedro.
 

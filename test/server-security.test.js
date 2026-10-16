@@ -63,6 +63,49 @@ async function cleanup(root) {
   await rm(root, { recursive: true, force: true });
 }
 
+test("development reload includes newly imported modules without exposing unrelated files or changing public manifests", async () => {
+  const root = await fixture();
+  const servers = [];
+  try {
+    await mkdir(path.join(root, "src/ui"));
+    for (const file of [
+      "admin.html",
+      "events.html",
+      "performance.html",
+      "src/admin-game.js",
+      "src/ui/admin.js",
+      "src/events-main.js",
+      "src/performance-main.js",
+    ])
+      await writeFile(path.join(root, file), "");
+    const dev = await listen({ root, development: true });
+    servers.push(dev.server);
+    const publicSite = await listen({ root });
+    servers.push(publicSite.server);
+    await writeFile(
+      path.join(root, "src/new-module.js"),
+      "export const ready = true;",
+    );
+    await writeFile(path.join(root, "src/private.js"), "private data");
+    await writeFile(
+      path.join(root, "src/main.js"),
+      'import "./new-module.js";',
+    );
+    assert.equal((await request(dev.port, "/")).status, 200);
+    assert.equal((await request(dev.port, "/src/new-module.js")).status, 200);
+    assert.equal((await request(dev.port, "/src/private.js")).status, 404);
+    assert.equal((await request(dev.port, "/server.js")).status, 404);
+    assert.equal((await request(publicSite.port, "/")).status, 200);
+    assert.equal(
+      (await request(publicSite.port, "/src/new-module.js")).status,
+      404,
+    );
+  } finally {
+    for (const server of servers) await stop(server);
+    await cleanup(root);
+  }
+});
+
 test("public server serves actual game modules, denies private files and includes browser protections", async () => {
   const { server, port } = await listen({ root: PROJECT_ROOT });
   try {

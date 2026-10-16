@@ -72,6 +72,7 @@ export function drawUnit(ctx, u, game, time, sources, sprites, view = {}) {
         game.time >= game.freezeUntil &&
         u.cooldown <= 0 &&
         !u.waiting &&
+        !u.raidingId &&
         !u.blockedBy &&
         !slipping,
       release: Math.max(0, 1 - (game.time - (u.lastStrike ?? -100)) / 0.25),
@@ -88,6 +89,24 @@ export function drawUnit(ctx, u, game, time, sources, sprites, view = {}) {
   ctx.restore();
   if (!slipping)
     drawAttackerAbilities(ctx, u, game, view.reducedMotion ? 0 : time);
+  if (u.raidingId && !slipping && game.time >= game.freezeUntil) {
+    const target = game.buildings.find((b) => b.id === u.raidingId && b.hp > 0);
+    if (target) {
+      ctx.save();
+      ctx.strokeStyle = "#db7839";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(u.x, projectY(u.y) - 15);
+      ctx.lineTo(target.x, projectY(target.y) - 12);
+      ctx.stroke();
+      ctx.strokeStyle = "#b6382e";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.ellipse(target.x, projectY(target.y), 25, 17, 0, 0, Math.PI * 2);
+      ctx.stroke();
+      ctx.restore();
+    }
+  }
   if (u.kind.startsWith("boss")) {
     ctx.save();
     ctx.fillStyle = "#16352e";

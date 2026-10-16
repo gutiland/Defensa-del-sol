@@ -7,12 +7,12 @@ const boss = (character, name, text) => ({ character, name, text });
 // Original dialogue for fictional caricatures, never presented as real quotations.
 export const STORY_SCENES = {
   5: {
-    title: "Ha llegado la desocupación",
+    title: "Derecho de admisión",
     lines: [
       boss(
         "bossDani",
-        "Dani Desalojo",
-        "¡Ha llegado la desocupación! ¡Se os acaba el camping!",
+        "El Portero",
+        "¡Mi lista de invitados no incluye sacos de dormir!",
       ),
       camp(
         "¡La plaza no se vende! ¡Primero tendrás que pasar por la asamblea!",
@@ -39,7 +39,7 @@ export const STORY_SCENES = {
     lines: [
       boss(
         "bossSanti",
-        "Santi de la Reconquista",
+        "El Capitán del Enfado",
         "¡Vengo a reconquistar la plaza, curva por curva!",
       ),
       camp("¡Pues coge número, que la comisión del plano aún no ha terminado!"),
@@ -50,7 +50,7 @@ export const STORY_SCENES = {
     lines: [
       boss(
         "bossPedro",
-        "Pedro del Cambio",
+        "El Prorrogador",
         "Traía un plan para esta plaza. Ahora traigo otro.",
       ),
       camp("¡Menos cambios de guion y más soluciones para el alquiler!"),

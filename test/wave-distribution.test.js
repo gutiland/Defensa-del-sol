@@ -8,7 +8,9 @@ test("each enemy class is balanced across the round's entrances instead of formi
       const counts = new Map();
       for (const u of wave.filter((u) => u.kind === kind))
         counts.set(u.entry, (counts.get(u.entry) || 0) + 1);
-      assert.ok(counts.size >= 2);
+      assert.ok(
+        counts.size >= Math.min(2, wave.filter((u) => u.kind === kind).length),
+      );
       assert.ok(
         Math.max(...counts.values()) - Math.min(...counts.values()) <= 1,
       );

@@ -1,4 +1,5 @@
 import { EnemyDiscovery } from "../enemy-discovery.js";
+import { rememberEnemyIntroduction } from "../campaign-save.js";
 import { UNITS } from "../data/catalog.js";
 import { attackerCharacter } from "../data/characters.js";
 import { drawCharacter } from "../render/characters.js";
@@ -34,7 +35,7 @@ export function createEnemyIntroductions(
     $("enemy-intro-name").textContent = d.name;
     $("enemy-intro-description").textContent = d.desc;
     $("enemy-intro-stats").textContent =
-      `Aguante ${unit?.maxHp || d.hp} · Velocidad ${d.speed} · Daño ${d.damage}. Su aspecto siempre identifica este tipo.`;
+      `Aguante ${unit?.maxHp || d.hp} · Velocidad ${Math.round(unit?.speed || d.speed)} · Daño ${unit?.damage || d.damage}. Su aspecto siempre identifica este tipo.`;
     const canvas = $("enemy-intro-portrait"),
       ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, 220, 230);
@@ -49,6 +50,7 @@ export function createEnemyIntroductions(
       { moving: false },
     );
     dialog.showModal();
+    rememberEnemyIntroduction(game, kind);
     return true;
   }
   function dismiss() {

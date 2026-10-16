@@ -7,6 +7,7 @@ import {
 } from "../data/weapons.js";
 import { odorStats } from "../stereotypes.js";
 import { BUILDINGS } from "../data/catalog.js";
+import { CHARACTERS } from "../data/characters.js";
 import { canRemove, refundableCost } from "../construction.js";
 import { projectY } from "../data/map.js";
 const $ = (id) => document.getElementById(id);
@@ -57,9 +58,9 @@ export function renderSelection({ game, selected }, command) {
     details.textContent = definition.damage
       ? `Daño ${Math.round(weapon.damage)} · Disparo cada ${weapon.rate.toFixed(2)} s · Alcance ${rangeFor(b, definition)}${weapon.splash ? ` · Radio ${weapon.splash}` : ""}${weapon.fire ? ` · Fuego: ${weapon.fire.dps} daño/s, radio ${weapon.fire.radius}, ${weapon.fire.duration} s` : ""}`
       : b.type === "odor"
-        ? `Olor: ${odorStats(b).dps} daño/s · Radio ${odorStats(b).radius}. No ralentiza ni se acumula. Perfumados inmunes.`
+        ? `Olor: ${odorStats(b, game).dps} daño/s · Radio ${odorStats(b, game).radius}. No ralentiza ni se acumula. Perfumados inmunes.`
         : b.type === "kitchen"
-          ? `Produce ${20 * b.level + (b.branch === "rapid" ? 20 : 0)} provisiones por ronda${b.branch === "power" ? " y 2 cada 5 s de combate" : ""}`
+          ? `Produce ${15 * b.level + (b.branch === "rapid" ? 15 : 0)} provisiones por ronda${b.branch === "power" ? " y 2 cada 5 s de combate" : ""}`
           : "Bloquea el paso hasta que la destruyen. No ataca ni causa daño";
     const info = document.createElement("details"),
       summary = document.createElement("summary");
@@ -83,8 +84,7 @@ export function renderSelection({ game, selected }, command) {
     }
     if (b.id === "base") {
       const spokesperson = document.createElement("p");
-      spokesperson.textContent =
-        "Alicia del Alquiler · Portavoz del campamento";
+      spokesperson.textContent = `${CHARACTERS.spokesperson.name} · Portavoz del campamento`;
       info.append(spokesperson);
     }
     if (b.level < maxLevel(b.type) && canDefend(game)) {

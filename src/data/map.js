@@ -1,6 +1,7 @@
 // Hand-authored schematic coordinates. Gameplay coordinates stay stable.
 export const projectY = (y) => 120 + y * 0.66;
 export const unprojectY = (y) => (y - 120) / 0.66;
+export const METRO_ACCESS = Object.freeze({ x: 405, y: 264 });
 export const STREETS = [
   {
     name: "ARENAL",

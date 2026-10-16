@@ -6,7 +6,7 @@ import { EnemyDiscovery } from "../src/enemy-discovery.js";
 import { createEnemyIntroductions } from "../src/ui/enemy-intro.js";
 import { Playback } from "../src/playback.js";
 
-test("rounds introduce one normal type at a time and retain previous lessons", () => {
+test("rounds introduce normal types progressively and retain previous lessons", () => {
   const seen = new Set();
   const expected = {
     1: "basic",
@@ -14,7 +14,7 @@ test("rounds introduce one normal type at a time and retain previous lessons", (
     3: "heavy",
     4: "perfume",
     6: "armored",
-    7: "sprinter",
+    7: ["sprinter", "saboteur"],
     8: "medic",
     12: "berserker",
   };
@@ -28,7 +28,7 @@ test("rounds introduce one normal type at a time and retain previous lessons", (
     const normal = [...kinds].filter((k) => !k.startsWith("boss"));
     assert.deepEqual(
       normal.filter((k) => !seen.has(k)),
-      expected[round] ? [expected[round]] : [],
+      expected[round] ? [expected[round]].flat() : [],
     );
     assert.deepEqual(
       [...kinds].filter((k) => k.startsWith("boss")),

@@ -7,6 +7,7 @@ export const FEATURED_CHARACTERS = [
   "flag",
   "viral",
   "medic",
+  "saboteur",
   "berserker",
   "bossDani",
   "bossSanti",

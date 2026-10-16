@@ -228,12 +228,12 @@ test("mass defeats pay all rewards once while creating a single grouped reward e
   for (const u of g.units) u.hp = 0;
   g.tick(1 / 60);
   assert.equal(g.kills, 100);
-  assert.equal(g.earned, 500);
+  assert.equal(g.earned, 300);
   const rewards = g.effects.filter((e) => e.type === "reward");
   assert.equal(rewards.length, 1);
-  assert.equal(rewards[0].amount, 500);
+  assert.equal(rewards[0].amount, 300);
   g.tick(1 / 60);
-  assert.equal(g.earned, 500);
+  assert.equal(g.earned, 300);
 });
 
 test("hostile saved data cannot inject inherited story options, oversized JSON or overlapping shelters", () => {

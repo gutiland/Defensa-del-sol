@@ -1,5 +1,6 @@
 import { PLAZA_CAST } from "./plaza-cast.js";
 export const DEFAULT_ROLES = {
+  saboteur: "saboteur",
   medic: "medic",
   berserker: "berserker",
   bossDani: "heavy",
@@ -21,6 +22,7 @@ export const DEFAULT_ROLES = {
   ...Object.fromEntries(PLAZA_CAST.map((actor) => [actor.id, actor.role])),
 };
 export const ROLE_LABELS = {
+  saboteur: "Saboteador de casetas",
   medic: "Regenerador",
   berserker: "Furia bajo media vida",
   armored: "Blindado con escudo",

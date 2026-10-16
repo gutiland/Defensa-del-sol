@@ -32,7 +32,7 @@ test("three levels retain the same camp, upgrades, specialization and treasury a
     assert.equal(tent.hp, 95);
     assert.equal(g.base, base);
     assert.equal(g.base.hp, 321);
-    assert.equal(g.money, 188);
+    assert.equal(g.money, 168);
   }
 });
 test("each level ends with its own boss and later bosses have increasing endurance", () => {

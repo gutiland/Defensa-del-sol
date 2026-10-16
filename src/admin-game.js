@@ -2,6 +2,7 @@ import { Game, UNITS, ENTRIES } from "./engine.js";
 import { BOSSES } from "./data/bosses.js";
 import { startCombat } from "./combat-lifecycle.js";
 import { spaceSpawns } from "./spawn-schedule.js";
+import { labBudget } from "./lab-budget.js";
 
 // Explicitly instantiated by admin.html only; ordinary matches keep their rules.
 export class AdminGame extends Game {
@@ -9,16 +10,34 @@ export class AdminGame extends Game {
     super("defense");
     this.sandbox = true;
     this.base.invulnerable = true;
+    this.trainingBudget = false;
+    this.testMoney = 140;
+    this.campaignTest = false;
   }
   get money() {
-    return Infinity;
+    return this.trainingBudget ? this.testMoney : Infinity;
   }
-  set money(_) {
-    /* The sandbox budget never runs out. */
+  set money(value) {
+    if (this.trainingBudget) this.testMoney = value;
   }
 
   command(c) {
     if (!c || typeof c !== "object" || typeof c.type !== "string") return false;
+    if (c.type === "admin-prepare") {
+      if (!Number.isInteger(c.round) || c.round < 1 || c.round > 20)
+        return false;
+      const budget = labBudget(c.round);
+      const revision = this.visualRevision + 1;
+      Object.assign(this, new AdminGame());
+      this.visualRevision = revision;
+      this.round = c.round;
+      this.defendedWaves = c.round - 1;
+      this.trainingBudget = true;
+      this.campaignTest = true;
+      this.money = budget;
+      this.base.invulnerable = false;
+      return true;
+    }
     if (c.type === "admin-reset") {
       const revision = this.visualRevision + 1;
       Object.assign(this, new AdminGame());

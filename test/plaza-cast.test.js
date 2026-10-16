@@ -16,12 +16,15 @@ test("the complete cast has renderable identities and appears once across the tw
     assert.equal(DEFAULT_ROLES[actor.id], actor.role);
     assert.ok(CHARACTERS[actor.id].lines.length >= 2);
   }
-  for (const [id, quotes] of Object.entries(BOSS_QUOTES))
-    assert.deepEqual(
-      CHARACTERS[id].quotes,
-      quotes,
-      "renaming a caricature must preserve real quotation sources",
+  for (const [id, quotes] of Object.entries(BOSS_QUOTES)) {
+    assert.equal(CHARACTERS[id].quotes, undefined);
+    assert.ok(
+      CHARACTERS[id].lines.every((line) =>
+        quotes.every((quote) => quote.text !== line),
+      ),
+      "archived quotations must not become fictional combat dialogue",
     );
+  }
 });
 test("new camp personalities stay on the defending side and do not vary attacker class identities", () => {
   const actors = new Set();

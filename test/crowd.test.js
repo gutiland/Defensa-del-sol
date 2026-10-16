@@ -42,6 +42,6 @@ test("overlapping attackers strike the central base together", () => {
     routeIndex: 0,
   }));
   game.tick(0.01);
-  assert.equal(game.base.hp, 523);
+  assert.equal(game.base.hp, 633);
   assert.ok(game.units.every((unit) => unit.cooldown === 1));
 });

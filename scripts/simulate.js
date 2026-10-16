@@ -1,6 +1,14 @@
 import { Game, BUILDINGS, ENTRIES } from "../src/engine.js";
 import { placementError } from "../src/placement.js";
 import { maxLevel } from "../src/data/weapons.js";
+const maxBuildings = Number(
+  process.argv
+    .find((arg) => arg.startsWith("--max-buildings="))
+    ?.split("=")[1] || Infinity,
+);
+const onlyStrategy = process.argv
+  .find((arg) => arg.startsWith("--strategy="))
+  ?.split("=")[1];
 
 // Scripted buyers are a balance diagnostic, not a replacement for human play.
 const samples = ENTRIES.flatMap((entry) =>
@@ -63,6 +71,7 @@ function buy(game, strategy) {
   if (strategy === "odor" && !game.buildings.some((b) => b.type === "odor"))
     kind = "odor";
   if (game.money < BUILDINGS[kind].cost) return;
+  if (game.buildings.length >= maxBuildings) return;
   const place = ranked[kind].find((p) => !placementError(game, p.x, p.y, kind));
   if (place) game.command({ type: "build", kind, x: place.x, y: place.y });
 }
@@ -76,6 +85,7 @@ for (const strategy of [
   "kitchen",
   "odor",
 ]) {
+  if (onlyStrategy && strategy !== onlyStrategy) continue;
   const game = new Game(),
     waves = [];
   let steps = 0;
@@ -116,6 +126,7 @@ for (const strategy of [
   "combined",
   "savePedro",
 ]) {
+  if (process.argv.includes("--defense-only")) break;
   const game = new Game("attack");
   let steps = 0;
   while (!game.result && steps < 180000) {

@@ -52,13 +52,14 @@ test("tents fit closer together while overlapping placements still preserve the 
 test("building checks budget, occupancy and upgrades", () => {
   const g = new Game();
   assert.ok(g.command({ type: "build", kind: "tent", x: 400, y: 280 }));
-  assert.equal(g.money, 65);
+  assert.equal(g.money, 95);
   assert.equal(
     g.command({ type: "build", kind: "tent", x: 400, y: 280 }),
     false,
   );
   assert.ok(g.command({ type: "upgrade", id: 1 }));
   assert.equal(g.buildings[0].level, 2);
+  g.money = 59;
   assert.equal(g.command({ type: "upgrade", id: 1 }), false);
 });
 test("local duel passes control and preserves defender budget", () => {
@@ -66,7 +67,7 @@ test("local duel passes control and preserves defender budget", () => {
   g.command({ type: "build", kind: "tent", x: 400, y: 280 });
   g.command({ type: "ready" });
   assert.equal(g.phase, "attack");
-  assert.equal(g.defenseMoney, 65);
+  assert.equal(g.defenseMoney, 95);
   assert.equal(g.command({ type: "ready" }), false);
   g.command({ type: "recruit", kind: "basic", entry: 0 });
   g.command({ type: "ready" });
@@ -83,9 +84,9 @@ test("recruitment undo refunds and invalid entries are rejected", () => {
     false,
   );
   g.command({ type: "recruit", kind: "heavy", entry: 2 });
-  assert.equal(g.money, 87);
+  assert.equal(g.money, 112);
   g.command({ type: "undo" });
-  assert.equal(g.money, 125);
+  assert.equal(g.money, 150);
 });
 test("full programmed defense simulation terminates", () => {
   const g = new Game();

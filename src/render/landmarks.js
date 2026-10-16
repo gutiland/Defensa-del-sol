@@ -1,4 +1,5 @@
 import { label } from "./architecture.js";
+import { METRO_ACCESS } from "../data/map.js";
 export function drawLandmarks(ctx) {
   // The oval fountain and equestrian monument, drawn in a storybook style.
   ctx.fillStyle = "#796e61";
@@ -171,13 +172,16 @@ export function drawLandmarks(ctx) {
   ctx.lineTo(705, 458);
   ctx.stroke();
   label(ctx, "SOL · CERCANÍAS", 713, 502, 8);
+  ctx.save();
+  ctx.translate(METRO_ACCESS.x, METRO_ACCESS.y);
   ctx.fillStyle = "#cf694f";
   ctx.beginPath();
-  ctx.moveTo(405, 255);
-  ctx.lineTo(417, 264);
-  ctx.lineTo(405, 273);
-  ctx.lineTo(393, 264);
+  ctx.moveTo(0, -9);
+  ctx.lineTo(12, 0);
+  ctx.lineTo(0, 9);
+  ctx.lineTo(-12, 0);
   ctx.closePath();
   ctx.fill();
-  label(ctx, "M", 405, 268, 9, "#fff5de");
+  label(ctx, "M", 0, 4, 9, "#fff5de");
+  ctx.restore();
 }

@@ -74,9 +74,9 @@ test("each defeat pays once, and local rewards belong to defender", () => {
     g.tick(0.05);
     g.tick(0.05);
     assert.equal(g.kills, 1);
-    assert.equal(g.earned, 5);
-    assert.equal(g.money, mode === "defense" ? 505 : 500);
-    assert.equal(g.defenseMoney, mode === "local" ? 25 : 20);
+    assert.equal(g.earned, 3);
+    assert.equal(g.money, mode === "defense" ? 503 : 500);
+    assert.equal(g.defenseMoney, mode === "local" ? 23 : 20);
   }
 });
 test("assembly freezes movement and attacks, expires and respects its cooldown", () => {
@@ -200,7 +200,7 @@ test("kitchen levels and dining specialization pay reduced income in defense and
     g.pending = [];
     g.defenseMoney = 20;
     g.tick(0.05);
-    assert.equal(g.money, mode === "defense" ? 625 : 145);
+    assert.equal(g.money, mode === "defense" ? 590 : 110);
     assert.equal(g.defenseMoney, 20);
   }
 });

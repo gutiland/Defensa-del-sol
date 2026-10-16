@@ -69,7 +69,7 @@ test("controller connects modes, construction, recruitment and the frame rendere
       .onclick({ clientX: SLOTS[0].x, clientY: projectY(SLOTS[0].y) });
     assert.equal(
       ids.get("money").textContent,
-      110,
+      140,
       "starting with no selected tool must not place a tent",
     );
     assert.equal(ids.get("cancel-build").disabled, true);
@@ -88,15 +88,15 @@ test("controller connects modes, construction, recruitment and the frame rendere
     ids
       .get("board")
       .onclick({ clientX: SLOTS[0].x, clientY: projectY(SLOTS[0].y) });
-    assert.equal(ids.get("money").textContent, 65);
+    assert.equal(ids.get("money").textContent, 95);
     ids.get("board").onclick({ clientX: 680, clientY: projectY(320) });
     assert.equal(
       ids.get("money").textContent,
-      65,
+      95,
       "inspecting after placement must not accidentally buy another tent",
     );
     ids.get("board").oncontextmenu({ preventDefault() {} });
-    assert.equal(ids.get("money").textContent, 65);
+    assert.equal(ids.get("money").textContent, 95);
     ids.get("action").onclick();
     frame(performance.now() + 20);
     assert.equal(ids.get("action").disabled, true);
@@ -110,7 +110,7 @@ test("controller connects modes, construction, recruitment and the frame rendere
     ids.get("restart").onclick();
     modes[1].onclick();
     ids.get("shop").children[0].onclick();
-    assert.equal(ids.get("money").textContent, 110);
+    assert.equal(ids.get("money").textContent, 135);
     assert.equal(ids.get("action").disabled, false);
     ids.get("routes").children[2].onclick();
     assert.equal(ids.get("routes").children.length, ENTRIES.length);

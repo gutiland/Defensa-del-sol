@@ -1,4 +1,6 @@
-import { Game, BUILDINGS } from "./engine.js";
+import { Game, BUILDINGS, UNITS } from "./engine.js";
+import { WAVES } from "./data/waves.js";
+import { LEVELS } from "./data/campaign.js";
 import { maxLevel } from "./data/weapons.js";
 import { readStorage, writeStorage } from "./preferences.js";
 import { validAwards } from "./data/awards.js";
@@ -65,6 +67,7 @@ export function saveCampaign(game) {
     "kills",
     "earned",
     "storyChoices",
+    "discoveredEnemies",
     "reports",
     "awards",
     "bestChain",
@@ -87,6 +90,16 @@ export function loadCampaign() {
     !Array.isArray(s.buildings) ||
     s.buildings.length > 300 ||
     !s.buildings.every((b) => validBuilding(b))
+  )
+    return null;
+  if (
+    s.discoveredEnemies !== undefined &&
+    (!Array.isArray(s.discoveredEnemies) ||
+      s.discoveredEnemies.length > Object.keys(UNITS).length ||
+      new Set(s.discoveredEnemies).size !== s.discoveredEnemies.length ||
+      !s.discoveredEnemies.every(
+        (kind) => typeof kind === "string" && Object.hasOwn(UNITS, kind),
+      ))
   )
     return null;
   const ids = s.buildings.map((b) => b.id);
@@ -116,10 +129,20 @@ export function loadCampaign() {
     !s.storyChoices ||
     typeof s.storyChoices !== "object" ||
     Array.isArray(s.storyChoices) ||
-    Object.keys(s.storyChoices).length > 3
+    Object.keys(s.storyChoices).length > Object.keys(STORY_EVENTS).length
   )
     return null;
   const game = new Game("defense");
+  game.discoveredEnemies = s.discoveredEnemies || [
+    ...new Set([
+      ...WAVES.slice(0, s.round - 1).flatMap((wave) =>
+        wave.groups.map(([kind]) => kind),
+      ),
+      ...LEVELS.filter((level) => level.last < s.round).map(
+        (level) => level.boss,
+      ),
+    ]),
+  ];
   if (s.base.x !== game.base.x || s.base.y !== game.base.y) return null;
   for (const [round, option] of Object.entries(s.storyChoices)) {
     if (
@@ -202,4 +225,21 @@ export function loadCampaign() {
     : [];
   game.bossesDefeated = game.defeatedBossKinds.length;
   return game;
+}
+
+export function rememberEnemyIntroduction(game, kind) {
+  if (
+    game.mode !== "defense" ||
+    game.sandbox ||
+    game.autoAdvance === false ||
+    !Object.hasOwn(UNITS, kind)
+  )
+    return;
+  if (!game.discoveredEnemies.includes(kind)) game.discoveredEnemies.push(kind);
+  const checkpoint = readStorage(KEY);
+  if (checkpoint?.version !== 1 || checkpoint.state?.round !== game.round)
+    return;
+  // Keep the preparation checkpoint intact; only persist the presentation history.
+  checkpoint.state.discoveredEnemies = [...game.discoveredEnemies];
+  writeStorage(KEY, checkpoint);
 }

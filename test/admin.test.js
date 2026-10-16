@@ -9,9 +9,9 @@ test("defense refunds a new construction and its upgrades only until combat begi
   const g = new Game();
   assert.ok(g.command({ type: "build", kind: "tent", x: 400, y: 280 }));
   assert.ok(g.command({ type: "upgrade", id: 1 }));
-  assert.equal(g.money, 35);
+  assert.equal(g.money, 65);
   assert.ok(g.command({ type: "remove", id: 1 }));
-  assert.equal(g.money, 110);
+  assert.equal(g.money, 140);
   assert.equal(g.buildings.length, 0);
   assert.equal(g.command({ type: "remove", id: 1 }), false);
   assert.equal(g.command({ type: "remove", id: "base" }), false);
@@ -68,16 +68,16 @@ test("admin can heal, test damage, reset branches and load authored waves", () =
   const g = new AdminGame();
   const attacker = { hp: 100, damage: 100, cooldown: 0, x: 500, y: 340 };
   strikeTarget(g, attacker, g.base);
-  assert.equal(g.base.hp, 550);
+  assert.equal(g.base.hp, 660);
   g.command({ type: "admin-invulnerable", value: false });
   attacker.cooldown = 0;
   strikeTarget(g, attacker, g.base);
-  assert.equal(g.base.hp, 450);
+  assert.equal(g.base.hp, 560);
   g.result = "loss";
   g.base.hp = 0;
   assert.ok(g.command({ type: "admin-heal" }));
   assert.equal(g.result, null);
-  assert.equal(g.base.hp, 550);
+  assert.equal(g.base.hp, 660);
   g.command({ type: "build", kind: "barrier", x: 350, y: (460 - 120) / 0.66 });
   const b = g.buildings[0],
     original = b.maxHp;
@@ -105,7 +105,7 @@ test("admin can heal, test damage, reset branches and load authored waves", () =
     false,
   );
   assert.equal(normal.command({ type: "admin-reset" }), false);
-  assert.equal(normal.money, 110);
+  assert.equal(normal.money, 140);
 });
 
 test("admin interface sends validated engine commands without advancing turns", () => {
@@ -131,7 +131,7 @@ test("admin interface sends validated engine commands without advancing turns", 
     (c) => g.command(c),
     () => g.command({ type: "admin-reset" }),
   );
-  assert.equal(elements.get("admin-kind").children.length, 11);
+  assert.equal(elements.get("admin-kind").children.length, 12);
   assert.equal(elements.get("admin-entry").children.length, 11);
   elements.get("admin-kind").value = "fast";
   elements.get("admin-entry").value = "8";
@@ -145,6 +145,13 @@ test("admin interface sends validated engine commands without advancing turns", 
   assert.ok(g.waveIsBoss);
   elements.get("admin-stop").onclick();
   assert.equal(g.phase, "build");
+  elements.get("admin-round").value = "7";
+  elements.get("admin-prepare").onclick();
+  assert.equal(g.phase, "build");
+  assert.equal(g.round, 7);
+  assert.ok(Number.isFinite(g.money));
+  assert.equal(elements.get("admin-invulnerable").checked, false);
+  assert.ok(elements.get("admin-feedback").textContent.includes(String(g.money)));
 });
 
 test("loading sandbox waves is atomic and manual boss indicators clear with the test", () => {

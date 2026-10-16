@@ -21,7 +21,7 @@ export const BRANCHES = {
     power: ["Concentrado", "+2 de daño por segundo de olor", 55],
   },
   kitchen: {
-    rapid: ["Comedor", "+20 provisiones al terminar cada ronda", 50],
+    rapid: ["Comedor", "+15 provisiones al terminar cada ronda", 50],
     power: ["Catering", "Produce 2 provisiones cada 5 s de combate", 65],
   },
   barrier: {
@@ -37,17 +37,19 @@ export const canDefend = (game) =>
   !game.result &&
   (game.phase === "build" ||
     (game.mode === "defense" && game.phase === "combat"));
+export const ROUND_PROVISIONS = 45;
 export const bountyFor = (unit) =>
   unit.scale
-    ? 55
+    ? 35
     : {
-        basic: 5,
-        fast: 6,
-        heavy: 12,
-        perfume: 8,
-        armored: 10,
-        sprinter: 6,
-        medic: 9,
-        berserker: 12,
-      }[unit.kind] || 5;
+        basic: 3,
+        fast: 4,
+        heavy: 8,
+        perfume: 5,
+        armored: 7,
+        sprinter: 4,
+        medic: 6,
+        saboteur: 6,
+        berserker: 8,
+      }[unit.kind] || 3;
 export const totalRounds = (game) => (game?.mode === "defense" ? 20 : 8);

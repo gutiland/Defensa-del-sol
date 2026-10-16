@@ -7,7 +7,7 @@ import { storyEventFor } from "../data/story-events.js";
 
 export function createStoryScenes(document, playback, getGame, onChange) {
   const dialog = document.getElementById("story-scene");
-  dialog.innerHTML = `<span class="eyebrow">HISTORIA DE LA PLAZA</span><h2 id="scene-title"></h2><canvas id="scene-portrait" width="560" height="300" aria-hidden="true"></canvas><p id="scene-speaker"></p><p id="scene-line" aria-live="polite"></p><p id="scene-event-info" hidden></p><div id="scene-choices" hidden></div><p id="scene-reference"></p><div class="scene-actions"><button id="scene-next" class="primary">Continuar</button><button id="scene-skip" class="subtle">Saltar escena</button></div>`;
+  dialog.innerHTML = `<span class="eyebrow">HISTORIA DE LA PLAZA · PARODIA</span><h2 id="scene-title"></h2><canvas id="scene-portrait" width="560" height="300" aria-hidden="true"></canvas><p id="scene-speaker"></p><p id="scene-line" aria-live="polite"></p><p id="scene-event-info" hidden></p><div id="scene-choices" hidden></div><p id="scene-reference"></p><div class="scene-actions"><button id="scene-next" class="primary">Continuar</button><button id="scene-skip" class="subtle">Saltar escena</button></div>`;
   const $ = (id) => document.getElementById(id);
   const reducedMotion = globalThis.matchMedia?.(
     "(prefers-reduced-motion: reduce)",

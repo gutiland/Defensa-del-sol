@@ -1,6 +1,6 @@
 ﻿// Story chapters author the enemy progression without random stat changes.
 import { STORY_CHAPTERS } from "./story.js";
-import { campaignLevel } from "./campaign.js";
+import { campaignLevel, campaignPressure } from "./campaign.js";
 const chapters = [
   [
     "La primera noche",
@@ -87,6 +87,7 @@ const unlocks = [
   [4, "perfume"],
   [6, "armored"],
   [7, "sprinter"],
+  [7, "saboteur"],
   [8, "medic"],
   [12, "berserker"],
 ];
@@ -100,12 +101,14 @@ export const WAVES = chapters.map(([name, story], index) => {
     boss: round === campaignLevel(round).last,
     groups: roster.map((kind, i) => [
       kind,
-      Math.ceil(
-        (kind === "basic" ? 9 + index : 3 + Math.floor(index / 3)) *
-          (1 + (campaignLevel(round).number - 1) * 0.15),
-      ),
+      kind === "saboteur"
+        ? 1 + Math.floor((round - 7) / 4)
+        : Math.ceil(
+            (kind === "basic" ? 9 + index : 3 + Math.floor(index / 3)) *
+              (1 + (campaignLevel(round).number - 1) * 0.15),
+          ),
       (i * 3 + index * 2) % 11,
-      i * 3.2,
+      i * campaignPressure(round).groupSpacing,
       kind === "heavy" || kind === "armored"
         ? 1.25
         : Math.max(0.8, 1.05 - index * 0.01),

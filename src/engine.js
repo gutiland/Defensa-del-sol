@@ -3,6 +3,7 @@
   canDefend,
   bountyFor,
   totalRounds,
+  ROUND_PROVISIONS,
 } from "./data/progression.js";
 import { WAVES, normalWave } from "./data/waves.js";
 import { bossState, dealDamage } from "./boss-mechanics.js";
@@ -31,9 +32,10 @@ import {
 import { hasDefender } from "./data/building-look.js";
 import { reinforceCamp } from "./attack-reinforcements.js";
 import { spaceSpawns } from "./spawn-schedule.js";
-import { campaignLevel } from "./data/campaign.js";
+import { campaignLevel, campaignPressure } from "./data/campaign.js";
 import { remainingPathDistance, priorityTarget } from "./targeting.js";
 import { advanceRainSlip } from "./rain.js";
+import { raidNearbyCaseta } from "./caseta-raider.js";
 import { recordDefeat, finishRoundReport } from "./experience.js";
 import {
   chooseStoryEvent,
@@ -62,14 +64,14 @@ export class Game {
     this.bestChain = 0;
     this.bossesDefeated = 0;
     this.defeatedBossKinds = [];
-    this.money = mode === "attack" ? 125 : 110;
+    this.money = mode === "attack" ? 150 : 140;
     this.base = {
       id: "base",
       type: "tent",
       level: 1,
       ...BASE_POSITION,
-      hp: 550,
-      maxHp: 550,
+      hp: 660,
+      maxHp: 660,
       cooldown: 0,
     };
     this.buildings = [];
@@ -87,6 +89,7 @@ export class Game {
     this.visualRevision = 0;
     this.result = null;
     this.storyChoices = {};
+    this.discoveredEnemies = [];
     this.storyEvent = null;
     this.speeches = [];
     this.nextSpeechAt = 0;
@@ -227,14 +230,23 @@ export class Game {
       const p = this.pending.shift(),
         d = UNITS[p.kind],
         e = ENTRIES[p.entry];
+      const pressure =
+        this.mode === "defense" && (!this.sandbox || this.campaignTest)
+          ? campaignPressure(this.round)
+          : { health: 1, speed: 1, damage: 1 };
+      const boss = !!BOSSES[p.kind];
       const health = Math.round(
         d.hp *
-          (this.mode === "defense" && !this.sandbox && BOSSES[p.kind]
+          (this.mode === "defense" &&
+          (!this.sandbox || this.campaignTest) &&
+          BOSSES[p.kind]
             ? campaignLevel(this.round).bossHealth
-            : 1),
+            : pressure.health),
       );
       this.units.push({
         ...d,
+        speed: d.speed * (boss ? 1 : pressure.speed),
+        damage: Math.round(d.damage * (boss ? 1 : pressure.damage)),
         id: this.nextUnitId++,
         kind: p.kind,
         character:
@@ -347,6 +359,11 @@ export class Game {
       const bossSpeed =
         bossState(this, u, sources).speed * attackerSpeedMultiplier(u);
       if (u.routeIndex < u.route.length) {
+        if (u.kind === "saboteur") {
+          followRoute(u, 0, barriers);
+          if (!u.blockedBy && raidNearbyCaseta(this, u, dt)) continue;
+          u.raidingId = null;
+        }
         followRoute(
           u,
           u.speed *
@@ -473,15 +490,15 @@ export class Game {
       this.projectiles = [];
       this.effects = [];
       const income =
-        65 +
+        ROUND_PROVISIONS +
         this.buildings
           .filter((b) => b.type === "kitchen")
           .reduce(
-            (n, b) => n + 20 * b.level + (b.branch === "rapid" ? 20 : 0),
+            (n, b) => n + 15 * b.level + (b.branch === "rapid" ? 15 : 0),
             0,
           );
       if (this.mode === "attack") {
-        this.money += 100 + this.round * 35;
+        this.money += 80 + this.round * 25;
         this.phase = "attack";
       } else {
         this.money =

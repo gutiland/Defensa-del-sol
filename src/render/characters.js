@@ -198,9 +198,7 @@ export function drawSpeech(ctx, speech) {
   ctx.textAlign = "left";
   ctx.font = "bold 10px sans-serif";
   ctx.fillText(
-    speech.quote
-      ? `${speech.quote.speaker} · CITA REAL`
-      : actor.name + " · PARODIA",
+    actor.name + " · PARODIA",
     x + 12,
     y + 17,
   );

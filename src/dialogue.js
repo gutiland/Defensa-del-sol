@@ -27,12 +27,10 @@ export function tryDialogue(game, character, source) {
   const actor = CHARACTERS[character];
   if (actor.side === game.lastSpeechSide) return false;
   const index = (game.round + game.dialogueCount) % actor.lines.length;
-  const quote = actor.quotes?.[index];
   game.speeches = [
     {
       character,
       text: actor.lines[index],
-      quote,
       x: source.x,
       y: source.y,
       until: game.time + 4,

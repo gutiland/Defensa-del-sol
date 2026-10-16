@@ -7,7 +7,7 @@ export class EnemyDiscovery {
   observe(game) {
     if (game !== this.game) {
       this.game = game;
-      this.seen.clear();
+      this.seen = new Set(game?.discoveredEnemies || []);
       this.queue = [];
     }
     if (!game || game.mode !== "defense" || game.sandbox) return;

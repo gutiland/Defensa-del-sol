@@ -4,6 +4,7 @@ import { Game } from "../src/engine.js";
 import { Playback } from "../src/playback.js";
 import { createStoryScenes } from "../src/ui/story-scenes.js";
 import { STORY_REFERENCES } from "../src/data/story-references.js";
+import { STORY_SCENES } from "../src/data/story-scenes.js";
 import { EVENT_PREVIEWS } from "../src/event-preview.js";
 
 function setup() {
@@ -59,7 +60,10 @@ test("every preview exposes its news link throughout the scene without adding de
     );
     const root = s.nodes.get("scene-reference");
     assert.equal(root.hidden, false);
-    assert.equal(root.children.length, 1);
+    assert.equal(root.children.length, 2);
+    assert.ok(
+      root.children[1].textContent.includes(STORY_REFERENCES[round].context),
+    );
     const link = root.children[0];
     assert.equal(link.href, STORY_REFERENCES[round].source);
     assert.equal(new URL(link.href).protocol, "https:");
@@ -80,7 +84,11 @@ test("boss scene pauses before combat, exchanges dialogue and starts the wave ex
   assert.equal(s.scenes.beforeReady(s.game, start), true);
   assert.equal(s.playback.paused, true);
   assert.equal(s.game.phase, "build");
-  assert.ok(s.nodes.get("scene-line").textContent.includes("desocupación"));
+  assert.ok(
+    s.nodes
+      .get("scene-line")
+      .textContent.includes(STORY_SCENES[5].lines[0].text),
+  );
   s.nodes.get("scene-next").onclick();
   assert.ok(s.nodes.get("scene-line").textContent.includes("asamblea"));
   assert.equal(resumed, 0);
@@ -106,7 +114,7 @@ test("story event choices explain their price and apply once before the wave beg
   const before = s.game.money;
   choices.children[1].children[0].onclick();
   assert.equal(resumed, 1);
-  assert.equal(s.game.money, before - 20);
+  assert.equal(s.game.money, before - 100);
   assert.equal(s.game.phase, "combat");
   assert.equal(s.game.storyEvent.id, "rain");
   assert.equal(s.game.storyEvent.intervalMultiplier, 1);

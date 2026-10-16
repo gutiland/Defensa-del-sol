@@ -14,8 +14,8 @@ export async function createStaticServer({
   rateLimit = 600,
   rateWindow = 60000,
 } = {}) {
-  const realRoot = await realpath(root),
-    allowed = await siteFiles(realRoot, development);
+  const realRoot = await realpath(root);
+  let allowed = await siteFiles(realRoot, development);
   const origin = publicOrigin ? new URL(publicOrigin) : null;
   if (
     origin &&
@@ -100,6 +100,8 @@ export async function createStaticServer({
         )
           return fail(400, "Ruta inválida");
         const name = pathname === "/" ? "index.html" : pathname.slice(1);
+        if (development && ["index.html", "src/main.js"].includes(name))
+          allowed = await siteFiles(realRoot, true);
         if (!allowed.has(name)) return fail(404, "No encontrado");
         const actual = await realpath(path.join(realRoot, name));
         if (!actual.startsWith(realRoot + path.sep))

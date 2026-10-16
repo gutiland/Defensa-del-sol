@@ -17,7 +17,7 @@ test("a successful occupied shelter greets immediately regardless of combat dial
   );
   assert.equal(speech.buildingId, building.id);
   assert.equal(speech.construction, true);
-  assert.equal(game.money, 65);
+  assert.equal(game.money, 95);
   assert.equal(
     game.command({ type: "build", kind: "tent", x: building.x, y: building.y }),
     false,

@@ -6,6 +6,7 @@ import { createAttackerSprites } from "./attacker-sprites.js";
 import { drawLandmarks } from "./landmarks.js";
 import { drawUnit, drawUnitBars } from "./unit.js";
 import { drawRain } from "./rain.js";
+import { drawStationClosure } from "./station-closure.js";
 import { auraSources } from "../aura-sources.js";
 import { drawPlacementPreview } from "./placement-preview.js";
 import { createConstructionAnimation } from "./construction-animation.js";
@@ -165,6 +166,7 @@ export function createBoardRenderer(canvas) {
     if (!view.reducedMotion && view.quality !== "low")
       atmosphere.draw(ctx, true);
     drawRain(ctx, game, visualTime, true);
+    drawStationClosure(ctx, game, view.reducedMotion);
     drawChain(ctx, game);
     for (const speech of speeches)
       if (CHARACTERS[speech.character]?.side !== "attack")

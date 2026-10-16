@@ -1,18 +1,20 @@
 export const ODOR_RADIUS = 95;
 export const LIVE_RADIUS = 65;
-export const odorStats = (building) => ({
+export const odorStats = (building, game) => ({
   radius:
     ODOR_RADIUS +
     15 * (building.level - 1) +
     (building.branch === "rapid" ? 45 : 0),
-  dps: 2 + (building.level - 1) + (building.branch === "power" ? 2 : 0),
+  dps:
+    (2 + (building.level - 1) + (building.branch === "power" ? 2 : 0)) *
+    rainDamageMultiplier(game, "odor"),
 });
 export function stereotypeState(game, unit, sources) {
   let odor = 0,
     sourceId;
   for (const b of sources?.odors || game.buildings) {
     if (b.type !== "odor" || b.hp <= 0) continue;
-    const stats = odorStats(b);
+    const stats = odorStats(b, game);
     if (
       Math.hypot(unit.x - b.x, unit.y - b.y) < stats.radius &&
       stats.dps > odor
@@ -41,3 +43,4 @@ export function stereotypeState(game, unit, sources) {
     sourceId,
   };
 }
+import { rainDamageMultiplier } from "./rain.js";

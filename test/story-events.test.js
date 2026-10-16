@@ -3,6 +3,30 @@ import assert from "node:assert/strict";
 import { Game, building } from "../src/engine.js";
 import { beginStoryEvent, eventShotInterval } from "../src/story-events.js";
 import { normalWave } from "../src/data/waves.js";
+import { STORY_EVENTS } from "../src/data/story-events.js";
+
+test("every paid event rejects insufficient provisions and charges its configured cost exactly once", () => {
+  for (const [round, event] of Object.entries(STORY_EVENTS)) {
+    const option = event.options.find((item) => item.cost > 0);
+    const game = new Game();
+    game.round = Number(round);
+    game.buildings = [building("tent", 400, 280, 1)];
+    game.money = option.cost - 1;
+    assert.equal(
+      game.command({ type: "story-choice", option: option.id }),
+      false,
+    );
+    assert.equal(game.money, option.cost - 1);
+    game.money = option.cost + 10;
+    assert.ok(game.command({ type: "story-choice", option: option.id }));
+    assert.equal(game.money, 10);
+    assert.equal(
+      game.command({ type: "story-choice", option: option.id }),
+      false,
+    );
+    assert.equal(game.money, 10);
+  }
+});
 test("disputed tent remains disabled for the whole round and recovers in the next one", () => {
   const g = new Game();
   g.round = 4;
@@ -67,10 +91,10 @@ test("choices validate costs and phase, cannot charge twice, and mediation avoid
   const g = new Game();
   g.round = 4;
   g.buildings = [building("tent", 400, 280, 1)];
-  g.money = 39;
+  g.money = 79;
   assert.equal(g.command({ type: "story-choice", option: "mediate" }), false);
-  assert.equal(g.money, 39);
-  g.money = 55;
+  assert.equal(g.money, 79);
+  g.money = 95;
   assert.equal(g.command({ type: "story-choice", option: "mediate" }), true);
   assert.equal(g.money, 15);
   assert.equal(g.command({ type: "story-choice", option: "mediate" }), false);
@@ -101,6 +125,7 @@ test("12 October adds distributed reinforcements and organizing delays those ext
   const create = () => {
     const g = new Game();
     g.round = 15;
+    g.money = 150;
     g.pending = normalWave(15, 11);
     return g;
   };

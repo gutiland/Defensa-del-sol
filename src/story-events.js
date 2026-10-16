@@ -48,6 +48,22 @@ export function beginStoryEvent(game) {
         const source = basic[Math.floor((i * basic.length) / 2)];
         game.pending.push({ ...source, at: source.at + 3 });
       }
+  } else if (event.id === "station-closure") {
+    game.pending = game.pending.map((unit) => ({
+      ...unit,
+      entry: 2,
+      at: unit.at + (choice === "signpost" ? 12 : 0),
+    }));
+    game.storyEvent = {
+      id: event.id,
+      title:
+        choice === "signpost"
+          ? "Metro de Sol cerrado · Preciados · refuerzos retrasados 12 s"
+          : "Metro de Sol cerrado · todos por Preciados",
+      wholeRound: true,
+      until: 0,
+      signposted: choice === "signpost",
+    };
   } else if (event.id === "october12") {
     const normal = game.pending.filter((u) => !u.kind.startsWith("boss"));
     const count = Math.ceil(normal.length * 0.25);

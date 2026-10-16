@@ -1,6 +1,5 @@
-import { BOSS_QUOTES } from "./quotes.js";
 import { PLAZA_CAST } from "./plaza-cast.js";
-// Fictional caricatures; boss quotations are documented separately.
+// Political caricatures with original dialogue, not statements by their inspirations.
 export const CHARACTERS = {
   micro: {
     name: "Vito del Micro",
@@ -48,7 +47,7 @@ export const CHARACTERS = {
     ],
   },
   reply: {
-    name: "Gabriel Réplica",
+    name: "El del Último Zasca",
     reference: "Gabriel Rufián",
     side: "defense",
     hair: "#292827",
@@ -58,7 +57,7 @@ export const CHARACTERS = {
     style: "crop",
     lines: [
       "¡Patriota de sofá, que te lo monta el chófer!",
-      "¡Menudo gilipollas: privatiza hasta la sombra!",
+      "¡Privatiza la sombra y luego cobra suplemento!",
       "¡Mucho orden y ni respetas la cola, cuñado!",
     ],
   },
@@ -83,7 +82,10 @@ Object.assign(CHARACTERS, {
     "bald",
     "muscles",
     "#303937",
-    BOSS_QUOTES.bossDani.map((quote) => quote.text),
+    [
+      "¡Mi lista de invitados no incluye sacos de dormir!",
+      "¡Hasta el menú de pausa necesita derecho de admisión!",
+    ],
     {
       reference: "Daniel Esteve (Dani Desokupa)",
       beard: true,
@@ -97,7 +99,10 @@ Object.assign(CHARACTERS, {
     "quiff",
     "tie",
     "#40659b",
-    BOSS_QUOTES.bossPedro.map((quote) => quote.text),
+    [
+      "¡Mi plan definitivo admite prórrogas!",
+      "¡Ese era el itinerario antes de la última reunión!",
+    ],
     { reference: "Pedro Sánchez", faceWidth: 9, hair: "#77756a" },
   ),
   bossSanti: extra(
@@ -106,7 +111,10 @@ Object.assign(CHARACTERS, {
     "slick",
     "jacket",
     "#6c884b",
-    BOSS_QUOTES.bossSanti.map((quote) => quote.text),
+    [
+      "¡Esta curva figuraba recta en mi programa!",
+      "¡Exijo una frontera para cada rotonda!",
+    ],
     {
       reference: "Santiago Abascal",
       beard: true,
@@ -116,7 +124,7 @@ Object.assign(CHARACTERS, {
   ),
 
   spokesperson: extra(
-    "Alicia del Alquiler",
+    "Lola de las Lonas",
     "defense",
     "bun",
     "megaphone",
@@ -126,8 +134,9 @@ Object.assign(CHARACTERS, {
       "¡La comisión de acogida necesita menos comisiones!",
     ],
     {
-      reference: "Alicia del Río, portavoz del Sindicato de Inquilinas",
-      hair: "#5b4030",
+      reference: null,
+      hair: "#686078",
+      glasses: true,
       faceWidth: 10,
     },
   ),
@@ -228,6 +237,18 @@ Object.assign(CHARACTERS, {
     { piercing: true, faceWidth: 9, hair: "#754c6b" },
   ),
 });
+CHARACTERS.saboteur = extra(
+  "Inspector de Cremalleras",
+  "attack",
+  "balding",
+  "briefcase",
+  "#f0b647",
+  [
+    "¡Esta cremallera no cumple el reglamento!",
+    "¡La lona necesita tres copias compulsadas!",
+  ],
+  { glasses: true, moustache: true, hair: "#66594d", faceWidth: 11 },
+);
 CHARACTERS.medic = {
   ...CHARACTERS.terrace,
   name: "Socorrista de tertulia",
@@ -254,10 +275,6 @@ CHARACTERS.berserker = {
     "¡He venido con queja y sin paciencia!",
   ],
 };
-for (const [id, quotes] of Object.entries(BOSS_QUOTES)) {
-  CHARACTERS[id].quotes = quotes;
-  CHARACTERS[id].lines = quotes.map((quote) => quote.text);
-}
 const wardrobe = {
   micro: "#74b9cb",
   viral: "#d94c42",

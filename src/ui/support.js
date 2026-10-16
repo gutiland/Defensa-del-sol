@@ -34,10 +34,10 @@ export function mountSupport(document, configuration = SUPPORT) {
       action.rel = "noopener noreferrer";
       action.setAttribute(
         "aria-label",
-        `${configuration.label} · abre una página de pago en otra pestaña`,
+        `${configuration.label} · aportación voluntaria mediante Stripe en otra pestaña`,
       );
       description.textContent =
-        "Aportación voluntaria. El juego sigue siendo gratuito.";
+        "¿Te ha gustado Acampada Sol? Tu aportación ayuda a seguir desarrollando este juego y a crear más juegos y productos como este, incluidos proyectos de mayor alcance. Aportar es opcional: puedes seguir jugando gratis.";
     } else {
       action.type = "button";
       action.disabled = true;

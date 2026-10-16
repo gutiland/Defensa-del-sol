@@ -8,13 +8,17 @@ import { renderSelection, refreshSelectionStats } from "./selection.js";
 import { renderRoutes, routeSummary } from "./routes.js";
 import { currentFeedback } from "./feedback.js";
 import { renderStory } from "./story.js";
-import { campaignLevel, levelRound } from "../data/campaign.js";
+import {
+  campaignLevel,
+  campaignPressure,
+  levelRound,
+} from "../data/campaign.js";
 import { storyEventFor } from "../data/story-events.js";
 const $ = (id) => document.getElementById(id);
 let lastQuote = null;
 export function renderLiveStats(game) {
   refreshSelectionStats(game);
-  $("money").textContent = game.sandbox ? "∞" : game.money;
+  $("money").textContent = game.money === Infinity ? "∞" : game.money;
   $("undo-build").hidden = game.sandbox || game.mode !== "defense";
   $("undo-build").disabled =
     game.phase !== "build" ||
@@ -113,6 +117,11 @@ export function renderPanel(
     : game.mode === "defense"
       ? `${campaignLevel(game.round).name} · ${wave.name}: ${wave.hint}`
       : "";
+  if (game.mode === "defense" && !game.sandbox && game.round > 5) {
+    const pressure = campaignPressure(game.round);
+    $("wave-preview").textContent +=
+      ` Enemigos normales: vida ×${pressure.health.toFixed(1)}, velocidad +${Math.round((pressure.speed - 1) * 100)} %, daño +${Math.round((pressure.damage - 1) * 100)} %.`;
+  }
   renderShop({ game, kind, selectedEntries }, { command, selectKind });
   const event = storyEventFor(game);
   if (game.mode === "defense" && !game.sandbox && !combat) {

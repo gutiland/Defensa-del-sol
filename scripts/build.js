@@ -68,7 +68,30 @@ export async function buildSite(
       if (/href="(?:admin|events|performance)\.html"|data-dev-only/.test(text))
         throw Error("Enlaces de laboratorio en distribución pública");
     }
+    if (name === "src/main.js")
+      text = text.replace(
+        /\/\/ @development-only:start\r?\n[\s\S]*?\/\/ @development-only:end/g,
+        "const isAdmin = false;\nlet AdminGame, mountAdmin;",
+      );
     contents.set(name, text);
+  }
+  for (const [name, text] of contents) {
+    if (!name.endsWith(".js")) continue;
+    const imports = [
+      ...text.matchAll(
+        /(?:\b(?:import|export)\s+(?:[^;]*?\s+from\s*)?)["']([^"']+)["']/g,
+      ),
+      ...text.matchAll(/\bimport\s*\(\s*["']([^"']+)["']\s*\)/g),
+    ];
+    for (const match of imports) {
+      const target = path.posix.normalize(
+        path.posix.join(path.posix.dirname(name), match[1]),
+      );
+      if (!match[1].startsWith(".") || !contents.has(target))
+        throw Error(
+          `Import no incluido en distribución: ${name} → ${match[1]}`,
+        );
+    }
   }
   // Absolute target checked above; only a directory bearing our marker is removed.
   if (previous) await rm(output, { recursive: true, force: false });

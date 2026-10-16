@@ -25,7 +25,23 @@ El generador solo reemplaza una carpeta `dist` identificada por su marcador. Rec
 
 `preview` sirve únicamente `dist` en localhost:3000. Un `NODE_ENV=production` también obliga al servidor a usar `dist`; falla si no se ha construido. No subir el directorio entero del proyecto al hosting.
 
-## Alojamiento preparado: Netlify
+## Publicar en Vercel
+
+El archivo `vercel.json` configura el proyecto como estático: framework Other, instalación `npm ci`, compilación `npm run build` y salida `dist`. Define las cabeceras HTTP; Vercel no depende del archivo `_headers` generado para Netlify.
+
+1. Subir los cambios del proyecto a GitHub.
+2. En Vercel, elegir Add New → Project e importar el repositorio.
+3. Mantener la raíz del repositorio como Root Directory, no `src` ni `dist`. Seleccionar Other si pregunta el framework y Node.js 24.x en los ajustes de compilación.
+4. Confirmar Build Command `npm run build`, Output Directory `dist` e Install Command `npm ci`. No configurar `npm start` ni desplegar `server.js` como función.
+5. No se necesitan variables de entorno para este juego ni claves de Stripe: el apoyo usa un enlace público. Pulsar Deploy cuando se quiera publicar.
+6. En el dominio desplegado comprobar juego, sonido y apoyo, además de las cabeceras y el bloqueo de recursos internos descritos abajo. La configuración local no acredita el despliegue real.
+
+La carpeta `.vercel/` es configuración local y queda ignorada. Los cambios posteriores de la rama conectada pueden generar nuevos despliegues automáticamente. No añadir una reescritura general a `index.html`: los archivos privados deben seguir devolviendo 404.
+
+- [Configuración estática de Vercel](https://vercel.com/docs/project-configuration/vercel-json).
+- [Versión de Node.js](https://vercel.com/docs/functions/runtimes/node-js/node-js-versions).
+
+## Publicar en Netlify
 
 Se incluye `netlify.toml`: comando `npm run build`, directorio publicable `dist`, Node 24. Se genera `dist/_headers` con las cabeceras de seguridad. No se ha creado una cuenta ni realizado un despliegue: esas configuraciones deben verificarse sobre el dominio final.
 

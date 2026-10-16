@@ -54,6 +54,10 @@ El multijugador online queda para una fase posterior: requiere validación de co
 
 ## Comprobaciones
 
+La compilación pública elimina los imports de desarrollo del punto de entrada y comprueba que cada import local, también dinámico, exista en la distribución antes de sustituir `dist`. Evita referencias al laboratorio ausente que los empaquetadores de despliegue intentaban resolver.
+
+Configuración de Vercel en `vercel.json`: compilación con pruebas, publicación exclusiva de `dist` y cabeceras HTTP de seguridad. Instrucciones en [secure-deployment.md](secure-deployment.md). Pendiente desplegar y comprobar el dominio real.
+
 Campaña completa comprobada con compras e ingresos reales: 4 de 18 estrategias mixtas ganan, con 37–43 casetas mejoradas y 483–608 de vida final. Dos cocinas, radios, especializaciones y Asamblea permiten superar las veinte rondas; las compras simples y la inversión prematura en cuatro cocinas pierden. Resultados, configuración y límites en [balance-tests.md](balance-tests.md). Las reglas no se han cambiado durante estas pruebas.
 
 `npm.cmd run check` valida sintaxis y pruebas de comportamiento. `npm.cmd run benchmark` mide la simulación; `performance.html` permite medir el dibujo en navegador. `npm.cmd run simulate` compara estrategias programadas como diagnóstico de equilibrio.

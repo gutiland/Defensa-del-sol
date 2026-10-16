@@ -8,6 +8,7 @@ playwright-report/
 .cache/
 .npm/
 .netlify/
+.vercel/
 
 # Local environment and credentials
 .env

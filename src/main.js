@@ -43,12 +43,14 @@ const introductions = createEnemyIntroductions(
   () => game,
   () => controls.render(),
 );
+// @development-only:start
 const isAdmin = document.body?.dataset.page === "admin";
 let AdminGame, mountAdmin;
 if (isAdmin) {
   ({ AdminGame } = await import("./admin-game.js"));
   ({ mountAdmin } = await import("./ui/admin.js"));
 }
+// @development-only:end
 const scenes = createStoryScenes(
   document,
   playback,

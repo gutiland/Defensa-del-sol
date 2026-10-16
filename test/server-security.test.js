@@ -14,6 +14,29 @@ import { tmpdir } from "node:os";
 import path from "node:path";
 import { createStaticServer, PROJECT_ROOT } from "../server.js";
 import { buildSite } from "../scripts/build.js";
+import {
+  SECURITY_HEADERS,
+  HTTPS_HEADERS,
+} from "../scripts/security-headers.js";
+
+test("Vercel publishes only dist with the same security policy as the local public server", async () => {
+  const config = JSON.parse(
+    await readFile(path.join(PROJECT_ROOT, "vercel.json"), "utf8"),
+  );
+  assert.equal(config.framework, null);
+  assert.equal(config.outputDirectory, "dist");
+  assert.equal(config.buildCommand, "npm run build");
+  assert.equal(config.rewrites, undefined);
+  const rule = config.headers.find((rule) => rule.source === "/(.*)");
+  const headers = Object.fromEntries(
+    rule.headers.map(({ key, value }) => [key, value]),
+  );
+  for (const [key, value] of Object.entries({
+    ...SECURITY_HEADERS,
+    ...HTTPS_HEADERS,
+  }))
+    assert.equal(headers[key], value);
+});
 
 async function listen(options) {
   const server = await createStaticServer(options);
@@ -62,6 +85,37 @@ async function cleanup(root) {
   assert.ok(path.basename(root).startsWith("acampada-security-"));
   await rm(root, { recursive: true, force: true });
 }
+
+test("public build removes development imports and rejects unresolved dynamic imports before replacing dist", async () => {
+  const root = await fixture();
+  try {
+    await writeFile(
+      path.join(root, "src/main.js"),
+      '// @development-only:start\nconst isAdmin = true;\nif (isAdmin) await import("./admin-game.js");\n// @development-only:end\nexport const ready = true;',
+    );
+    const result = await buildSite(root);
+    const entry = await readFile(
+      path.join(result.output, "src/main.js"),
+      "utf8",
+    );
+    assert.ok(entry.includes("const isAdmin = false"));
+    assert.ok(!entry.includes("admin-game.js"));
+    await assert.rejects(
+      readFile(path.join(result.output, "src/admin-game.js")),
+    );
+    await writeFile(
+      path.join(root, "src/main.js"),
+      'await import("./missing.js");',
+    );
+    await assert.rejects(buildSite(root), /Import no incluido/);
+    assert.equal(
+      await readFile(path.join(result.output, "src/main.js"), "utf8"),
+      entry,
+    );
+  } finally {
+    await cleanup(root);
+  }
+});
 
 test("development reload includes newly imported modules without exposing unrelated files or changing public manifests", async () => {
   const root = await fixture();

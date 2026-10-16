@@ -1,0 +1,1259 @@
+{
+  "target": "https://defensa-del-sol-six.vercel.app",
+  "checkedAt": "2026-10-16T14:01:54.643Z",
+  "scope": "Low-impact checks of the authorized host only; no load testing, payments or data changes",
+  "home": {
+    "status": 200,
+    "tls": "TLSv1.3",
+    "headers": {
+      "Content-Security-Policy": "default-src 'none'; script-src 'self'; script-src-attr 'none'; style-src 'self'; style-src-attr 'none'; img-src 'self' data: blob:; font-src 'self'; connect-src 'none'; media-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+      "X-Content-Type-Options": "nosniff",
+      "X-Frame-Options": "DENY",
+      "Referrer-Policy": "no-referrer",
+      "Permissions-Policy": "camera=(), microphone=(), geolocation=(), payment=(), usb=(), serial=()",
+      "Cross-Origin-Resource-Policy": "same-origin",
+      "Cross-Origin-Opener-Policy": "same-origin",
+      "Strict-Transport-Security": "max-age=31536000"
+    },
+    "hasGame": true,
+    "hasLaboratoryLinks": false,
+    "setsCookie": false
+  },
+  "httpRedirect": {
+    "status": 308,
+    "location": "https://defensa-del-sol-six.vercel.app/"
+  },
+  "cors": {
+    "allowOrigin": "*",
+    "allowCredentials": null
+  },
+  "reflectsRawPayload": false,
+  "exposure": [
+    {
+      "path": "/.env",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/.env.local",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/.git/HEAD",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/.git/config",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/AGENTS.md",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/server.js",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/package.json",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/package-lock.json",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/vercel.json",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/admin.html",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/events.html",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/performance.html",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/src/admin-game.js",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/src/ui/admin.js",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/src/lab-budget.js",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    },
+    {
+      "path": "/docs/secure-deployment.md",
+      "status": 404,
+      "returnsGame": false,
+      "secretPattern": false
+    }
+  ],
+  "assets": [
+    {
+      "path": "src/main.js",
+      "status": 200,
+      "nosniff": "nosniff",
+      "manifestMatches": true,
+      "secretPattern": false,
+      "adminImports": false
+    },
+    {
+      "path": "src/engine.js",
+      "status": 200,
+      "nosniff": "nosniff",
+      "manifestMatches": true,
+      "secretPattern": false
+    },
+    {
+      "path": "src/data/support.js",
+      "status": 200,
+      "nosniff": "nosniff",
+      "manifestMatches": true,
+      "secretPattern": false,
+      "paymentUrls": [
+        "https://buy.stripe.com/fZucN7dBa8negD125QbQY00"
+      ]
+    },
+    {
+      "path": "src/ui/support.js",
+      "status": 200,
+      "nosniff": "nosniff",
+      "manifestMatches": true,
+      "secretPattern": false
+    },
+    {
+      "path": "style.css",
+      "status": 200,
+      "nosniff": "nosniff",
+      "manifestMatches": true,
+      "secretPattern": false,
+      "externalFonts": true
+    }
+  ],
+  "manifestResources": 103,
+  "requests": [
+    {
+      "path": "/",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "bytes": 7309
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "scheme": "http",
+      "status": 308,
+      "type": "text/plain",
+      "bytes": 14
+    },
+    {
+      "path": "/.env",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/.env.local",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/.git/HEAD",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/.git/config",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/AGENTS.md",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/server.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/package.json",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/package-lock.json",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/vercel.json",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/admin.html",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/events.html",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/performance.html",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/src/admin-game.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/src/ui/admin.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/src/lab-budget.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/docs/secure-deployment.md",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/%2e%2e/server.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 400,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 65
+    },
+    {
+      "path": "/..%5cserver.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/src/%2e%2e/server.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 404,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 79
+    },
+    {
+      "path": "/%00",
+      "method": "GET",
+      "scheme": "https",
+      "status": 400,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 65
+    },
+    {
+      "path": "/",
+      "method": "HEAD",
+      "scheme": "https",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "bytes": 0
+    },
+    {
+      "path": "/",
+      "method": "OPTIONS",
+      "scheme": "https",
+      "status": 204,
+      "bytes": 0
+    },
+    {
+      "path": "/",
+      "method": "TRACE",
+      "scheme": "https",
+      "status": 405,
+      "type": "text/plain; charset=utf-8",
+      "bytes": 72
+    },
+    {
+      "path": "/",
+      "method": "POST",
+      "scheme": "https",
+      "status": 405,
+      "bytes": 0
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "bytes": 7309
+    },
+    {
+      "path": "/?audit=%3Cimg%20src%3Dx%20onerror%3Dalert(1)%3E",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "text/html; charset=utf-8",
+      "bytes": 7309
+    },
+    {
+      "path": "/integrity.json",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/json; charset=utf-8",
+      "bytes": 9990
+    },
+    {
+      "path": "/src/main.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 8162
+    },
+    {
+      "path": "/src/data/progression.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1630
+    },
+    {
+      "path": "/src/ui/audio.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4320
+    },
+    {
+      "path": "/src/audio-synth.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 6687
+    },
+    {
+      "path": "/src/data/sounds.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 7152
+    },
+    {
+      "path": "/src/audio-events.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 569
+    },
+    {
+      "path": "/src/preferences.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2458
+    },
+    {
+      "path": "/src/data/copy.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 7132
+    },
+    {
+      "path": "/src/ui/gallery.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1032
+    },
+    {
+      "path": "/src/data/characters.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 8924
+    },
+    {
+      "path": "/src/data/plaza-cast.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2933
+    },
+    {
+      "path": "/src/render/characters.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5886
+    },
+    {
+      "path": "/src/render/poses.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1559
+    },
+    {
+      "path": "/src/data/weapons.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1742
+    },
+    {
+      "path": "/src/render/weapon-art.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2261
+    },
+    {
+      "path": "/src/render/equipment.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 6130
+    },
+    {
+      "path": "/src/render/banner.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2546
+    },
+    {
+      "path": "/src/data/banner-copy.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 450
+    },
+    {
+      "path": "/src/data/roles.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1051
+    },
+    {
+      "path": "/src/render/face.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4244
+    },
+    {
+      "path": "/src/render/flags.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1713
+    },
+    {
+      "path": "/src/render/accessories.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4979
+    },
+    {
+      "path": "/src/data/map.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1516
+    },
+    {
+      "path": "/src/data/featured-characters.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 376
+    },
+    {
+      "path": "/src/placement.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2384
+    },
+    {
+      "path": "/src/data/routes.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3817
+    },
+    {
+      "path": "/src/render/board.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 7374
+    },
+    {
+      "path": "/src/render/street-labels.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2790
+    },
+    {
+      "path": "/src/render/impact-feedback.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1394
+    },
+    {
+      "path": "/src/render/speech-lifetime.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 665
+    },
+    {
+      "path": "/src/render/battle-camera.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 674
+    },
+    {
+      "path": "/src/render/attacker-sprites.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2543
+    },
+    {
+      "path": "/src/render/landmarks.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4884
+    },
+    {
+      "path": "/src/render/architecture.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3335
+    },
+    {
+      "path": "/src/render/unit.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4594
+    },
+    {
+      "path": "/src/boss-mechanics.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2303
+    },
+    {
+      "path": "/src/render/effects.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 8551
+    },
+    {
+      "path": "/src/render/attacker-abilities.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1834
+    },
+    {
+      "path": "/src/attacker-abilities.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 296
+    },
+    {
+      "path": "/src/render/rain.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1637
+    },
+    {
+      "path": "/src/render/station-closure.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1371
+    },
+    {
+      "path": "/src/aura-sources.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 461
+    },
+    {
+      "path": "/src/render/placement-preview.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1213
+    },
+    {
+      "path": "/src/data/catalog.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4061
+    },
+    {
+      "path": "/src/data/bosses.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1636
+    },
+    {
+      "path": "/src/render/defense-structure.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5115
+    },
+    {
+      "path": "/src/render/tent.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3478
+    },
+    {
+      "path": "/src/render/camp.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3021
+    },
+    {
+      "path": "/src/data/building-look.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 194
+    },
+    {
+      "path": "/src/render/construction-animation.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2296
+    },
+    {
+      "path": "/src/render/celebration.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 593
+    },
+    {
+      "path": "/src/render/battle-atmosphere.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4974
+    },
+    {
+      "path": "/src/render/paths.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 549
+    },
+    {
+      "path": "/src/render/stereotypes.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3093
+    },
+    {
+      "path": "/src/stereotypes.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1264
+    },
+    {
+      "path": "/src/rain.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 842
+    },
+    {
+      "path": "/src/render/deaths.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3751
+    },
+    {
+      "path": "/src/render/ambient.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 560
+    },
+    {
+      "path": "/src/render/sprites.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2462
+    },
+    {
+      "path": "/src/plaza.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3530
+    },
+    {
+      "path": "/src/render/materials.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1585
+    },
+    {
+      "path": "/src/render/tactical.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1937
+    },
+    {
+      "path": "/src/ui/panel.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 7649
+    },
+    {
+      "path": "/src/data/waves.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3966
+    },
+    {
+      "path": "/src/data/story.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 6205
+    },
+    {
+      "path": "/src/data/campaign.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1192
+    },
+    {
+      "path": "/src/ui/shop.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3310
+    },
+    {
+      "path": "/src/ui/shortcuts.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 972
+    },
+    {
+      "path": "/src/ui/selection.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5750
+    },
+    {
+      "path": "/src/construction.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 735
+    },
+    {
+      "path": "/src/ui/routes.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 970
+    },
+    {
+      "path": "/src/ui/feedback.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 361
+    },
+    {
+      "path": "/src/ui/story.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5793
+    },
+    {
+      "path": "/src/ui/story-reference.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 729
+    },
+    {
+      "path": "/src/data/story-references.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2607
+    },
+    {
+      "path": "/src/data/story-events.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 4873
+    },
+    {
+      "path": "/src/data/awards.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 300
+    },
+    {
+      "path": "/src/ui/result.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1133
+    },
+    {
+      "path": "/src/ui/share-result.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2618
+    },
+    {
+      "path": "/src/ui/support.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1639
+    },
+    {
+      "path": "/src/data/support.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 183
+    },
+    {
+      "path": "/src/engine.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 16646
+    },
+    {
+      "path": "/src/combat.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3076
+    },
+    {
+      "path": "/src/movement.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1623
+    },
+    {
+      "path": "/src/dialogue.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1296
+    },
+    {
+      "path": "/src/combat-lifecycle.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 581
+    },
+    {
+      "path": "/src/experience.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1893
+    },
+    {
+      "path": "/src/attack-reinforcements.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 815
+    },
+    {
+      "path": "/src/spawn-schedule.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 404
+    },
+    {
+      "path": "/src/targeting.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1229
+    },
+    {
+      "path": "/src/caseta-raider.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 910
+    },
+    {
+      "path": "/src/story-events.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 3031
+    },
+    {
+      "path": "/src/playback.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 852
+    },
+    {
+      "path": "/src/ui/playback.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1567
+    },
+    {
+      "path": "/src/ui/enemy-intro.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2432
+    },
+    {
+      "path": "/src/enemy-discovery.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 551
+    },
+    {
+      "path": "/src/campaign-save.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 6901
+    },
+    {
+      "path": "/src/ui/story-scenes.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 5419
+    },
+    {
+      "path": "/src/data/story-scenes.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1514
+    },
+    {
+      "path": "/src/render/anime-scene.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 2291
+    },
+    {
+      "path": "/src/ui/construction-hit.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 288
+    },
+    {
+      "path": "/src/main.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 8162
+    },
+    {
+      "path": "/src/engine.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 16646
+    },
+    {
+      "path": "/src/data/support.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 183
+    },
+    {
+      "path": "/src/ui/support.js",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "application/javascript; charset=utf-8",
+      "bytes": 1639
+    },
+    {
+      "path": "/style.css",
+      "method": "GET",
+      "scheme": "https",
+      "status": 200,
+      "type": "text/css; charset=utf-8",
+      "bytes": 19245
+    }
+  ],
+  "moduleAudit": {
+    "checked": 101,
+    "failures": [],
+    "secretPatterns": [],
+    "missingImports": [],
+    "hashMismatches": []
+  }
+}

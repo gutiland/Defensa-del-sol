@@ -2,6 +2,12 @@
 
 ## Estado actual
 
+Tipografía Lilita One local para títulos y botones, con licencia SIL OFL incluida; cuerpo de texto con fuentes del sistema para facilitar la lectura. Eliminada la importación externa de Google Fonts. El servidor y la distribución conservan los bytes de la fuente y la sirven con su tipo MIME, sin ampliar la política de seguridad.
+
+El panel de mejoras de casetas se superpone al diario y al botón de ronda. Cabecera compacta con icono y nivel, mejora con arma y coste, acciones secundarias con símbolos y estadísticas desplegables; las etiquetas accesibles conservan la explicación completa.
+
+Controles de partida compactos con iconos, explicaciones accesibles y respuesta animada al pasar el cursor, enfocar o pulsar; respetan el movimiento reducido del sistema. Catálogo alineado con el inicio de ronda mediante una barra de controles común sobre mapa y lateral. La prueba de jefes queda fuera de la partida normal y se conserva en el laboratorio. Pendiente comprobar visualmente en navegador: no había superficies disponibles en esta sesión.
+
 Campaña de veinte rondas dividida en tres niveles, con campamento persistente y jefes en las rondas 5, 12 y 20. Ataque y duelo local duran ocho rondas. La construcción es libre fuera de caminos y monumentos; las barricadas bloquean los caminos sin atacar.
 
 El modo atacante individual queda oculto en la portada del MVP. Su código, reglas y pruebas se conservan para retomarlo más adelante. Defensa y duelo local siguen disponibles.
@@ -53,6 +59,8 @@ Referencias periodísticas con fondo sólido, texto oscuro sin transparencia y t
 El multijugador online queda para una fase posterior: requiere validación de comandos en servidor, salas y reconexión.
 
 ## Comprobaciones
+
+Despliegue Vercel revisado por HTTP el 16 de octubre: HTTPS y cabeceras presentes, 16 rutas internas bloqueadas y 101 módulos sin imports ausentes ni patrones de secretos detectados. Informe y límites en [public-security-audit-2026-10-16.md](public-security-audit-2026-10-16.md). Quedan revisión de cuentas, comprobación en navegador y limpieza del import de fuentes externas bloqueado por CSP.
 
 La compilación pública elimina los imports de desarrollo del punto de entrada y comprueba que cada import local, también dinámico, exista en la distribución antes de sustituir `dist`. Evita referencias al laboratorio ausente que los empaquetadores de despliegue intentaban resolver.
 

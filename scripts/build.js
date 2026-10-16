@@ -43,6 +43,17 @@ export async function buildSite(
   const files = await siteFiles(root),
     contents = new Map();
   for (const name of files) {
+    if (name.endsWith(".ttf")) {
+      const bytes = await readFile(path.join(root, name));
+      if (
+        bytes.length < 4 ||
+        bytes.length > 2 * 1024 * 1024 ||
+        bytes.readUInt32BE(0) !== 0x00010000
+      )
+        throw Error(`Fuente inválida: ${name}`);
+      contents.set(name, bytes);
+      continue;
+    }
     let text = await readFile(path.join(root, name), "utf8");
     if (Buffer.byteLength(text) > 2 * 1024 * 1024)
       throw Error(`Recurso demasiado grande: ${name}`);

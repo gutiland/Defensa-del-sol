@@ -34,7 +34,7 @@ test("selected construction health updates without recreating controls, and dest
       title = nodes[1];
     game.buildings[0].hp = 50;
     refreshSelectionStats(game);
-    assert.ok(title.textContent.includes("50/132"));
+    assert.ok(title.title.includes("50/132"));
     assert.deepEqual(panel.children, nodes);
     game.buildings = [];
     refreshSelectionStats(game);

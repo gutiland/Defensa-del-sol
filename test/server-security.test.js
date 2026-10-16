@@ -86,6 +86,61 @@ async function cleanup(root) {
   await rm(root, { recursive: true, force: true });
 }
 
+test("local font and license reach the public build intact and are served with safe MIME types", async () => {
+  const root = await fixture();
+  try {
+    await mkdir(path.join(root, "assets/fonts"), { recursive: true });
+    const font = await readFile(
+      path.join(PROJECT_ROOT, "assets/fonts/lilita-one.ttf"),
+    );
+    const license = await readFile(
+      path.join(PROJECT_ROOT, "assets/fonts/lilita-one-license.txt"),
+    );
+    await writeFile(path.join(root, "assets/fonts/lilita-one.ttf"), font);
+    await writeFile(
+      path.join(root, "assets/fonts/lilita-one-license.txt"),
+      license,
+    );
+    await writeFile(
+      path.join(root, "style.css"),
+      '@font-face { font-family: Cartoon; src: url("./assets/fonts/lilita-one.ttf"); }',
+    );
+    const result = await buildSite(root);
+    assert.deepEqual(
+      await readFile(path.join(result.output, "assets/fonts/lilita-one.ttf")),
+      font,
+    );
+    assert.deepEqual(
+      await readFile(
+        path.join(result.output, "assets/fonts/lilita-one-license.txt"),
+      ),
+      license,
+    );
+    const { server, port } = await listen({
+      root: result.output,
+      publicOrigin: "https://game.example",
+    });
+    try {
+      const response = await request(
+        port,
+        "/assets/fonts/lilita-one.ttf",
+        "HEAD",
+      );
+      assert.equal(response.status, 200);
+      assert.equal(response.headers["content-type"], "font/ttf");
+      assert.equal(Number(response.headers["content-length"]), font.length);
+      assert.equal(
+        (await request(port, "/assets/fonts/private.ttf")).status,
+        404,
+      );
+    } finally {
+      await stop(server);
+    }
+  } finally {
+    await cleanup(root);
+  }
+});
+
 test("public build removes development imports and rejects unresolved dynamic imports before replacing dist", async () => {
   const root = await fixture();
   try {

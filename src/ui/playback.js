@@ -1,19 +1,35 @@
+import { controlIcon } from "./control-icon.js";
+
 export function createPlaybackControls(document, playback, getGame) {
   const pause = document.getElementById("pause"),
     speed = document.getElementById("speed"),
     paths = document.getElementById("paths");
   let showPaths = false;
+  const undo = document.getElementById("undo-build"),
+    cancel = document.getElementById("cancel-build");
+  if (undo) controlIcon(undo, "↶", "Deshacer última colocación");
+  if (cancel) controlIcon(cancel, "×", "Cancelar selección · Esc");
   function render() {
     const game = getGame(),
       combat = game?.phase === "combat" && !game.result;
     pause.disabled = !combat;
     speed.disabled = !combat;
-    pause.textContent = playback.paused
-      ? "▶ Reanudar la bronca"
-      : "Ⅱ Pausa parlamentaria";
+    controlIcon(
+      pause,
+      playback.paused ? "▶" : "Ⅱ",
+      playback.paused ? "Reanudar · Espacio" : "Pausar · Espacio",
+    );
     pause.setAttribute("aria-pressed", String(playback.paused));
-    speed.textContent = `${playback.speed}× · Ritmo de tertulia`;
-    paths.textContent = showPaths ? "Ocultar rutas" : "Ver rutas de entrada";
+    controlIcon(
+      speed,
+      `${playback.speed}×`,
+      `Velocidad ${playback.speed}× · Pulsa para cambiar`,
+    );
+    controlIcon(
+      paths,
+      "↝",
+      showPaths ? "Ocultar rutas" : "Ver rutas de entrada",
+    );
     paths.setAttribute("aria-pressed", String(showPaths));
   }
   pause.onclick = () => {

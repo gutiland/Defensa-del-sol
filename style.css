@@ -1,4 +1,10 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap");
+@font-face {
+  font-family: "Lilita One";
+  src: url("./assets/fonts/lilita-one.ttf") format("truetype");
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+}
 :root {
   color-scheme: dark;
   --bg: #243c2c;
@@ -7,13 +13,15 @@
   --muted: #e0e7cc;
   --ink: #fff1ce;
   --yellow: #f4ce66;
+  --font-cartoon: "Lilita One", "Arial Rounded MT Bold", sans-serif;
+  --font-body: "Trebuchet MS", Arial, sans-serif;
 }
 .board-stage {
   position: relative;
 }
 .building-popover {
   position: absolute;
-  z-index: 5;
+  z-index: 8;
   width: min(240px, calc(100% - 16px));
   max-height: min(260px, 55vh);
   overflow: auto;
@@ -73,7 +81,7 @@ body {
   margin: 0;
   background: radial-gradient(ellipse at 50% 0, #49623c 0, var(--bg) 65%);
   color: var(--ink);
-  font-family: "DM Sans", sans-serif;
+  font-family: var(--font-body);
 }
 header {
   height: 90px;
@@ -84,9 +92,7 @@ header {
   border-bottom: 1px solid var(--line);
 }
 .brand {
-  font:
-    700 20px "Space Grotesk",
-    sans-serif;
+  font: 400 20px var(--font-cartoon);
   letter-spacing: 2px;
   color: var(--yellow);
   text-decoration: none;
@@ -94,14 +100,12 @@ header {
 .brand small {
   display: block;
   color: var(--muted);
-  font:
-    12px "DM Sans",
-    sans-serif;
+  font: 12px var(--font-body);
   letter-spacing: 1px;
   margin-top: 6px;
 }
 button {
-  font: inherit;
+  font: 400 16px var(--font-cartoon);
   color: inherit;
   cursor: pointer;
   border: 1px solid var(--line);
@@ -139,7 +143,8 @@ main {
 h1,
 h2,
 h3 {
-  font-family: "Space Grotesk", sans-serif;
+  font-family: var(--font-cartoon);
+  font-weight: 400;
 }
 h1 {
   font-size: 32px;
@@ -267,7 +272,7 @@ p {
 }
 .stats b {
   display: block;
-  font: 600 25px "Space Grotesk";
+  font: 400 25px var(--font-cartoon);
   color: var(--ink);
   margin-top: 6px;
 }
@@ -275,6 +280,61 @@ p {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 260px;
   gap: 22px;
+}
+.play-layout > aside {
+  padding-top: 10px;
+}
+#game > .board-toolbar {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  margin-bottom: 10px;
+}
+.board-toolbar button[data-icon-control] {
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 22px;
+  line-height: 1;
+  transition:
+    transform 150ms ease,
+    background-color 150ms ease;
+}
+.board-toolbar button[data-icon-control]:enabled:hover,
+.board-toolbar button[data-icon-control]:focus-visible {
+  transform: translateY(-2px) scale(1.06);
+}
+.board-toolbar button[data-icon-control]:enabled:active {
+  transform: scale(0.92);
+}
+.board-toolbar button:focus-visible,
+.experience-settings summary:focus-visible {
+  outline: 3px solid var(--yellow);
+  outline-offset: 3px;
+}
+.experience-settings summary {
+  cursor: pointer;
+  font-size: 24px;
+  min-width: 28px;
+  min-height: 32px;
+  list-style: none;
+  transition: transform 180ms ease;
+}
+.experience-settings summary::-webkit-details-marker {
+  display: none;
+}
+.experience-settings summary:hover {
+  transform: rotate(20deg);
+}
+@media (max-width: 850px) {
+  .play-layout > aside {
+    padding-top: 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .board-toolbar button[data-icon-control],
+  .experience-settings summary {
+    transition: none;
+    transform: none !important;
+  }
 }
 .board-wrap {
   border: 1px solid var(--line);

@@ -37,7 +37,9 @@ export function mountExperienceSettings(document) {
   const details = document.createElement("details"),
     summary = document.createElement("summary");
   details.className = "experience-settings";
-  summary.textContent = "Imagen y mezcla";
+  summary.textContent = "⚙";
+  summary.setAttribute("aria-label", "Ajustes de imagen y mezcla de sonido");
+  summary.setAttribute("title", "Imagen y mezcla de sonido");
   details.append(summary);
   for (const [key, title] of [
     ["flashes", "Destellos de impacto"],

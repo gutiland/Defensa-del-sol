@@ -14,6 +14,7 @@ import {
   levelRound,
 } from "../data/campaign.js";
 import { storyEventFor } from "../data/story-events.js";
+import { controlIcon } from "./control-icon.js";
 const $ = (id) => document.getElementById(id);
 let lastQuote = null;
 export function renderLiveStats(game) {
@@ -32,12 +33,17 @@ export function renderLiveStats(game) {
     game.time < game.freezeUntil ||
     !!game.result;
   const remaining = Math.max(0, Math.ceil(game.abilityReadyAt - game.time));
-  ability.textContent =
+  const abilityLabel =
     game.time < game.freezeUntil
       ? "Asamblea en curso: detenidos"
       : remaining
         ? `Asamblea: ${remaining} s`
         : "Asamblea extraordinaria · Detener 3 s";
+  controlIcon(
+    ability,
+    remaining ? `✋ ${remaining}s` : "✋",
+    `${abilityLabel} · Q`,
+  );
   document.querySelectorAll("button[data-cost]").forEach((button) => {
     if (game.phase !== "attack")
       button.disabled =
@@ -151,8 +157,10 @@ export function renderPanel(
     COPY.headlines[(game.round - 1) % COPY.headlines.length].join(" / ");
   $("action").disabled =
     !!game.result || combat || (attacking && !game.queue.length);
-  $("test-boss").hidden = game.mode !== "defense";
-  $("test-boss").disabled = combat || !!game.result;
+  if ($("test-boss")) {
+    $("test-boss").hidden = game.mode !== "defense";
+    $("test-boss").disabled = combat || !!game.result;
+  }
   $("action").textContent =
     COPY.action[
       combat

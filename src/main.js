@@ -174,7 +174,8 @@ document.onkeydown = (event) => {
 };
 $("action").onclick = () => command({ type: "ready" });
 $("ability").onclick = () => command({ type: "ability" });
-$("test-boss").onclick = () => command({ type: "test-boss" });
+if ($("test-boss"))
+  $("test-boss").onclick = () => command({ type: "test-boss" });
 $("undo-build").onclick = () => {
   const b = [...game.buildings].reverse().find((b) => b.refundable);
   if (b) command({ type: "remove", id: b.id });

@@ -82,44 +82,44 @@
             ><span>BASE <b id="health"></b></span>
           </div>
         </div>
-        <div class="layout">
+        <div class="board-toolbar" aria-label="Controles de partida">
+          <small id="save-status" role="status"></small>
+          <button id="undo-build" type="button" disabled>
+            Deshacer última colocación
+          </button>
+          <button id="cancel-build" type="button">
+            Cancelar selección · Esc
+          </button>
+          <button id="pause" type="button" disabled>
+            Ⅱ Pausa parlamentaria
+          </button>
+          <button id="speed" type="button" disabled>
+            1× · Ritmo de tertulia
+          </button>
+          <button id="sound" type="button" aria-pressed="true">
+            Sonido: activado
+          </button>
+          <label class="volume-control" title="Volumen general"
+            >&#9835;
+            <input
+              id="sound-volume"
+              type="range"
+              min="0"
+              max="100"
+              value="35"
+              aria-label="Volumen de efectos"
+          /></label>
+          <button id="ability" type="button" disabled>
+            Asamblea extraordinaria
+          </button>
+          <button id="paths" type="button">Ver rutas de entrada</button>
+          <small
+            >Espacio: pausa · 1–6: casetas · Q: asamblea · Enter: ronda · Mayús:
+            colocar varias</small
+          >
+        </div>
+        <div class="layout play-layout">
           <div class="board-wrap">
-            <div class="board-toolbar" aria-label="Controles de partida">
-              <small id="save-status" role="status"></small>
-              <button id="undo-build" type="button" disabled>
-                Deshacer última colocación
-              </button>
-              <button id="cancel-build" type="button">
-                Cancelar selección · Esc
-              </button>
-              <button id="pause" type="button" disabled>
-                Ⅱ Pausa parlamentaria
-              </button>
-              <button id="speed" type="button" disabled>
-                1× · Ritmo de tertulia
-              </button>
-              <button id="sound" type="button" aria-pressed="true">
-                Sonido: activado
-              </button>
-              <label class="volume-control"
-                >Volumen
-                <input
-                  id="sound-volume"
-                  type="range"
-                  min="0"
-                  max="100"
-                  value="35"
-                  aria-label="Volumen de efectos"
-              /></label>
-              <button id="ability" type="button" disabled>
-                Asamblea extraordinaria
-              </button>
-              <button id="paths" type="button">Ver rutas de entrada</button>
-              <small
-                >Espacio: pausa · 1–6: casetas · Q: asamblea · Enter: ronda ·
-                Mayús: colocar varias</small
-              >
-            </div>
             <div class="board-stage">
               <canvas
                 id="board"
@@ -161,10 +161,6 @@
               </details>
               <div id="routes" hidden></div>
               <div id="queue"></div>
-
-              <button id="test-boss" class="subtle" type="button">
-                ★ Probar ronda de jefes
-              </button>
             </div>
             <p class="note">
               Movimiento y combate automáticos. Las decisiones de construcción y

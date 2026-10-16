@@ -1,6 +1,7 @@
 import { createSynth } from "../audio-synth.js";
 import { soundForEffect } from "../audio-events.js";
 import { preferences } from "../preferences.js";
+import { controlIcon } from "./control-icon.js";
 
 export function createAudio(
   document,
@@ -22,7 +23,11 @@ export function createAudio(
   const heard = new WeakSet();
   let bossSeen = new WeakSet();
   function render() {
-    button.textContent = enabled ? "Sonido: activado" : "Sonido: desactivado";
+    controlIcon(
+      button,
+      enabled ? "🔊" : "🔇",
+      enabled ? "Silenciar sonido" : "Activar sonido",
+    );
     button.setAttribute("aria-pressed", String(enabled));
   }
   async function unlock() {
@@ -35,7 +40,7 @@ export function createAudio(
       synth.volume(enabled ? volume : 0);
       if (context.state !== "running") await context.resume();
     } catch {
-      button.textContent = "Sonido no disponible";
+      controlIcon(button, "♪!", "Sonido no disponible");
     }
   }
   let deathVoice = 0;

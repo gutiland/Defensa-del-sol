@@ -16,12 +16,29 @@ export async function siteFiles(root, development = false) {
   async function visit(name) {
     name = name.replaceAll("\\", "/");
     if (files.has(name)) return;
-    if (!/^(?:src\/[a-zA-Z0-9_/-]+\.js|[a-z-]+\.(?:html|css))$/.test(name))
+    if (
+      !/^(?:src\/[a-zA-Z0-9_/-]+\.js|[a-z-]+\.(?:html|css)|assets\/fonts\/lilita-one(?:\.ttf|-license\.txt))$/.test(
+        name,
+      )
+    )
       throw Error(`Recurso no permitido: ${name}`);
     const actual = await realpath(path.join(root, name));
     if (!actual.startsWith(resolvedRoot + path.sep))
       throw Error("Recurso fuera de la raíz pública");
     files.add(name);
+    if (name.endsWith(".css")) {
+      const css = await readFile(actual, "utf8");
+      for (const match of css.matchAll(
+        /url\(\s*["']?(\.\/assets\/fonts\/[a-z.-]+)["']?\s*\)/g,
+      ))
+        await visit(
+          path.posix.normalize(
+            path.posix.join(path.posix.dirname(name), match[1]),
+          ),
+        );
+    }
+    if (name === "assets/fonts/lilita-one.ttf")
+      await visit("assets/fonts/lilita-one-license.txt");
     if (name.endsWith(".js")) {
       const source = await readFile(actual, "utf8");
       for (const match of source.matchAll(

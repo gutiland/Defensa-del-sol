@@ -11,6 +11,15 @@ import { CHARACTERS } from "../data/characters.js";
 import { canRemove, refundableCost } from "../construction.js";
 import { projectY } from "../data/map.js";
 const $ = (id) => document.getElementById(id);
+const WEAPON_ICONS = ["🪨", "🪨", "🍾", "🔥"];
+const BRANCH_ICONS = {
+  tent: ["⚡", "💥"],
+  area: ["⚡", "🎨"],
+  speaker: ["🎶", "📣"],
+  odor: ["☁", "🧪"],
+  kitchen: ["🍲", "⏱"],
+  barrier: ["🛡", "🔧"],
+};
 let selectionView = null;
 export function refreshSelectionStats(game) {
   if (selectionView?.game !== game) return;
@@ -24,7 +33,8 @@ export function refreshSelectionStats(game) {
     selectionView = null;
     return;
   }
-  selectionView.title.textContent = `${BUILDINGS[b.type].name} · N${b.level} · ${Math.ceil(b.hp)}/${b.maxHp}`;
+  selectionView.title.textContent = `${BUILDINGS[b.type].icon} ${BUILDINGS[b.type].name} · N${b.level}`;
+  selectionView.title.title = `Resistencia: ${Math.ceil(b.hp)}/${b.maxHp}`;
 }
 export function renderSelection({ game, selected }, command) {
   selectionView = null;
@@ -66,19 +76,30 @@ export function renderSelection({ game, selected }, command) {
       summary = document.createElement("summary");
     const secondary = document.createElement("div");
     secondary.className = "popover-secondary";
-    summary.textContent = "Detalles";
+    summary.textContent = "ⓘ";
+    summary.setAttribute("aria-label", "Ver estadísticas y especialidades");
+    summary.title = "Estadísticas y especialidades";
     info.append(summary, details);
     if (canRemove(game, b)) {
       const remove = document.createElement("button");
-      remove.textContent = game.sandbox
-        ? "Eliminar"
-        : `Retirar · +${refundableCost(b)}`;
+      remove.textContent = game.sandbox ? "🗑" : `↶ +${refundableCost(b)}`;
+      remove.title = game.sandbox
+        ? "Eliminar caseta"
+        : "Retirar y recuperar provisiones";
+      remove.setAttribute(
+        "aria-label",
+        game.sandbox
+          ? "Eliminar caseta"
+          : `Retirar: recuperar ${refundableCost(b)} provisiones`,
+      );
       remove.onclick = () => command({ type: "remove", id: b.id });
       secondary.append(remove);
     }
     if (game.sandbox && b.branch) {
       const reset = document.createElement("button");
-      reset.textContent = "Cambiar especialidad";
+      reset.textContent = "↻";
+      reset.title = "Cambiar especialidad";
+      reset.setAttribute("aria-label", "Cambiar especialidad");
       reset.onclick = () => command({ type: "admin-branch-reset", id: b.id });
       secondary.append(reset);
     }
@@ -89,10 +110,13 @@ export function renderSelection({ game, selected }, command) {
     }
     if (b.level < maxLevel(b.type) && canDefend(game)) {
       const btn = document.createElement("button");
-      btn.textContent =
+      const upgradeLabel =
         b.type === "tent"
           ? `↑ ${TENT_WEAPONS[b.level].name} · ${b.level * 30}`
           : `↑ Nivel ${b.level + 1} · ${b.level * 30}`;
+      btn.textContent = `↑ ${b.type === "tent" ? WEAPON_ICONS[b.level] : definition.icon} N${b.level + 1} · ${b.level * 30}`;
+      btn.title = upgradeLabel;
+      btn.setAttribute("aria-label", `${upgradeLabel} provisiones`);
       btn.className = "upgrade-primary";
       btn.dataset.cost = b.level * 30;
       btn.disabled = game.money < b.level * 30;
@@ -111,7 +135,8 @@ export function renderSelection({ game, selected }, command) {
         BRANCHES[b.type],
       )) {
         const button = document.createElement("button");
-        button.textContent = `${name} · ${cost}`;
+        const icon = BRANCH_ICONS[b.type][branch === "rapid" ? 0 : 1];
+        button.textContent = `${icon} ${name} · ${cost}`;
         button.title = `${description}. Elección permanente: excluye la otra rama.`;
         button.setAttribute(
           "aria-label",

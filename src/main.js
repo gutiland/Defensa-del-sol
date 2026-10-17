@@ -19,9 +19,11 @@ import { loadCampaign, saveCampaign } from "./campaign-save.js";
 import { preferences } from "./preferences.js";
 import { mountSupport } from "./ui/support.js";
 import { createTutorial } from "./ui/tutorial.js";
+import { mountBoardInterface } from "./ui/board-interface.js";
 applyStaticCopy(document);
 mountGallery(document);
 mountSupport(document);
+const boardInterface = mountBoardInterface(document);
 const $ = (id) => document.getElementById(id),
   canvas = $("board"),
   renderer = createBoardRenderer(canvas);
@@ -63,6 +65,7 @@ const scenes = createStoryScenes(
   () => controls.render(),
 );
 function start(mode, restored = null) {
+  boardInterface?.close();
   tutorial.cancel();
   scenes.cancel();
   playback.reset();
@@ -146,6 +149,7 @@ function update() {
         kind = value;
         placing = true;
         selected = null;
+        boardInterface?.selected();
         update();
       },
       selectEntry(value) {

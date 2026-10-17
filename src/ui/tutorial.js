@@ -32,11 +32,15 @@ export function createTutorial(document, playback, blocked = () => false) {
     seen = new Set();
   function position() {
     if (!active) return;
-    const rect = document
-      .querySelector(active.target)
-      ?.getBoundingClientRect?.();
+    const target = document.querySelector(active.target);
+    const menu = target?.closest?.(".board-menu");
+    if (menu) menu.open = true;
+    const rect = target?.getBoundingClientRect?.();
     halo.hidden = arrow.hidden = !rect || !rect.width || !rect.height;
-    if (halo.hidden) return;
+    if (halo.hidden) {
+      card.style.top = "50%";
+      return;
+    }
     const width = globalThis.innerWidth || 1000,
       height = globalThis.innerHeight || 680;
     const x = Math.max(4, rect.left),
@@ -114,7 +118,9 @@ export function createTutorial(document, playback, blocked = () => false) {
       playback.paused = true;
       root.showModal();
       position();
-      close.focus?.();
+      close.focus?.({ preventScroll: true });
+      root.scrollTop = 0;
+      root.scrollLeft = 0;
     },
   };
 }

@@ -1,11 +1,20 @@
 import { projectY } from "../data/map.js";
-export function drawBuildingAmbient(ctx, building, time) {
+import { buildingScale } from "../data/building-look.js";
+export function drawBuildingAmbient(
+  ctx,
+  building,
+  time,
+  combatTime = time,
+  reducedMotion = false,
+) {
   const level = building.level || 1;
   const x = building.x,
     y = projectY(building.y);
   if (building.type === "odor" && level >= 3) {
     ctx.save();
-    ctx.translate(x + 20, y - 13);
+    const scale = buildingScale(building);
+    ctx.translate(x + 25 * scale, y - 13 * scale);
+    ctx.scale(scale, scale);
     ctx.rotate(time * 5);
     ctx.fillStyle = "#a8c56a";
     for (let i = 0; i < 3; i++) {
@@ -18,7 +27,9 @@ export function drawBuildingAmbient(ctx, building, time) {
     return;
   }
   if (building.type === "speaker") {
-    const pulse = Math.max(0, 1 - (time - (building.lastShot ?? -100)) / 0.4);
+    if (reducedMotion) return;
+    const age = combatTime - (building.lastShot ?? -100);
+    const pulse = age >= 0 ? Math.max(0, 1 - age / 0.4) : 0;
     if (!pulse) return;
     ctx.save();
     ctx.strokeStyle = ["#e1e8be", "#9bdeef", "#f5d26b"][level - 1];

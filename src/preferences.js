@@ -20,9 +20,8 @@ const saved = readStorage("sol-preferences-v1", 2048) || {};
 export const preferences = {
   flashes: saved.flashes !== false,
   reducedMotion:
-    typeof saved.reducedMotion === "boolean"
-      ? saved.reducedMotion
-      : !!globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
+    saved.reducedMotion === true ||
+    !!globalThis.matchMedia?.("(prefers-reduced-motion: reduce)").matches,
   quality: saved.quality === "low" ? "low" : "auto",
   effectsVolume: Number.isFinite(saved.effectsVolume)
     ? Math.max(0, Math.min(1, saved.effectsVolume))

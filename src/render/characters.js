@@ -7,6 +7,7 @@ import { characterFlag } from "../data/characters.js";
 import { drawOutfit, drawHairDetails } from "./accessories.js";
 import { CHARACTERS } from "../data/characters.js";
 import { projectY } from "../data/map.js";
+import { placeSpeechBox } from "./speech-layout.js";
 
 export function drawCharacter(
   ctx,
@@ -159,8 +160,11 @@ export function drawCharacter(
   ctx.restore();
 }
 
-export function drawSpeech(ctx, speech) {
+export function drawSpeech(ctx, speech, viewport = {}) {
   const actor = CHARACTERS[speech.character];
+  const screenWidth = viewport.width || 1000;
+  const screenHeight = viewport.height || 680;
+  const width = Math.min(270, Math.max(80, screenWidth - 16));
   ctx.save();
   ctx.font = "12px sans-serif";
   const words = speech.text.split(" "),
@@ -168,18 +172,30 @@ export function drawSpeech(ctx, speech) {
   let line = "";
   for (const word of words) {
     const next = line ? line + " " + word : word;
-    if (ctx.measureText(next).width > 240 && line) {
+    if (ctx.measureText(next).width > width - 24 && line) {
       lines.push(line);
       line = word;
     } else line = next;
   }
   if (line) lines.push(line);
-  const width = 270,
-    height = 39 + lines.length * 17;
-  const x = Math.max(8, Math.min(722, speech.x - width / 2)),
-    y = Math.max(8, Math.min(590, projectY(speech.y) - height - 35));
-  ctx.shadowColor = "#0003";
-  ctx.shadowBlur = 9;
+  const maxLines = Math.max(1, Math.floor((screenHeight - 61) / 17));
+  if (lines.length > maxLines) {
+    lines.length = maxLines;
+    let last = lines[maxLines - 1];
+    while (last && ctx.measureText(last + "…").width > width - 24)
+      last = last.slice(0, -1);
+    lines[maxLines - 1] = last.trimEnd() + "…";
+  }
+  const height = 39 + lines.length * 17;
+  const { x, y } = placeSpeechBox(
+    speech.x * (viewport.scaleX || 1),
+    projectY(speech.y) * (viewport.scaleY || 1),
+    width,
+    height,
+    { width: screenWidth, height: screenHeight },
+  );
+  ctx.shadowColor = "transparent";
+  ctx.shadowBlur = 0;
   ctx.fillStyle = "#fff2c8";
   ctx.beginPath();
   ctx.roundRect(x, y, width, height, 13);
@@ -188,21 +204,23 @@ export function drawSpeech(ctx, speech) {
   ctx.strokeStyle = "#34412b";
   ctx.lineWidth = 2.5;
   ctx.stroke();
+  const tailX = Math.max(
+    x + 18,
+    Math.min(x + width - 18, speech.x * (viewport.scaleX || 1)),
+  );
   ctx.beginPath();
-  ctx.moveTo(x + width / 2 - 6, y + height);
-  ctx.lineTo(x + width / 2 - 2, y + height + 9);
-  ctx.lineTo(x + width / 2 + 8, y + height);
+  ctx.moveTo(tailX - 6, y + height);
+  ctx.lineTo(tailX - 2, y + height + 9);
+  ctx.lineTo(tailX + 8, y + height);
   ctx.fill();
   ctx.stroke();
   ctx.fillStyle = "#333b33";
   ctx.textAlign = "left";
   ctx.font = "bold 10px sans-serif";
-  ctx.fillText(
-    actor.name + " · PARODIA",
-    x + 12,
-    y + 17,
-  );
+  ctx.fillText(actor.name + " · PARODIA", x + 12, y + 17, width - 24);
   ctx.font = "12px sans-serif";
-  lines.forEach((text, i) => ctx.fillText(text, x + 12, y + 37 + i * 17));
+  lines.forEach((text, i) =>
+    ctx.fillText(text, x + 12, y + 37 + i * 17, width - 24),
+  );
   ctx.restore();
 }

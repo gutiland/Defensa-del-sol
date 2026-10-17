@@ -62,6 +62,52 @@ function canvasShelter(ctx, color, roof, level) {
     ctx.fillStyle = "#c29c66";
     ctx.fillRect(-35, 24, 70, 5);
   }
+  ctx.save();
+  if (level === 1) {
+    // Low-level shelters show repairs rather than polished equipment.
+    ctx.fillStyle = "#b8a784";
+    ctx.strokeStyle = "#695f49";
+    ctx.lineWidth = 1;
+    for (const [x, y, width, height] of [
+      [-17, -11, 11, 8],
+      [12, -7, 8, 6],
+    ]) {
+      ctx.fillRect(x, y, width, height);
+      ctx.strokeRect(x, y, width, height);
+      ctx.beginPath();
+      ctx.moveTo(x + 2, y - 1);
+      ctx.lineTo(x + 2, y + 2);
+      ctx.moveTo(x + width - 2, y + height - 2);
+      ctx.lineTo(x + width - 2, y + height + 1);
+      ctx.stroke();
+    }
+  } else {
+    ctx.strokeStyle = "#f1e6c3";
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(-24, 2);
+    ctx.lineTo(-24, 23);
+    ctx.moveTo(24, 2);
+    ctx.lineTo(24, 23);
+    ctx.stroke();
+    ctx.fillStyle = level >= 3 ? "#f2cb6a" : "#e7dac1";
+    for (const x of [-28, -14, 14, 28]) {
+      ctx.beginPath();
+      ctx.arc(x, 1, 1.6, 0, Math.PI * 2);
+      ctx.fill();
+    }
+    if (level >= 3) {
+      ctx.strokeStyle = "#f5ebcd";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(-4, -22);
+      ctx.lineTo(-4, -4);
+      ctx.moveTo(4, -18);
+      ctx.lineTo(4, -4);
+      ctx.stroke();
+    }
+  }
+  ctx.restore();
 }
 export function drawDefenseStructure(ctx, type, level = 1, base = false) {
   ctx.save();

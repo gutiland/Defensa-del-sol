@@ -83,7 +83,8 @@ export function renderSelection(
     const close = document.createElement("button");
     close.textContent = "×";
     close.className = "popover-close";
-    close.setAttribute("aria-label", "Cerrar mejoras");
+    close.setAttribute("aria-label", "Cerrar mejoras y deseleccionar caseta");
+    close.title = "Cerrar y deseleccionar";
     close.onclick = () => {
       $("selection").hidden = true;
       selectionView = null;

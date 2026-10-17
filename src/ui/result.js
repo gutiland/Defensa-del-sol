@@ -1,6 +1,7 @@
 import { COPY } from "../data/copy.js";
 import { mountResultSharing } from "./share-result.js";
 import { mountSupport } from "./support.js";
+import { focusDialogStart } from "./dialog-focus.js";
 const $ = (id) => document.getElementById(id);
 export function showResult(game) {
   const loss = game.result === "loss",
@@ -27,4 +28,5 @@ export function showResult(game) {
   mountSupport(document);
   mountResultSharing(document, game);
   $("result").showModal();
+  focusDialogStart($("result"), $("resultTitle"));
 }

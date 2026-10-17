@@ -24,11 +24,48 @@ import { CHARACTERS, buildingDefender } from "../data/characters.js";
 import { createSprites } from "./sprites.js";
 import { projectY } from "../data/map.js";
 import { createIncomeState, drawRoundIncome } from "./round-income.js";
+import { measureSpeechViewport } from "./speech-layout.js";
 import { drawPlaza } from "../plaza.js";
 import { drawTactical } from "./tactical.js";
 import { drawCombatEffects, gradeEnvironment } from "./effects.js";
 export function createBoardRenderer(canvas) {
   const ctx = canvas.getContext("2d");
+  const speechLayer = canvas.parentElement
+    ? document.createElement("canvas")
+    : null;
+  if (speechLayer) {
+    speechLayer.width = 1000;
+    speechLayer.height = 680;
+    speechLayer.className = "board-speech-layer";
+    speechLayer.setAttribute("aria-hidden", "true");
+    canvas.parentElement.append(speechLayer);
+  }
+  const speechCtx = speechLayer?.getContext("2d");
+  let speechViewport = { width: 1000, height: 680, scaleX: 1, scaleY: 1 };
+  let speechDensity = 1;
+  function resizeSpeechLayer() {
+    if (!speechLayer) return;
+    const rect = canvas.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) return;
+    speechViewport = measureSpeechViewport(
+      rect.width,
+      rect.height,
+      globalThis.devicePixelRatio || 1,
+    );
+    speechDensity = speechViewport.density;
+    if (speechLayer.width !== speechViewport.pixelWidth)
+      speechLayer.width = speechViewport.pixelWidth;
+    if (speechLayer.height !== speechViewport.pixelHeight)
+      speechLayer.height = speechViewport.pixelHeight;
+  }
+  if (speechLayer) {
+    resizeSpeechLayer();
+    if (globalThis.ResizeObserver) {
+      const observer = new globalThis.ResizeObserver(resizeSpeechLayer);
+      observer.observe(canvas);
+    }
+    globalThis.addEventListener?.("resize", resizeSpeechLayer);
+  }
   const background = document.createElement("canvas");
   background.width = 1000;
   background.height = 680;
@@ -55,7 +92,10 @@ export function createBoardRenderer(canvas) {
     }
     visualTime += Math.max(0, view.animationDelta || 0);
     const speeches = visibleSpeeches(game, visualTime);
-    const income = incomeState(game, view.paused ? 0 : view.animationDelta || 0);
+    const income = incomeState(
+      game,
+      view.paused ? 0 : view.animationDelta || 0,
+    );
     const cheering = celebration(game, view.animationDelta || 0);
     const animationDt = view.reducedMotion ? 0 : view.animationDelta || 0;
     atmosphere.advance(game, view.quality === "low" ? 0 : animationDt);
@@ -67,6 +107,15 @@ export function createBoardRenderer(canvas) {
       view.reducedMotion,
     );
     ctx.translate(cameraShift, cameraShift * 0.4);
+    if (speechCtx) {
+      speechCtx.setTransform(speechDensity, 0, 0, speechDensity, 0, 0);
+      speechCtx.clearRect(0, 0, speechViewport.width, speechViewport.height);
+      speechCtx.save();
+      speechCtx.translate(
+        cameraShift * speechViewport.scaleX,
+        cameraShift * 0.4 * speechViewport.scaleY,
+      );
+    }
     ctx.drawImage(background, 0, 0);
     drawRain(ctx, game, visualTime);
     if (!view.reducedMotion && view.quality !== "low") atmosphere.draw(ctx);
@@ -122,7 +171,13 @@ export function createBoardRenderer(canvas) {
           ctx.restore();
         }
         drawOdorLines(ctx, b, view.reducedMotion ? 0 : visualTime);
-        drawBuildingAmbient(ctx, b, view.reducedMotion ? 0 : visualTime);
+        drawBuildingAmbient(
+          ctx,
+          b,
+          view.reducedMotion ? 0 : visualTime,
+          game.time,
+          view.reducedMotion,
+        );
         if (hasDefender(b))
           drawCharacter(
             ctx,
@@ -174,8 +229,19 @@ export function createBoardRenderer(canvas) {
     drawChain(ctx, game);
     for (const speech of speeches)
       if (CHARACTERS[speech.character]?.side !== "attack")
-        drawSpeech(ctx, speech);
-    drawRoundIncome(ctx, game, income, view.reducedMotion);
+        drawSpeech(
+          speechCtx || ctx,
+          speech,
+          speechCtx ? speechViewport : undefined,
+        );
+    drawRoundIncome(
+      ctx,
+      game,
+      income,
+      view.reducedMotion,
+      speechCtx || ctx,
+      speechCtx ? speechViewport : undefined,
+    );
     if (view.paused && game.phase === "combat") {
       ctx.save();
       ctx.fillStyle = "#182522d9";
@@ -187,6 +253,7 @@ export function createBoardRenderer(canvas) {
       ctx.restore();
     }
     ctx.restore();
+    speechCtx?.restore();
   }
 
   return { draw };

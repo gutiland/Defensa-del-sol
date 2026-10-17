@@ -23,7 +23,8 @@ export function renderShop(
     for (const [key, button] of cached.buttons) {
       button.classList.toggle("active", kind === key);
       button.setAttribute("aria-pressed", String(kind === key));
-      button.disabled = !canDefend(game) || game.money < BUILDINGS[key].cost;
+      button.disabled = !canDefend(game);
+      button.dataset.affordable = String(game.money >= BUILDINGS[key].cost);
     }
     return;
   }
@@ -37,6 +38,7 @@ export function renderShop(
     const price = document.createElement("span"),
       description = document.createElement("small");
     price.textContent = `${d.cost} ◈`;
+    price.className = "shop-card-price";
     description.className = "shop-description";
     const help = attacking
       ? d.desc || `Resistencia ${d.hp} · Velocidad ${d.speed}`
@@ -121,10 +123,11 @@ export function renderShop(
     }
     b.disabled =
       (!attacking && !canDefend(game)) ||
-      game.money < d.cost ||
+      (attacking && game.money < d.cost) ||
       (attacking && entry === undefined);
     b.dataset.cost = d.cost;
     b.dataset.shop = "true";
+    if (!attacking) b.dataset.affordable = String(game.money >= d.cost);
     b.onclick = () => {
       if (attacking) command({ type: "recruit", kind: key, entry });
       else {

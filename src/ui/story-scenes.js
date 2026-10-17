@@ -4,6 +4,7 @@ import { STORY_SCENES } from "../data/story-scenes.js";
 import { drawAnimeScene } from "../render/anime-scene.js";
 import { CHARACTERS } from "../data/characters.js";
 import { storyEventFor } from "../data/story-events.js";
+import { focusDialogStart } from "./dialog-focus.js";
 
 export function createStoryScenes(document, playback, getGame, onChange) {
   const dialog = document.getElementById("story-scene");
@@ -12,8 +13,8 @@ export function createStoryScenes(document, playback, getGame, onChange) {
   $("scene-title").setAttribute("tabindex", "-1");
   $("scene-title").setAttribute("autofocus", "");
   function showFromTop() {
-    $("scene-title").focus?.({ preventScroll: true });
-    for (const node of [dialog, $("scene-choices"), $("scene-reference")]) {
+    focusDialogStart(dialog, $("scene-title"));
+    for (const node of [$("scene-choices"), $("scene-reference")]) {
       node.scrollTop = 0;
       node.scrollLeft = 0;
     }

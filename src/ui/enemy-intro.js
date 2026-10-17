@@ -3,6 +3,7 @@ import { rememberEnemyIntroduction } from "../campaign-save.js";
 import { UNITS } from "../data/catalog.js";
 import { attackerCharacter } from "../data/characters.js";
 import { drawCharacter } from "../render/characters.js";
+import { focusDialogStart } from "./dialog-focus.js";
 
 export function createEnemyIntroductions(
   document,
@@ -50,6 +51,7 @@ export function createEnemyIntroductions(
       { moving: false },
     );
     dialog.showModal();
+    focusDialogStart(dialog, $("enemy-intro-name"));
     rememberEnemyIntroduction(game, kind);
     return true;
   }

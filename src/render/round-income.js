@@ -41,7 +41,14 @@ export function createIncomeState() {
   };
 }
 
-export function drawRoundIncome(ctx, game, state, reducedMotion = false) {
+export function drawRoundIncome(
+  ctx,
+  game,
+  state,
+  reducedMotion = false,
+  speechCtx = ctx,
+  speechViewport,
+) {
   if (!state) return;
   const { event, age, speech } = state;
   const source = [game.base, ...game.buildings].find(
@@ -101,5 +108,5 @@ export function drawRoundIncome(ctx, game, state, reducedMotion = false) {
       ctx.stroke();
     }
   ctx.restore();
-  drawSpeech(ctx, speech);
+  drawSpeech(speechCtx, speech, speechViewport);
 }

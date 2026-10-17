@@ -59,6 +59,7 @@ test("controller connects modes, construction, recruitment and the frame rendere
     querySelectorAll: (selector) => (selector === "[data-mode]" ? modes : []),
   };
   let frame;
+  document.getElementById("board").parentElement = element();
   globalThis.requestAnimationFrame = (callback) => {
     frame = callback;
   };

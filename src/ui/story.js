@@ -134,7 +134,11 @@ export function renderStory(game, document) {
     completed > previous.completed ||
     previous.archive.open;
   archive.ontoggle = () => {
-    summary.textContent = `Diario de la plaza · ${archive.open ? "Minimizar" : "Abrir"} · Ronda ${available}`;
+    summary.textContent = `Diario de la plaza · Ronda ${available}`;
+    summary.setAttribute(
+      "aria-label",
+      `${archive.open ? "Minimizar" : "Abrir"} diario de la plaza, ronda ${available}`,
+    );
   };
   archive.ontoggle();
   archive.append(summary, card);

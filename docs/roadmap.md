@@ -2,6 +2,22 @@
 
 ## Estado actual
 
+Móvil vertical: el canvas y su capa de diálogos mantienen la proporción 1000:680 y se centran en un marco con espacio para controles, sin estirar el mapa hasta la altura del teléfono. Desplegables limitados también por el marco. CSS analizado sin terminal; pendiente comprobar aspecto y pulsaciones en navegador móvil real.
+
+Interfaz de partida integrada en el tablero: catálogo en desplegable «Casetas», con dos columnas en móvil y tres en horizontal bajo; controles y reinicio en un segundo desplegable. Ambos se excluyen entre sí y no cambian el tamaño del mapa. Seleccionar una caseta cierra el catálogo; el tutorial abre el menú correspondiente para resaltar el objetivo. Laboratorio conservado. Comprobados sintaxis y comportamiento de apertura/cierre con JavaScript sin terminal; pendientes revisión visual móvil/escritorio y `npm.cmd run check`.
+
+Catálogo con retrato y texto en columnas, reverso contenido y precio destacado cuando faltan provisiones. Se pueden inspeccionar las cartas sin saldo; el motor conserva la validación de compra. Cifras tabulares y foco visible para reducir saltos y facilitar la lectura.
+
+Resultados, fichas y escenas comparten reinicio de foco y scroll. Ventanas contenidas en el viewport, mejoras con fondo opaco y tutorial centrado cuando no existe un destino visible. Se respeta el movimiento reducido del sistema.
+
+Los bocadillos usan píxeles de pantalla y una capa adaptable a la densidad, con buffer limitado y sin medir el layout en cada fotograma. Se mantienen dentro del tablero y se elimina su sombra difusa. Las casetas de área, olor y radio muestran remiendos en nivel 1 y acabados más cuidados al mejorar, dentro de la caché de estructuras.
+
+Ondas de radio corregidas: usan el reloj de combate para la edad del disparo, con radios válidos y sin pulsos animados en movimiento reducido. El ventilador de olor queda alineado con la escala de su caseta. Los diálogos largos se recortan con puntos suspensivos en tableros bajos y su rabillo señala al personaje.
+
+Validación del 17 de octubre sin terminal: sintaxis analizada en 189 módulos. Las referencias relativas del código fuente existen; las rutas inexistentes detectadas en los tests pertenecen a fixtures de seguridad. Comprobaciones directas de geometría, foco, dibujo, selección sin saldo y relojes de animación sobre los módulos reales. Añadidas pruebas de regresión para foco, cartas sin saldo, dimensiones de diálogos y animaciones de radio/ventilador. La batería integrada no pudo completarse dentro del entorno JavaScript. Pendientes `npm.cmd run check`, generación de `dist` y revisión visual en móvil y escritorio (320×568, 390×844, 1366×768 y 1920×1080). No se ha publicado ni regenerado la distribución.
+
+Diario compacto en ancho, cabecera y altura desplegada. Los diálogos ciudadanos y del Táper se dibujan en una capa transparente por delante del diario, sin interceptar clics; las mejoras conservan prioridad sobre esa capa. La X de mejoras limpia la selección real de la caseta y no vuelve a abrirse por actualizaciones ordinarias.
+
 La X del panel de mejoras limpia también la selección y la previsualización, igual que cancelar; el panel permanece cerrado al actualizar contadores.
 
 Al superar una ronda con ingreso, el Ministerio del Táper anuncia el reparto con una frase satírica y muestra provisiones de ronda y cocina, más monedas hacia el marcador. El efecto usa el importe abonado por el motor, dura cuatro segundos de reloj visual en preparación y se cancela al iniciar combate; no repite cobros ni se reproduce al cargar. Sin monedas en movimiento reducido. La última ronda mantiene su economía existente (sin ingreso entre rondas).

@@ -45,9 +45,15 @@ export function renderLiveStats(game) {
     `${abilityLabel} · Q`,
   );
   document.querySelectorAll("button[data-cost]").forEach((button) => {
-    if (game.phase !== "attack")
+    if (game.phase !== "attack") {
+      const card = button.dataset.flipCard === "true";
       button.disabled =
-        game.money < Number(button.dataset.cost) || !canDefend(game);
+        (!card && game.money < Number(button.dataset.cost)) || !canDefend(game);
+      if (card)
+        button.dataset.affordable = String(
+          game.money >= Number(button.dataset.cost),
+        );
+    }
   });
   const quote = game.speeches[0]?.quote;
   if (quote !== lastQuote) {
